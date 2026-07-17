@@ -1,0 +1,34 @@
+# Faria tunables. Code defaults (src/faria/config.py) match this file exactly;
+# it exists so you can see and tweak every knob in one place. Point FARIA_CONFIG
+# at a different file to keep experimental configs side by side.
+
+[models]
+# Tutor brain: Sonnet-class for conversation quality (deliberate choice; see DECISIONS.md ADR-002).
+conversation = "claude-sonnet-5"
+# Summaries + end-of-session sweep are cheaper, non-interactive work.
+summarizer = "claude-haiku-4-5"
+max_reply_tokens = 1024
+max_summary_tokens = 4096
+# "disabled" = lowest latency (right for conversation). "adaptive" = let the model
+# think when it wants; better for the annotation sidecar, slower to first token.
+thinking = "disabled"
+
+[correction]
+# minimal | balanced | aggressive — per-profile setting overrides this default.
+default_aggressiveness = "balanced"
+# Flow-protection budget: hard caps on inline corrections (see domain/correction.py).
+max_inline_per_turn = 1
+max_inline_per_window = 2
+window_turns = 5
+# A pattern recurring this many times escalates to inline + focus list.
+recurrence_escalation_threshold = 3
+
+[memory]
+# How many recent session summaries are injected into the next session's prompt.
+recent_summaries_in_prompt = 3
+
+[audio]
+# Phase 2 placeholders — read but unused until the speech loop lands.
+stt_default = "faster-whisper"
+tts_default = "piper"
+sample_rate = 16000
