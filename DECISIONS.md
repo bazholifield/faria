@@ -124,3 +124,53 @@ No auth or multi-tenancy, but the schema has a `learners` table (one row for now
 everything hangs off `language_profiles(learner_id, language)`. Cost today: one JOIN key.
 Benefit: publishing this later as a shareable project is an auth layer, not a schema
 migration; and "my partner tries it" doesn't corrupt my learner model.
+
+## ADR-013 — Correction frequency and style are separate axes; recast default; orthography exempt
+
+From the first real session: explicit corrections felt like an eager assistant, and it
+corrected a *spelling* error — meaningless for a product that is audio-first even when typed.
+**Decision:** two orthogonal per-profile knobs. *Frequency*: off | minimal | balanced |
+aggressive ("off" is new — the tutor must be able to shut up entirely). *Style*: recast |
+recast_plus_note | explicit; default balanced + recast ("Yo voy a la playa ayer" → "Ah,
+¿fuiste a la playa ayer?"). The **orthography category (spelling, diacritics, punctuation) is
+never surfaced in conversation at any setting** — logged for stats only. Detector nuance the
+sidecar instructions must carry: a load-bearing diacritic ("ayer hablo con ella" for
+*habló*) is a tense/conjugation error that happens to surface in writing — classify it as
+morphosyntax, not orthography, so it isn't silenced by this rule. Consequences: migration
+0002 (add 'off' to the aggressiveness CHECK, add a `correction_style` column); rules v1 in
+domain/correction.py gain R0 (orthography → logged_silent, always).
+
+## ADR-014 — Sessions are learner-scoped; language is a per-utterance property
+
+The north-star scenario (ROADMAP) has English as home base with fluid entry/exit of target
+languages, including tutor-initiated pivots. A session bound to one `language_profiles` row
+cannot represent that. **Decision:** sessions attach to the learner; `utterances` carry a
+`language` column; error events and level observations route to the profile of the language
+in play for that utterance. Per-language profiles, patterns, and level models are untouched —
+the companion vision *depends* on them (pivoting into French "at my level" requires the
+French estimate to exist, which is why Phases 0–1 stay single-language and come first).
+Consequence: migration scheduled early in Phase 1.5, while the DB is still disposable —
+delete `data/` rather than write data-preserving migration code for throwaway sessions.
+
+## ADR-015 — The UI is the conversation: state changes are tool calls
+
+"Switch to German", "correct me less", "teach me about X" are said, not clicked.
+**Decision:** a second tool alongside the annotation sidecar — `update_session_state` — which
+the model calls when the learner requests a change (and when the model itself initiates one,
+e.g. a surprise pivot, so every pivot is logged and auditable). The backend persists the
+change (session state or profile `preferences`) and re-renders the context for subsequent
+turns. This is how "it learns from the conversation" becomes durable rows instead of vibes.
+Consequence: mid-session context changes re-render the system prompt, which invalidates the
+prompt cache for the rest of that session — acceptable at personal scale; revisit placement
+(volatile state below the cached prefix) if costs ever matter.
+
+## ADR-016 — Persona presets; "mentor" is the default
+
+The desired character is a wise old mentor, not an eager assistant — and eager-assistant is
+the model's default gravity, so the persona block must actively counter it: unhurried, tells
+stories and teaches unprompted, makes statements rather than ending every turn with a
+question, no praise inflation, comfortable taking the lead and comfortable with silence.
+**Decision:** personas are named, swappable prompt blocks (start with "mentor"), selected
+per profile or per session; the initiative knob (learner-led ↔ balanced ↔ tutor-led talk
+ratio) is part of persona configuration. Personality is content for `tutor/prompts.py`
+section 1 — versioned prompt text, not code.

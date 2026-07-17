@@ -49,7 +49,11 @@ class Repository:
         )
 
     def get_or_create_profile(
-        self, learner_id: int, language: str, default_aggressiveness: str
+        self,
+        learner_id: int,
+        language: str,
+        default_aggressiveness: str,
+        default_style: str = "recast",
     ) -> LanguageProfile:
         row = self._conn.execute(
             "SELECT * FROM language_profiles WHERE learner_id = ? AND language = ?",
@@ -60,10 +64,10 @@ class Repository:
                 cur = conn.execute(
                     """
                     INSERT INTO language_profiles
-                        (learner_id, language, correction_aggressiveness)
-                    VALUES (?, ?, ?)
+                        (learner_id, language, correction_aggressiveness, correction_style)
+                    VALUES (?, ?, ?, ?)
                     """,
-                    (learner_id, language, default_aggressiveness),
+                    (learner_id, language, default_aggressiveness, default_style),
                 )
             row = self._conn.execute(
                 "SELECT * FROM language_profiles WHERE id = ?", (cur.lastrowid,)
@@ -79,6 +83,7 @@ class Repository:
             level_overall=row["level_overall"],
             level_confidence=row["level_confidence"],
             correction_aggressiveness=row["correction_aggressiveness"],
+            correction_style=row["correction_style"],
             explanation_language=row["explanation_language"],
             preferences=json.loads(row["preferences"]),
         )

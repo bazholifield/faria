@@ -14,8 +14,11 @@ max_summary_tokens = 4096
 thinking = "disabled"
 
 [correction]
-# minimal | balanced | aggressive — per-profile setting overrides this default.
+# Frequency: off | minimal | balanced | aggressive — per-profile setting overrides this.
 default_aggressiveness = "balanced"
+# Style: recast | recast_plus_note | explicit (ADR-013; recast = repeat the
+# sentence back naturally, no meta-talk).
+default_style = "recast"
 # Flow-protection budget: hard caps on inline corrections (see domain/correction.py).
 max_inline_per_turn = 1
 max_inline_per_window = 2

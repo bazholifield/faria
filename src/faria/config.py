@@ -35,7 +35,8 @@ class ModelsConfig(BaseModel):
 
 
 class CorrectionConfig(BaseModel):
-    default_aggressiveness: str = "balanced"  # minimal | balanced | aggressive
+    default_aggressiveness: str = "balanced"  # off | minimal | balanced | aggressive
+    default_style: str = "recast"             # recast | recast_plus_note | explicit
     max_inline_per_turn: int = 1
     max_inline_per_window: int = 2
     window_turns: int = 5

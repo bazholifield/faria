@@ -25,6 +25,12 @@ from typing import Iterator
 
 from faria.config import Settings
 from faria.db.repository import Repository
+from faria.domain.correction import (
+    Aggressiveness,
+    CorrectionPolicy,
+    CorrectionStyle,
+    TurnState,
+)
 from faria.domain.models import SessionContext
 from faria.tutor.brain import TutorBrain
 from faria.tutor.prompts import assemble_system_prompt
@@ -41,6 +47,8 @@ class SessionRunner:
         self._system: str = ""
         self._history: list[dict] = []
         self._turn_index: int = 0
+        self._policy: CorrectionPolicy | None = None
+        self._turn_state = TurnState()
 
     @property
     def context(self) -> SessionContext:
@@ -50,7 +58,10 @@ class SessionRunner:
     def start(self, language: str, learner_name: str, goal: str | None = None) -> SessionContext:
         learner = self._repo.get_or_create_learner(learner_name)
         profile = self._repo.get_or_create_profile(
-            learner.id, language, self._settings.correction.default_aggressiveness
+            learner.id,
+            language,
+            self._settings.correction.default_aggressiveness,
+            self._settings.correction.default_style,
         )
         ctx = SessionContext(
             learner=learner,
@@ -67,13 +78,20 @@ class SessionRunner:
         session = self._repo.create_session(profile.id, mode="text", goal=goal)
         self._ctx = ctx
         self._session_id = session.id
-        # Phase 0 (yours): pass CorrectionPolicy.prompt_directives(...) here.
-        self._system = assemble_system_prompt(ctx)
+        self._policy = CorrectionPolicy(
+            self._settings.correction,
+            Aggressiveness(profile.correction_aggressiveness),
+            CorrectionStyle(profile.correction_style),
+        )
+        self._system = assemble_system_prompt(
+            ctx, self._policy.prompt_directives(ctx.focus_patterns, profile.level_overall)
+        )
         return ctx
 
     def turn(self, user_text: str) -> Iterator[str]:
         """One conversation turn: yields the tutor reply as text deltas."""
-        assert self._session_id is not None, "call start() first"
+        assert self._session_id is not None and self._policy is not None, "call start() first"
+        self._policy.start_turn(self._turn_state)  # budget window tracks turns from day one
         self._repo.add_utterance(self._session_id, self._turn_index, "learner", user_text)
         self._turn_index += 1
         self._history.append({"role": "user", "content": user_text})

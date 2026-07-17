@@ -21,6 +21,7 @@ def test_learner_and_profile_are_idempotent(repo):
 
     p_fr = repo.get_or_create_profile(l1.id, "fr", "balanced")
     assert p_fr.id != p1.id
+    assert p_fr.correction_style == "recast"  # style default flows through
 
 
 def test_utterance_roundtrip(repo):

@@ -47,11 +47,11 @@ faria/
 │   ├── domain/                 # Pedagogy lives here; no I/O, no LLM calls
 │   │   ├── models.py           # Dataclasses mirroring DB rows + SessionContext aggregate
 │   │   ├── taxonomy.py         # Error taxonomy (2-level), anchored severity scale
-│   │   ├── levels.py           # CEFR bands + level-estimation update rules   [STUB: yours]
-│   │   └── correction.py       # Correction policy engine                     [STUB: yours]
+│   │   ├── levels.py           # CEFR bands + estimation update rules      [first pass — tune]
+│   │   └── correction.py       # Correction policy engine                  [first pass — tune]
 │   ├── tutor/                  # Everything that talks to the Claude API
 │   │   ├── brain.py            # Streaming client wrapper around the Messages API
-│   │   ├── prompts.py          # System-prompt assembly  [baseline works; full version yours]
+│   │   ├── prompts.py          # System-prompt assembly, mentor persona    [first pass — tune]
 │   │   ├── schema.py           # Tool-use schema for the error-annotation sidecar
 │   │   └── summarizer.py       # End-of-session structured summary (messages.parse)
 │   ├── session/
@@ -69,6 +69,7 @@ faria/
     └── test_taxonomy.py        # Category/subcategory consistency, prompt rendering
 ```
 
-Modules marked **[STUB: yours]** are fully specified (signatures, docstrings, design notes)
-but intentionally unimplemented — the pedagogy is the interesting part and it's yours to build.
-Everything else works.
+The pedagogy modules marked **[first pass — tune]** carry working implementations written to
+the specs in their docstrings; they are the modules meant to be argued with and reshaped
+against real sessions. Their behavior is pinned by tests (`test_correction.py`,
+`test_levels.py`) — when you change a rule, change its test.

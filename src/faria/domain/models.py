@@ -27,7 +27,8 @@ class LanguageProfile:
     language: str
     level_overall: float | None
     level_confidence: float
-    correction_aggressiveness: str  # minimal | balanced | aggressive
+    correction_aggressiveness: str  # off | minimal | balanced | aggressive
+    correction_style: str           # recast | recast_plus_note | explicit
     explanation_language: str       # adaptive | native | target
     preferences: dict
 
