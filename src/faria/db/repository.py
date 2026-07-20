@@ -74,6 +74,52 @@ class Repository:
             ).fetchone()
         return self._profile_from_row(row)
 
+    def update_correction_settings(
+        self, profile_id: int, aggressiveness: str | None, style: str | None
+    ) -> None:
+        """Apply a learner-driven change from the session control tool (ADR-015).
+
+        Either argument may be None to leave that setting untouched; both
+        None is a no-op.
+        """
+        if aggressiveness is None and style is None:
+            return
+        sets, params = [], []
+        if aggressiveness is not None:
+            sets.append("correction_aggressiveness = ?")
+            params.append(aggressiveness)
+        if style is not None:
+            sets.append("correction_style = ?")
+            params.append(style)
+        params.append(profile_id)
+        with transaction(self._conn) as conn:
+            conn.execute(
+                f"UPDATE language_profiles SET {', '.join(sets)}, updated_at = datetime('now') "
+                "WHERE id = ?",
+                params,
+            )
+
+    def update_preferences(self, profile_id: int, preferences: dict) -> None:
+        """Replace the profile's preferences JSON wholesale (caller merges first)."""
+        with transaction(self._conn) as conn:
+            conn.execute(
+                "UPDATE language_profiles SET preferences = ?, updated_at = datetime('now') WHERE id = ?",
+                (json.dumps(preferences, ensure_ascii=False), profile_id),
+            )
+
+    def known_target_languages(self, learner_id: int, exclude_language: str) -> list[str]:
+        """Languages this learner has an existing profile for, other than
+        ``exclude_language`` (normally the native/home language). Only languages
+        with real history are eligible for tutor-initiated pivots (ADR-015) —
+        pivoting into a language with zero context isn't a comprehension test,
+        it's just noise."""
+        rows = self._conn.execute(
+            "SELECT language FROM language_profiles WHERE learner_id = ? AND language != ? "
+            "ORDER BY updated_at DESC",
+            (learner_id, exclude_language),
+        ).fetchall()
+        return [r["language"] for r in rows]
+
     @staticmethod
     def _profile_from_row(row: sqlite3.Row) -> LanguageProfile:
         return LanguageProfile(
@@ -100,6 +146,7 @@ class Repository:
                 dimension=r["dimension"],
                 score=r["score"],
                 confidence=r["confidence"],
+                updated_at=r["updated_at"],
             )
             for r in rows
         ]
@@ -160,14 +207,17 @@ class Repository:
             )
 
     # -- sessions / utterances ----------------------------------------------
+    # Sessions are learner-scoped, not language-scoped (ADR-014): a single
+    # session can move between English and any number of target languages.
+    # Language lives on each Utterance instead.
 
-    def create_session(self, profile_id: int, mode: str = "text", goal: str | None = None) -> Session:
+    def create_session(self, learner_id: int, mode: str = "text", goal: str | None = None) -> Session:
         with transaction(self._conn) as conn:
             cur = conn.execute(
-                "INSERT INTO sessions (profile_id, mode, goal) VALUES (?, ?, ?)",
-                (profile_id, mode, goal),
+                "INSERT INTO sessions (learner_id, mode, goal) VALUES (?, ?, ?)",
+                (learner_id, mode, goal),
             )
-        return Session(id=cur.lastrowid, profile_id=profile_id, mode=mode, goal=goal, status="active")
+        return Session(id=cur.lastrowid, learner_id=learner_id, mode=mode, goal=goal, status="active")
 
     def end_session(self, session_id: int, status: str = "completed") -> None:
         with transaction(self._conn) as conn:
@@ -177,18 +227,29 @@ class Repository:
             )
 
     def add_utterance(
-        self, session_id: int, turn_index: int, speaker: str, text: str, meta: dict | None = None
+        self,
+        session_id: int,
+        turn_index: int,
+        speaker: str,
+        text: str,
+        language: str,
+        meta: dict | None = None,
     ) -> Utterance:
         with transaction(self._conn) as conn:
             cur = conn.execute(
                 """
-                INSERT INTO utterances (session_id, turn_index, speaker, text, meta)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO utterances (session_id, turn_index, speaker, text, language, meta)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """,
-                (session_id, turn_index, speaker, text, json.dumps(meta or {})),
+                (session_id, turn_index, speaker, text, language, json.dumps(meta or {})),
             )
         return Utterance(
-            id=cur.lastrowid, session_id=session_id, turn_index=turn_index, speaker=speaker, text=text
+            id=cur.lastrowid,
+            session_id=session_id,
+            turn_index=turn_index,
+            speaker=speaker,
+            text=text,
+            language=language,
         )
 
     def session_utterances(self, session_id: int) -> list[Utterance]:
@@ -202,6 +263,7 @@ class Repository:
                 turn_index=r["turn_index"],
                 speaker=r["speaker"],
                 text=r["text"],
+                language=r["language"],
             )
             for r in rows
         ]
@@ -215,8 +277,17 @@ class Repository:
         subcategory: ErrorSubcategory | None,
         feature_key: str,
         description: str | None,
+        fossilization_threshold: int = 6,
     ) -> ErrorPattern:
-        """Find-or-create the pattern for feature_key and bump its recurrence count."""
+        """Find-or-create the pattern for feature_key and bump its recurrence count.
+
+        Any new occurrence resets status to 'active' (still a live problem)
+        unless the bumped count crosses `fossilization_threshold`, in which
+        case it's marked 'fossilization_risk'. Downgrading a quiet pattern to
+        'improving'/'resolved' happens separately in decay_pattern_statuses(),
+        called at the start of each session so a fresh session sees an
+        up-to-date focus list (ADR-018).
+        """
         with transaction(self._conn) as conn:
             conn.execute(
                 """
@@ -225,16 +296,101 @@ class Repository:
                 VALUES (?, ?, ?, ?, ?, 1)
                 ON CONFLICT (profile_id, feature_key) DO UPDATE SET
                     occurrence_count = occurrence_count + 1,
-                    last_seen_at = datetime('now')
+                    last_seen_at = datetime('now'),
+                    status = CASE
+                        WHEN occurrence_count + 1 >= ? THEN 'fossilization_risk'
+                        ELSE 'active'
+                    END
                 """,
                 (profile_id, category.value, subcategory.value if subcategory else None,
-                 feature_key, description),
+                 feature_key, description, fossilization_threshold),
             )
         row = self._conn.execute(
             "SELECT * FROM error_patterns WHERE profile_id = ? AND feature_key = ?",
             (profile_id, feature_key),
         ).fetchone()
         return self._pattern_from_row(row)
+
+    def decay_pattern_statuses(
+        self, profile_id: int, improving_after_days: int, resolved_after_days: int
+    ) -> None:
+        """Downgrade patterns that have gone quiet (ADR-018): active or
+        fossilization_risk -> improving after `improving_after_days` without
+        recurrence, -> resolved after `resolved_after_days`. A pattern that
+        recurs again is bumped back to 'active' by upsert_pattern, so this is
+        a one-way decay unless real evidence of continuing struggle shows up.
+        Call at session start, before focus_patterns(), so the focus list
+        reflects current reality.
+        """
+        with transaction(self._conn) as conn:
+            conn.execute(
+                """
+                UPDATE error_patterns
+                SET status = CASE
+                    WHEN julianday('now') - julianday(last_seen_at) >= ? THEN 'resolved'
+                    WHEN julianday('now') - julianday(last_seen_at) >= ? THEN 'improving'
+                    ELSE status
+                END
+                WHERE profile_id = ? AND status IN ('active', 'fossilization_risk', 'improving')
+                """,
+                (resolved_after_days, improving_after_days, profile_id),
+            )
+
+    def list_patterns(self, profile_id: int, limit: int = 5) -> list[ErrorPattern]:
+        """All patterns for this profile, most-recurrent first, any status —
+        for inspection (`faria patterns`). Contrast with focus_patterns(),
+        which filters by status specifically for prompt injection."""
+        rows = self._conn.execute(
+            """
+            SELECT * FROM error_patterns
+            WHERE profile_id = ?
+            ORDER BY occurrence_count DESC, last_seen_at DESC
+            LIMIT ?
+            """,
+            (profile_id, limit),
+        ).fetchall()
+        return [self._pattern_from_row(r) for r in rows]
+
+    def pattern_examples(self, pattern_id: int, limit: int = 2) -> list[tuple[str, str | None]]:
+        """A few (span_text, correction) examples for a pattern, newest first."""
+        rows = self._conn.execute(
+            """
+            SELECT span_text, correction FROM error_events
+            WHERE pattern_id = ? AND span_text IS NOT NULL
+            ORDER BY id DESC
+            LIMIT ?
+            """,
+            (pattern_id, limit),
+        ).fetchall()
+        return [(r["span_text"], r["correction"]) for r in rows]
+
+    def known_feature_keys(self, profile_id: int, limit: int = 30) -> list[str]:
+        """All feature_keys logged for this profile, most-recently-seen first.
+
+        Deliberately not filtered by status/threshold like focus_patterns()
+        — a pattern only gets ONE chance to be recognized as recurring the
+        second time it happens, and that requires the detector to already
+        know the key exists the first time (see prompts.py's known-keys
+        section)."""
+        rows = self._conn.execute(
+            "SELECT feature_key FROM error_patterns WHERE profile_id = ? "
+            "ORDER BY last_seen_at DESC LIMIT ?",
+            (profile_id, limit),
+        ).fetchall()
+        return [r["feature_key"] for r in rows]
+
+    def pattern_feature_keys_for_utterance(self, utterance_id: int) -> set[str]:
+        """feature_keys already logged for this utterance — lets the
+        end-of-session sweep skip errors the live sidecar already caught."""
+        rows = self._conn.execute(
+            """
+            SELECT DISTINCT ep.feature_key FROM error_events ee
+            JOIN error_patterns ep ON ep.id = ee.pattern_id
+            WHERE ee.utterance_id = ?
+            """,
+            (utterance_id,),
+        ).fetchall()
+        return {r["feature_key"] for r in rows}
 
     def record_error_event(self, session_id: int, event: ErrorEvent, pattern_id: int | None) -> None:
         with transaction(self._conn) as conn:
@@ -316,17 +472,20 @@ class Repository:
                 ),
             )
 
-    def recent_summaries(self, profile_id: int, limit: int) -> list[SummaryRow]:
-        """Latest summaries for this profile, oldest-first for prompt injection."""
+    def recent_summaries(self, language: str, limit: int) -> list[SummaryRow]:
+        """Latest summaries for sessions where this language appeared, oldest
+        first for prompt injection. Language-scoped rather than profile-scoped
+        (ADR-014): a session is no longer bound to one language, so "recent
+        Spanish sessions" means "sessions with at least one Spanish
+        utterance", not "sessions of the Spanish profile"."""
         rows = self._conn.execute(
             """
-            SELECT ss.* FROM session_summaries ss
-            JOIN sessions s ON s.id = ss.session_id
-            WHERE s.profile_id = ?
-            ORDER BY ss.created_at DESC, ss.id DESC
+            SELECT * FROM session_summaries
+            WHERE session_id IN (SELECT DISTINCT session_id FROM utterances WHERE language = ?)
+            ORDER BY created_at DESC, id DESC
             LIMIT ?
             """,
-            (profile_id, limit),
+            (language, limit),
         ).fetchall()
         summaries = [
             SummaryRow(

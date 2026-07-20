@@ -36,7 +36,7 @@ def test_migrations_are_idempotent(tmp_path):
 def test_0002_upgrade_preserves_existing_profiles(tmp_path):
     """The path a real DB takes: 0001 applied with data, then later migrations land.
 
-    Only 0001 is pre-registered, so this also exercises 0002 and 0003 landing
+    Only 0001 is pre-registered, so this also exercises 0002-0004 landing
     together in one apply_migrations() call — a real upgrade scenario, not an
     artifact of the test setup.
     """
@@ -59,7 +59,11 @@ def test_0002_upgrade_preserves_existing_profiles(tmp_path):
     conn.commit()
 
     applied = apply_migrations(conn)
-    assert applied == ["0002_correction_style.sql", "0003_model_action.sql"]
+    assert applied == [
+        "0002_correction_style.sql",
+        "0003_model_action.sql",
+        "0004_learner_scoped_sessions.sql",
+    ]
 
     row = conn.execute("SELECT * FROM language_profiles WHERE language = 'es'").fetchone()
     assert row["correction_aggressiveness"] == "balanced"  # data survived the rebuild
@@ -70,7 +74,7 @@ def test_0002_upgrade_preserves_existing_profiles(tmp_path):
 
 
 def test_0003_upgrade_preserves_existing_error_events(tmp_path):
-    """The path a real DB takes: 0001+0002 applied with data, then 0003 lands."""
+    """The path a real DB takes: 0001+0002 applied with data, then 0003+0004 land."""
     from importlib.resources import files
 
     conn = connect(tmp_path / "m.db")
@@ -100,11 +104,59 @@ def test_0003_upgrade_preserves_existing_error_events(tmp_path):
     conn.commit()
 
     applied = apply_migrations(conn)
-    assert applied == ["0003_model_action.sql"]
+    assert applied == ["0003_model_action.sql", "0004_learner_scoped_sessions.sql"]
 
     row = conn.execute("SELECT * FROM error_events").fetchone()
     assert row["detector"] == "sidecar:test"  # existing data survived
     assert row["model_action"] is None        # new column defaulted to NULL
+
+    # utterance backfilled with the session's original (pre-1.5) language
+    utt = conn.execute("SELECT * FROM utterances WHERE id = 1").fetchone()
+    assert utt["language"] == "es"
+
+
+def test_0004_upgrade_backfills_language_and_rescopes_sessions(tmp_path):
+    """0001-0003 applied with data (spanning two profiles/sessions), then 0004 lands."""
+    from importlib.resources import files
+
+    conn = connect(tmp_path / "m.db")
+    for name in ("0001_initial.sql", "0002_correction_style.sql", "0003_model_action.sql"):
+        sql = (files("faria.db") / "migrations" / name).read_text()
+        conn.executescript(sql)
+    conn.execute(
+        "CREATE TABLE schema_migrations (version TEXT PRIMARY KEY, "
+        "applied_at TEXT NOT NULL DEFAULT (datetime('now')))"
+    )
+    conn.executemany(
+        "INSERT INTO schema_migrations (version) VALUES (?)",
+        [("0001_initial.sql",), ("0002_correction_style.sql",), ("0003_model_action.sql",)],
+    )
+    conn.execute("INSERT INTO learners (name) VALUES ('bazh')")
+    conn.execute("INSERT INTO language_profiles (learner_id, language) VALUES (1, 'es')")  # id 1
+    conn.execute("INSERT INTO language_profiles (learner_id, language) VALUES (1, 'fr')")  # id 2
+    conn.execute("INSERT INTO sessions (profile_id) VALUES (1)")  # session 1, Spanish
+    conn.execute("INSERT INTO sessions (profile_id) VALUES (2)")  # session 2, French
+    conn.execute(
+        "INSERT INTO utterances (session_id, turn_index, speaker, text) "
+        "VALUES (1, 0, 'learner', 'hola')"
+    )
+    conn.execute(
+        "INSERT INTO utterances (session_id, turn_index, speaker, text) "
+        "VALUES (2, 0, 'learner', 'bonjour')"
+    )
+    conn.commit()
+
+    applied = apply_migrations(conn)
+    assert applied == ["0004_learner_scoped_sessions.sql"]
+
+    sessions = {r["id"]: dict(r) for r in conn.execute("SELECT * FROM sessions")}
+    assert sessions[1]["learner_id"] == 1
+    assert sessions[2]["learner_id"] == 1
+    assert "profile_id" not in sessions[1]
+
+    utterances = {r["session_id"]: r["language"] for r in conn.execute("SELECT * FROM utterances")}
+    assert utterances == {1: "es", 2: "fr"}
+    assert conn.execute("PRAGMA foreign_key_check").fetchall() == []
 
 
 def test_0003_check_constraint_rejects_unknown_model_action(tmp_path):
@@ -116,9 +168,10 @@ def test_0003_check_constraint_rejects_unknown_model_action(tmp_path):
     apply_migrations(conn)
     conn.execute("INSERT INTO learners (name) VALUES ('t')")
     conn.execute("INSERT INTO language_profiles (learner_id, language) VALUES (1, 'es')")
-    conn.execute("INSERT INTO sessions (profile_id) VALUES (1)")
+    conn.execute("INSERT INTO sessions (learner_id) VALUES (1)")
     conn.execute(
-        "INSERT INTO utterances (session_id, turn_index, speaker, text) VALUES (1, 0, 'learner', 'x')"
+        "INSERT INTO utterances (session_id, turn_index, speaker, text, language) "
+        "VALUES (1, 0, 'learner', 'x', 'es')"
     )
     with pytest.raises(sqlite3.IntegrityError):
         conn.execute(

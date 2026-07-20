@@ -41,6 +41,16 @@ class CorrectionConfig(BaseModel):
     max_inline_per_window: int = 2
     window_turns: int = 5
     recurrence_escalation_threshold: int = 3
+    # Pattern lifecycle (ADR-018): a pattern that keeps recurring past this
+    # many occurrences is flagged fossilization_risk; one that's gone quiet
+    # decays active/fossilization_risk -> improving -> resolved.
+    fossilization_threshold: int = 6
+    pattern_improving_after_days: int = 14
+    pattern_resolved_after_days: int = 45
+    # Companion mode (ADR-015/ADR-019): minimum learner turns between two
+    # tutor-INITIATED language pivots. Does not apply to learner requests,
+    # which always take effect immediately.
+    min_turns_between_pivots: int = 4
 
 
 class MemoryConfig(BaseModel):

@@ -75,7 +75,10 @@ ERROR_ANNOTATION_TOOL: dict = {
                                 "lowercase snake_case, e.g. "
                                 "'morphosyntax:agreement:gender_noun_adj' or "
                                 "'lexis:false_friend:actualmente' (lemma for lexical items). "
-                                "Reuse a key from the learner's known patterns when one fits."
+                                "The system prompt lists this learner's already-known "
+                                "feature_keys for this language — reuse one verbatim if the "
+                                "error is the same underlying mistake, rather than minting a "
+                                "near-duplicate."
                             ),
                         },
                         "correction": {

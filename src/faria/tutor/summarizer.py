@@ -2,12 +2,15 @@
 
 The call itself is implemented (mechanical: transcript in, validated
 SessionSummary out). What the rest of the system *does* with the summary —
-updating patterns, levels, and focus — is the learner-model work in
-domain/ and session/lifecycle.py.
+updating patterns, levels, and focus — is the learner-model work in domain/
+and session/lifecycle.py. The end-of-session sweep (ADR-003, missed errors +
+level observations) is a separate call in tutor/sweep.py, which shares
+render_transcript() with this module.
 
-Phase 1 will add the end-of-session sweep here (ADR-003): a second pass over
-the same transcript that emits missed error_events and per-dimension level
-observations. It shares render_transcript() and the model config.
+One summary per SESSION regardless of how many languages it touched (ADR-014)
+— it's a narrative of the whole conversation, not a per-language artifact —
+so this module takes the raw utterances and derives which languages were
+spoken from them, rather than depending on any one language's profile.
 """
 
 from __future__ import annotations
@@ -16,7 +19,7 @@ import anthropic
 from pydantic import BaseModel, Field
 
 from faria.config import ModelsConfig
-from faria.domain.models import SessionContext, SummaryRow, Utterance
+from faria.domain.models import SummaryRow, Utterance
 from faria.tutor.prompts import language_name
 
 
@@ -58,21 +61,20 @@ def render_transcript(utterances: list[Utterance]) -> str:
     return "\n".join(f"{u.speaker.upper()}: {u.text}" for u in utterances)
 
 
-def generate_summary(
-    utterances: list[Utterance],
-    ctx: SessionContext,
-    models: ModelsConfig,
-) -> SessionSummary:
+def generate_summary(utterances: list[Utterance], models: ModelsConfig) -> SessionSummary:
     """One structured-output call over the transcript; validated by pydantic."""
     client = anthropic.Anthropic()
-    target = language_name(ctx.profile.language)
+    languages = sorted({u.language for u in utterances})
+    lang_list = ", ".join(language_name(code) for code in languages)
     response = client.messages.parse(
         model=models.summarizer,
         max_tokens=models.max_summary_tokens,
         system=(
-            f"You are the session archivist for a {target} language tutor. "
-            "Summarize the session below for the tutor's persistent learner "
-            "model. Be concrete and evidence-based: quote the learner where "
+            "You are the session archivist for a personal multilingual tutoring "
+            f"companion. This session's languages: {lang_list}. Summarize the "
+            "session below for whichever tutoring context picks it up next — "
+            "note which language(s) were used for what if more than one came "
+            "up. Be concrete and evidence-based: quote the learner where "
             "relevant, never flatter, and only report errors actually present "
             "in the transcript."
         ),

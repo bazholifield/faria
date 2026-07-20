@@ -39,12 +39,17 @@ class LevelDimensionRow:
     dimension: str
     score: float
     confidence: float
+    updated_at: str
 
 
 @dataclass(frozen=True)
 class Session:
+    """A conversation with the learner (ADR-014). Language-agnostic: a session
+    can move between English and any number of target languages — language is
+    a property of each Utterance, not of the session."""
+
     id: int
-    profile_id: int
+    learner_id: int
     mode: str
     goal: str | None
     status: str
@@ -57,6 +62,7 @@ class Utterance:
     turn_index: int
     speaker: str  # learner | tutor
     text: str
+    language: str  # ISO 639-1/BCP-47 code the utterance was actually in (ADR-014)
 
 
 @dataclass(frozen=True)
@@ -117,4 +123,9 @@ class SessionContext:
     dimensions: list[LevelDimensionRow] = field(default_factory=list)
     recent_summaries: list[SummaryRow] = field(default_factory=list)
     focus_patterns: list[ErrorPattern] = field(default_factory=list)
+    # ALL known feature_keys for this profile, not just focus_patterns (which
+    # only holds ones past the recurrence threshold) — surfaced to the
+    # detector so it can reuse an existing fingerprint for a still-rare error
+    # instead of minting a near-duplicate every time (see prompts.py).
+    known_feature_keys: list[str] = field(default_factory=list)
     goal: str | None = None

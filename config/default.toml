@@ -25,6 +25,14 @@ max_inline_per_window = 2
 window_turns = 5
 # A pattern recurring this many times escalates to inline + focus list.
 recurrence_escalation_threshold = 3
+# Pattern lifecycle (ADR-018): recurring past this many occurrences flags
+# fossilization_risk; a quiet pattern decays active -> improving -> resolved.
+fossilization_threshold = 6
+pattern_improving_after_days = 14
+pattern_resolved_after_days = 45
+# Companion mode: minimum learner turns between two TUTOR-initiated language
+# pivots (learner-requested switches are never throttled).
+min_turns_between_pivots = 4
 
 [memory]
 # How many recent session summaries are injected into the next session's prompt.

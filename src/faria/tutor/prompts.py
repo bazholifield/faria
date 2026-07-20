@@ -1,20 +1,27 @@
 """System-prompt assembly.
 
-First-pass implementation of the full six-section design. The persona block
-is where the product's character lives — iterate on it conversationally (edit
+First-pass implementation of the full section design. The persona block is
+where the product's character lives — iterate on it conversationally (edit
 text, `faria chat`, judge, repeat); nothing else changes when you tune it.
 
 Section order (stability matters for prompt caching — stable first, ADR-002):
   1. persona (frozen text, byte-identical every session)
-  2. language + level behavior (changes rarely)
+  2. language + level behavior (changes rarely; home-base wording when the
+     active language IS the learner's native language — ADR-014/019)
   3. profile snapshot (changes per session)
   4. memory: summaries + carry-over focus (changes per session)
   5. correction directives from CorrectionPolicy (changes per session)
-  6. session goal (changes per session)
+  6. session control: always-on instructions for learner-requested language/
+     correction changes, plus a conditional surprise-pivot section when the
+     learner has opted in (ADR-015)
+  7. session goal (changes per session)
 
 Personas are named blocks (ADR-016) selected via profile preferences
 (``preferences["persona"]``, default "mentor") so alternatives can be added
-without touching assembly logic.
+without touching assembly logic. Rebuilt in full on every language switch
+(SessionRunner._rebuild_prompt) — mid-session changes already invalidate the
+prompt cache for the rest of that session, which is an accepted tradeoff at
+personal scale (ADR-015).
 """
 
 from __future__ import annotations
@@ -72,8 +79,20 @@ PERSONAS: dict[str, str] = {
 }
 
 
-def assemble_system_prompt(ctx: SessionContext, policy_directives: str | None = None) -> str:
-    """Build the per-session system prompt from the learner context."""
+def assemble_system_prompt(
+    ctx: SessionContext,
+    policy_directives: str | None = None,
+    pivot_frequency: str = "off",
+    other_known_languages: list[str] | None = None,
+) -> str:
+    """Build the system prompt for the currently active language.
+
+    ``pivot_frequency`` and ``other_known_languages`` are session-wide
+    concepts (not properties of any one language's profile), computed by
+    SessionRunner from the home profile's preferences and the learner's
+    profile history respectively — see ADR-019.
+    """
+    is_home_base = ctx.profile.language == ctx.learner.native_language
     target = language_name(ctx.profile.language)
     native = language_name(ctx.learner.native_language)
 
@@ -81,30 +100,67 @@ def assemble_system_prompt(ctx: SessionContext, policy_directives: str | None = 
     sections: list[str] = [PERSONAS.get(persona_name, _MENTOR)]
 
     # 2. Language + level behavior
-    sections.append(
+    sections.append(_language_section(ctx, is_home_base, target, native))
+
+    # 3. Profile snapshot
+    sections.append(_profile_snapshot(ctx))
+
+    # 4. Memory
+    memory = _memory_section(ctx, target, is_home_base)
+    if memory:
+        sections.append(memory)
+
+    # 5. Correction directives (home base has nothing to correct)
+    if policy_directives and not is_home_base:
+        sections.append(policy_directives)
+        known_keys = _known_keys_section(ctx)
+        if known_keys:
+            sections.append(known_keys)
+
+    # 6. Session control — always-on learner-driven changes, plus an opt-in
+    # surprise-pivot addendum.
+    sections.append(_CONTROL_INSTRUCTIONS)
+    if pivot_frequency != "off" and other_known_languages:
+        sections.append(_pivot_section(pivot_frequency, other_known_languages))
+
+    # 7. Session goal
+    if ctx.goal:
+        sections.append(f"Today's session goal: {ctx.goal}")
+
+    return "\n\n".join(sections)
+
+
+def _language_section(ctx: SessionContext, is_home_base: bool, target: str, native: str) -> str:
+    if is_home_base:
+        return (
+            f"You're currently speaking {native} — this is home base: ambient "
+            "conversation, companionship, and teaching about whatever the "
+            "learner is doing or curious about. They may ask you to switch into "
+            "a language they're practicing at any point; you may also teach "
+            "them a word or phrase in another language in passing without "
+            "fully switching."
+        )
+    return (
         f"Converse in {target}. The learner's native language is {native}. "
         "Speak just above the learner's productive level — comprehensible but "
         "stretching. If they flounder, simplify and recast rather than "
         f"switching to {native}. {_metalanguage_rule(ctx, native, target)}"
     )
 
-    # 3. Profile snapshot
-    sections.append(_profile_snapshot(ctx))
 
-    # 4. Memory
-    memory = _memory_section(ctx, target)
-    if memory:
-        sections.append(memory)
-
-    # 5. Correction directives
-    if policy_directives:
-        sections.append(policy_directives)
-
-    # 6. Session goal
-    if ctx.goal:
-        sections.append(f"Today's session goal: {ctx.goal}")
-
-    return "\n\n".join(sections)
+_CONTROL_INSTRUCTIONS = (
+    "The learner can reshape this session just by asking, at any point: switch "
+    "which language you're speaking (e.g. 'let's do German', 'back to "
+    "English'), change how much you correct them, change how you correct them "
+    "(recasts vs. explicit), or give you standing permission to occasionally "
+    "test them with a surprise switch. When they ask for any of these, call "
+    "update_session_state to make the change — don't just say you will and "
+    "then keep behaving the old way. A language switch takes effect on your "
+    "NEXT reply, in the new language. Whenever you call this tool, ALSO write "
+    "a normal conversational reply in the same message, in the language you "
+    "were just using — answer whatever they asked, acknowledge the change if "
+    "it's natural to. Never respond with only a tool call and no words."
+)
 
 
 def _metalanguage_rule(ctx: SessionContext, native: str, target: str) -> str:
@@ -143,15 +199,20 @@ def _profile_snapshot(ctx: SessionContext) -> str:
             "calibrate difficulty from their first few replies rather than asking "
             "them to self-assess."
         )
-    prefs = {k: v for k, v in ctx.profile.preferences.items() if k != "persona"}
+    # pivot_frequency lives here structurally (ADR-019) but has its own prompt
+    # section — don't double-render it as a generic "stated preference".
+    hidden_keys = {"persona", "pivot_frequency"}
+    prefs = {k: v for k, v in ctx.profile.preferences.items() if k not in hidden_keys}
     if prefs:
         rendered = "; ".join(f"{k}: {v}" for k, v in sorted(prefs.items()))
         lines.append(f"Stated preferences: {rendered}.")
     return "\n".join(lines)
 
 
-def _memory_section(ctx: SessionContext, target: str) -> str | None:
+def _memory_section(ctx: SessionContext, target: str, is_home_base: bool) -> str | None:
     if not ctx.recent_summaries:
+        if is_home_base:
+            return None  # nothing distinctive to say about a first home-base chat
         return (
             f"This is your first {target} conversation with this learner. Get "
             "acquainted the way a person would — through the conversation itself, "
@@ -166,3 +227,39 @@ def _memory_section(ctx: SessionContext, target: str) -> str | None:
             "in naturally; do not announce them as an agenda."
         )
     return "\n".join(lines)
+
+
+def _known_keys_section(ctx: SessionContext) -> str | None:
+    """Surfaces every feature_key already on record for this profile — not
+    just the ones that have crossed the recurrence threshold — so the
+    annotate_errors detector can reuse a key on the SECOND occurrence of a
+    still-rare error instead of minting a near-duplicate fingerprint each
+    time (observed live: the same "tengo vs. tiene" mistake logged under
+    three different feature_keys across three calls before this section
+    existed)."""
+    if not ctx.known_feature_keys:
+        return None
+    keys = ", ".join(ctx.known_feature_keys)
+    return (
+        "When you call annotate_errors, check this list of the learner's "
+        "already-logged error fingerprints FIRST. If an error is the same "
+        "underlying mistake as one already here, reuse that exact feature_key "
+        f"string verbatim — do not invent a new one for it: {keys}"
+    )
+
+
+def _pivot_section(frequency: str, other_languages: list[str]) -> str:
+    langs = ", ".join(language_name(code) for code in other_languages)
+    cadence = {
+        "occasional": "rarely — no more than once every several exchanges, and only when it fits naturally",
+        "frequent": "somewhat often, whenever a natural moment presents itself",
+    }.get(frequency, "rarely")
+    return (
+        f"With the learner's standing permission, you may {cadence} pivot the "
+        f"conversation into one of their other languages ({langs}) to test "
+        "them, unannounced — call update_session_state(action='switch_language', "
+        "language=<code>, reason='tutor_pivot'). This is a comprehension check, "
+        "not a trick: stay on the same topic through the switch. If they seem "
+        "genuinely lost or ask to switch back, do so immediately, the same way. "
+        "Never pivot mid-sentence, and never two turns in a row."
+    )

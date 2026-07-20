@@ -52,6 +52,8 @@ plus time decay applied at session start (``decay_confidence``). Properties
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 #: Higher = high-confidence estimates resist single observations more.
 GAIN_INERTIA = 6.0
 
@@ -129,6 +131,17 @@ def decay_confidence(confidence: float, days_idle: float) -> float:
     if days_idle <= 0:
         return confidence
     return confidence * 0.5 ** (days_idle / CONFIDENCE_HALF_LIFE_DAYS)
+
+
+def days_since(iso_timestamp: str) -> float:
+    """Days elapsed since a SQLite ``datetime('now')``-style timestamp.
+
+    Used with decay_confidence() at the point a new observation is folded in,
+    to figure out how stale the prior estimate is before applying it.
+    """
+    then = datetime.fromisoformat(iso_timestamp).replace(tzinfo=timezone.utc)
+    now = datetime.now(timezone.utc)
+    return (now - then).total_seconds() / 86400.0
 
 
 def aggregate_overall(dimensions: dict[str, tuple[float, float]]) -> tuple[float, float]:

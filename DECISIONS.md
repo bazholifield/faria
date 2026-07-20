@@ -174,3 +174,71 @@ question, no praise inflation, comfortable taking the lead and comfortable with 
 per profile or per session; the initiative knob (learner-led ↔ balanced ↔ tutor-led talk
 ratio) is part of persona configuration. Personality is content for `tutor/prompts.py`
 section 1 — versioned prompt text, not code.
+
+## ADR-017 — End-of-session sweep is one call per target language, dedup is best-effort
+
+The sweep (ADR-003's second detector) runs against the SAME full transcript once per distinct
+non-native language the learner actually spoke (`SessionRunner._run_sweeps`), told each time to
+ignore every other language — simpler than trying to slice the transcript, and cheap since
+these are Haiku calls. Missed errors are persisted with `action="logged_silent"` always (the
+session is over; there's no live moment to correct in) but still feed pattern recurrence.
+Dedup against what the live sidecar already caught is by exact `feature_key` string match on
+the same utterance — **confirmed live to be incomplete**: the sweep can fingerprint the same
+conceptual error differently than the sidecar did, producing a third `error_events` row for a
+real duplicate. A true fix needs semantic matching (its own LLM call, or embeddings) and was
+judged overkill for v1; see ADR-020 for the mitigation that *does* ship this pass. Documented
+as a known limitation in `tutor/sweep.py`'s docstring rather than silently accepted.
+
+## ADR-018 — Pattern lifecycle: threshold escalation on write, decay on session start
+
+Every `upsert_pattern` call resets status to `active` (still a live problem) unless the bumped
+`occurrence_count` crosses `fossilization_threshold` (default 6), in which case it's marked
+`fossilization_risk` — computed in one SQL `CASE`, no read-modify-write round trip. The reverse
+direction (a pattern going quiet) can't happen at write time by definition, so
+`decay_pattern_statuses` runs separately at the start of every session, downgrading
+`active`/`fossilization_risk` → `improving` after `pattern_improving_after_days` (default 14)
+without recurrence, → `resolved` after `pattern_resolved_after_days` (default 45). A pattern
+that recurs after being marked `improving` is bumped back to `active` by the next
+`upsert_pattern` call — a relapse, not a new pattern. All three thresholds are
+`CorrectionConfig` fields, tunable without touching the rule.
+
+## ADR-019 — Pivot frequency and per-session state live on the home profile; initiative deferred
+
+Pivot frequency and (later) the initiative knob are session-wide, companion-mode concepts —
+properties of the LEARNER's relationship with Faria, not of any one target-language profile.
+Rather than add a new schema table for this (real design work, uncertain shape), they're
+stored in the home-language profile's existing `preferences` JSON, read fresh at every prompt
+rebuild via `SessionRunner._pivot_settings()`. Consequence: a learner whose `native_language`
+changes, or who has no home profile yet, needs one created first — handled today since
+`_set_pivot_preference` creates it on demand. **Initiative (learner-led/balanced/tutor-led)
+was scoped OUT of the control tool this pass** — the roadmap bullet lists it under "Persona
+presets," not "Control tool," so it's treated as a preference to set by editing
+`preferences` directly for now, not a conversational action; revisit if that friction matters
+in practice. Tutor-initiated pivots are additionally throttled by
+`min_turns_between_pivots` (default 4), tracked against the shared `TurnState.turn_index` —
+one cooldown counter for the whole session, not per language-pair. Learner-requested switches
+are never throttled, by design (consent from the learner always wins).
+
+## ADR-020 — Nullable enum tool-schema fields need `anyOf`, not `type: [x, "null"] + enum`
+
+Discovered live, not in docs: a strict tool `input_schema` field shaped as
+`{"type": ["string", "null"], "enum": [...values..., null]}` is **rejected by the API**
+(`400 invalid_request_error`, "Enum value 'off' does not match declared type"), even though
+the sibling pattern `{"type": ["string", "null"]}` *without* an enum (used by
+`error_events.interference_source` since Phase 1) works fine. The fix is `anyOf`:
+`{"anyOf": [{"type": "string", "enum": [...]}, {"type": "null"}]}` — used throughout
+`tutor/control.py`'s four optional fields. Rule of thumb for any future nullable-enum tool
+field: reach for `anyOf` first, don't assume the array-type-plus-enum shorthand is supported.
+
+Also discovered live: even with the known-feature_key list (below), the model can report the
+identical error span twice under two different `feature_key`s **within a single**
+`annotate_errors` call. `SessionRunner._process_annotations` now deduplicates by exact
+`span_text` match within one call — a narrower, code-safe guard than the cross-call fuzzy-match
+problem in ADR-017, since two identical spans in the same batch are unambiguously the same
+error. The companion fix for cross-*session* fingerprint drift: `SessionContext` now carries
+`known_feature_keys` (every fingerprint on record for the profile, not just ones past the
+focus threshold — the old bug was that a still-rare error had no existing key to reuse, since
+`focus_patterns` only surfaces recurring ones), rendered as an explicit "reuse this verbatim"
+list in the prompt. Confirmed live: a repeated "tengo vs. tiene" error correctly accumulated
+onto one pattern (occurrence_count 1 → 2) after this fix, where it had previously fragmented
+into three separate one-off patterns across two sessions.
