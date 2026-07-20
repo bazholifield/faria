@@ -89,6 +89,7 @@ class ErrorEvent:
     interference_source: str | None = None
     action: str = "logged_silent"
     detector: str = "unknown"
+    model_action: str | None = None  # the model's own "handled" self-report (ADR-005)
 
 
 @dataclass(frozen=True)

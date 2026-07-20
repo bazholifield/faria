@@ -8,20 +8,23 @@ Lifecycle:
   start()  — load learner + profile + memory, assemble the system prompt,
              open a session row.
   turn()   — persist the learner utterance, stream the tutor reply (yielding
-             text deltas), persist the reply.
-             Phase 1 additions here: pass ERROR_ANNOTATION_TOOL to the brain,
-             pull the annotate_errors tool_use block off the final message,
-             run each error through CorrectionPolicy.decide(), upsert patterns
-             and record events.
+             text deltas), persist the reply, then process the annotation
+             sidecar's tool_use block: each reported error goes through
+             CorrectionPolicy.decide() and is persisted with pattern linking.
   end()    — generate + store the structured summary, close the session row.
-             Phase 1 additions: run the transcript sweep, record level
-             observations, update dimension estimates, surface the recap
-             queue to the caller.
+             Still Phase 1 TODO: an end-of-session transcript sweep for
+             missed errors + level observations -> levels.update_dimension()
+             -> repo.upsert_dimension()/set_overall_level(). The recap queue
+             built during turn() is already available via the recap_queue
+             property for the caller to surface at end of session.
 """
 
 from __future__ import annotations
 
+from dataclasses import replace
 from typing import Iterator
+
+from anthropic.types import Message
 
 from faria.config import Settings
 from faria.db.repository import Repository
@@ -31,9 +34,10 @@ from faria.domain.correction import (
     CorrectionStyle,
     TurnState,
 )
-from faria.domain.models import SessionContext
+from faria.domain.models import ErrorEvent, SessionContext
 from faria.tutor.brain import TutorBrain
 from faria.tutor.prompts import assemble_system_prompt
+from faria.tutor.schema import ERROR_ANNOTATION_TOOL, parse_annotated_errors
 from faria.tutor.summarizer import SessionSummary, generate_summary, to_summary_row
 
 
@@ -54,6 +58,11 @@ class SessionRunner:
     def context(self) -> SessionContext:
         assert self._ctx is not None, "call start() first"
         return self._ctx
+
+    @property
+    def recap_queue(self) -> list[ErrorEvent]:
+        """Errors deferred this session (CorrectionAction.DEFERRED_RECAP), for /end."""
+        return list(self._turn_state.recap_queue)
 
     def start(self, language: str, learner_name: str, goal: str | None = None) -> SessionContext:
         learner = self._repo.get_or_create_learner(learner_name)
@@ -90,13 +99,21 @@ class SessionRunner:
 
     def turn(self, user_text: str) -> Iterator[str]:
         """One conversation turn: yields the tutor reply as text deltas."""
-        assert self._session_id is not None and self._policy is not None, "call start() first"
+        assert (
+            self._session_id is not None
+            and self._policy is not None
+            and self._ctx is not None
+        ), "call start() first"
         self._policy.start_turn(self._turn_state)  # budget window tracks turns from day one
-        self._repo.add_utterance(self._session_id, self._turn_index, "learner", user_text)
+        learner_utt = self._repo.add_utterance(
+            self._session_id, self._turn_index, "learner", user_text
+        )
         self._turn_index += 1
         self._history.append({"role": "user", "content": user_text})
 
-        with self._brain.stream_reply(self._system, self._history) as stream:
+        with self._brain.stream_reply(
+            self._system, self._history, tools=[ERROR_ANNOTATION_TOOL]
+        ) as stream:
             for delta in stream.text_stream:
                 yield delta
             final = stream.get_final_message()
@@ -106,9 +123,33 @@ class SessionRunner:
         )
         self._repo.add_utterance(self._session_id, self._turn_index, "tutor", reply_text)
         self._turn_index += 1
+        # Only the plain text goes into history — dropping the tool_use block
+        # means we never send a matching tool_result back; the annotation
+        # call is a one-shot sidecar, not a round trip (ADR-003).
         self._history.append({"role": "assistant", "content": reply_text})
-        # Phase 1: extract annotate_errors tool_use from final.content,
-        # run CorrectionPolicy.decide() per error, persist events + patterns.
+
+        self._process_annotations(final, learner_utt.id)
+
+    def _process_annotations(self, final: Message, learner_utterance_id: int) -> None:
+        assert self._ctx is not None and self._policy is not None and self._session_id is not None
+        detector = f"sidecar:{final.model}"
+        for block in final.content:
+            if block.type != "tool_use" or block.name != "annotate_errors":
+                continue
+            for raw_event in parse_annotated_errors(block.input, learner_utterance_id, detector):
+                pattern = self._repo.upsert_pattern(
+                    self._ctx.profile.id,
+                    raw_event.category,
+                    raw_event.subcategory,
+                    raw_event.feature_key,
+                    raw_event.explanation,
+                )
+                action = self._policy.decide(
+                    raw_event, pattern, self._turn_state, self._ctx.profile.level_overall
+                )
+                self._repo.record_error_event(
+                    self._session_id, replace(raw_event, action=action), pattern.id
+                )
 
     def end(self) -> SessionSummary | None:
         """Close the session; returns the summary (None if nothing was said)."""

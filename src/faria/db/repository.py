@@ -243,8 +243,8 @@ class Repository:
                 INSERT INTO error_events
                     (session_id, utterance_id, pattern_id, span_start, span_end, span_text,
                      category, subcategory, severity, confidence, correction, explanation,
-                     interference_source, action, detector)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     interference_source, action, detector, model_action)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     session_id,
@@ -262,6 +262,7 @@ class Repository:
                     event.interference_source,
                     event.action,
                     event.detector,
+                    event.model_action,
                 ),
             )
 

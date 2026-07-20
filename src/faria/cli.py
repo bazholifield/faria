@@ -114,7 +114,17 @@ def _run_chat(args: argparse.Namespace, settings: Settings, conn) -> int:
 
 def _end_session(runner: SessionRunner) -> int:
     print("[faria] wrapping up...")
+    recap = runner.recap_queue
     summary = runner.end()
+
+    if recap:
+        print("\n[faria] a few things worth a second look:")
+        for e in recap:
+            if e.correction:
+                print(f'  - "{e.span_text}" -> {e.correction}')
+            elif e.explanation:
+                print(f"  - {e.explanation}")
+
     if summary is None:
         print("[faria] nothing was said; no summary written.")
         return 0

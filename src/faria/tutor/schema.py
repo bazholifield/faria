@@ -18,10 +18,12 @@ by-description only, which is fine).
 
 from __future__ import annotations
 
+from faria.domain.models import ErrorEvent
 from faria.domain.taxonomy import (
     SEVERITY_ANCHORS,
     ErrorCategory,
     ErrorSubcategory,
+    Severity,
     render_for_prompt,
 )
 
@@ -117,3 +119,36 @@ ERROR_ANNOTATION_TOOL: dict = {
         "additionalProperties": False,
     },
 }
+
+
+def parse_annotated_errors(
+    tool_input: dict, utterance_id: int, detector: str
+) -> list[ErrorEvent]:
+    """Convert one ``annotate_errors`` tool call's input into ErrorEvents.
+
+    ``action`` is left at the ErrorEvent default (logged_silent) — the caller
+    runs each event through CorrectionPolicy.decide() to get the real value.
+    ``model_action`` preserves the model's own "handled" self-report, kept
+    separately so it can be compared against the policy's decision (ADR-005):
+    the model may claim it corrected something the budget wouldn't have
+    allowed, and that disagreement is worth keeping, not silently resolving.
+    """
+    events = []
+    for raw in tool_input.get("errors", []):
+        events.append(
+            ErrorEvent(
+                utterance_id=utterance_id,
+                category=ErrorCategory(raw["category"]),
+                subcategory=ErrorSubcategory(raw["subcategory"]),
+                severity=Severity(raw["severity"]),
+                confidence=raw["confidence"],
+                feature_key=raw["feature_key"],
+                span_text=raw.get("span_text"),
+                correction=raw.get("correction"),
+                explanation=raw.get("explanation"),
+                interference_source=raw.get("interference_source") or None,
+                model_action=raw.get("handled"),
+                detector=detector,
+            )
+        )
+    return events

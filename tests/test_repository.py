@@ -74,12 +74,14 @@ def test_error_event_roundtrip(repo, conn):
         span_end=11,
         correction="el problema",
         detector="sidecar:test",
+        model_action="corrected_recast",
     )
     repo.record_error_event(session.id, event, pattern.id)
     row = conn.execute("SELECT * FROM error_events").fetchone()
     assert row["severity"] == 2
     assert row["pattern_id"] == pattern.id
     assert row["detector"] == "sidecar:test"
+    assert row["model_action"] == "corrected_recast"
 
 
 def test_summary_storage_and_recall_order(repo):
