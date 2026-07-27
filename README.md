@@ -12,6 +12,31 @@ page later.
 See [ROADMAP.md](ROADMAP.md) for the phased plan and [DECISIONS.md](DECISIONS.md) for why
 things are the way they are.
 
+## Languages
+
+Two tiers, because text and voice have different requirements. **Text mode** (`faria chat`)
+works for essentially any language Claude speaks — the learner model, error taxonomy, and
+CEFR estimation are all language-agnostic. **Voice mode** (`faria serve`) additionally needs
+a speech-to-text model (Whisper, broadly multilingual) and a text-to-speech voice (currently
+Piper, one configured voice per language).
+
+**Voice-ready now** (STT + a configured Piper voice): English, Spanish, French, German,
+Arabic. Basque is text-only for now — no Piper voice exists in the catalog yet (it will need
+an API voice or a community model).
+
+**Planned lineup** (text-capable today via `faria chat --language <code>`; voice support to
+follow as voices are added): English, Spanish, French, German, Chinese, Japanese, Korean,
+Italian, Portuguese, Hindi, Arabic, Swahili, Tagalog, Russian — and more over time.
+
+**Dialects** are a longer-term goal: choosing, say, Rioplatense vs. Castilian Spanish, or
+Egyptian vs. Modern Standard Arabic, both in how the tutor speaks and how it assesses you.
+The learner model is already per-language and could extend to per-dialect; the gating factor
+is dialect-specific voices and STT.
+
+The dream end state for voice is a single voice that speaks every language consistently and
+correctly, switching seamlessly mid-sentence — see the note in DECISIONS ADR-026; today's
+per-language Piper voices are a stepping stone, not the destination.
+
 ## Quickstart
 
 ```bash
