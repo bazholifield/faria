@@ -39,7 +39,36 @@ min_turns_between_pivots = 4
 recent_summaries_in_prompt = 3
 
 [audio]
-# Phase 2 placeholders — read but unused until the speech loop lands.
+# The browser client sends 16 kHz mono Int16 PCM; VAD + whisper assume it.
 stt_default = "faster-whisper"
-tts_default = "piper"
+tts_default = "piper"           # piper (local, free) | openai (needs OPENAI_API_KEY)
 sample_rate = 16000
+# faster-whisper: model size vs. latency is THE knob for the <2s budget.
+# Benchmarked here (WSL2 CPU, int8): "base" ~1.5s per 3s utterance, "small"
+# 7-9s (busts the budget). Raise to "small"/"medium" only with stt_device
+# = "cuda" (WSL2 CUDA passthrough works if the Windows NVIDIA driver is set up).
+stt_model = "base"
+stt_device = "auto"
+stt_compute = "int8"
+pronunciation_suspect_threshold = 0.5
+# VAD utterance segmentation
+vad_aggressiveness = 2          # 0 lenient .. 3 aggressive
+vad_silence_ms = 700            # trailing silence that ends your turn
+vad_min_speech_ms = 250
+vad_max_utterance_s = 45
+voices_dir = "data/voices"      # Piper voices auto-download here on first use
+
+[audio.piper_voices]
+# Piper voice per language. No Basque (eu) voice exists in the Piper catalog —
+# the TTS twin of the Whisper-Basque STT gap; use the openai backend for eu.
+en = "en_US-lessac-medium"
+es = "es_ES-sharvard-medium"
+fr = "fr_FR-siwis-medium"
+de = "de_DE-thorsten-medium"
+ar = "ar_JO-kareem-medium"
+
+[server]
+# 127.0.0.1 for the desk (Windows browser -> WSL2 localhost forwarding);
+# switch to 0.0.0.0 for LAN/Tailscale in Phase 3.
+host = "127.0.0.1"
+port = 8765

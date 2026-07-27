@@ -34,11 +34,20 @@ class TranscriptionResult:
 
 
 class Transcriber(ABC):
-    """One STT backend. Implementations: FasterWhisperTranscriber (Phase 2), ..."""
+    """One STT backend. Implementations: FasterWhisperTranscriber, ..."""
 
     @abstractmethod
-    def transcribe(self, audio_pcm: bytes, sample_rate: int, language: str) -> TranscriptionResult:
-        """Transcribe a complete utterance (VAD segmentation happens upstream)."""
+    def transcribe(
+        self, audio_pcm: bytes, sample_rate: int, language: str | None
+    ) -> TranscriptionResult:
+        """Transcribe a complete utterance (VAD segmentation happens upstream).
+
+        ``language=None`` asks the backend to auto-detect — the right call for
+        companion sessions, where the learner may answer in a different
+        language than the active one ("switch back to English please" spoken
+        while Spanish is active must not be force-decoded as Spanish).
+        TranscriptionResult.language reports what was actually detected/used.
+        """
 
 
 class TranscriberRegistry:

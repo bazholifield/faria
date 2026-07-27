@@ -12,15 +12,23 @@ page later.
 See [ROADMAP.md](ROADMAP.md) for the phased plan and [DECISIONS.md](DECISIONS.md) for why
 things are the way they are.
 
-## Quickstart (Phase 0)
+## Quickstart
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env          # then put your ANTHROPIC_API_KEY in .env
-faria chat --language es      # talk; /end for summary+exit, /quit to abort
+
+faria chat                    # text companion mode (English home base; ask to switch)
+faria chat --language es      # text focused practice; /end for summary, /quit to abort
+faria serve                   # voice: open http://localhost:8765 in a browser w/ mic
+faria patterns --language es  # your recurring error patterns, with examples
 pytest                        # run the test suite
 ```
+
+First `faria serve` run downloads the speech models (~500 MB whisper + ~60 MB per Piper
+voice) into `data/`. On WSL2, browse from Windows — the browser owns the microphone and
+speakers; the backend never touches audio hardware (ADR-021).
 
 ## Repository structure
 
@@ -58,11 +66,19 @@ faria/
 │   │   └── sweep.py            # End-of-session error sweep + CEFR evidence, per target language
 │   ├── session/
 │   │   └── lifecycle.py        # SessionRunner: multi-language contexts, turns, sweep, end
-│   ├── speech/                 # Phase 2 — interfaces only for now
+│   ├── speech/                 # The audio pipeline (Phase 2)
 │   │   ├── stt.py              # Transcriber ABC + per-language override registry
-│   │   └── tts.py              # Synthesizer ABC (Piper local, API, XTTS later)
-│   └── server/                 # Phase 2/3 — FastAPI app, WebSocket audio loop, REST, web/
-│       └── __init__.py         # Placeholder; see ROADMAP Phase 2
+│   │   ├── whisper_stt.py      # faster-whisper implementation (word confidences)
+│   │   ├── tts.py              # Synthesizer ABC
+│   │   ├── piper_tts.py        # Piper implementation (local, free; auto-downloads voices)
+│   │   ├── openai_tts.py       # API TTS option (opt-in; needs OPENAI_API_KEY)
+│   │   ├── vad.py              # Utterance segmentation over the mic stream (webrtcvad)
+│   │   └── sentences.py        # Streams Claude deltas into per-sentence TTS handoffs
+│   └── server/                 # FastAPI server (Phase 2)
+│       ├── app.py              # App factory with injectable deps (tests use fakes)
+│       ├── ws.py               # The realtime loop: PCM in -> VAD -> STT -> tutor -> TTS out
+│       ├── rest.py             # Read-only views: /api/profiles, /api/patterns/{lang}
+│       └── web/                # Browser client: index.html + mic-capture worklet
 └── tests/
     ├── conftest.py             # tmp-DB fixture
     ├── test_config.py          # Defaults + TOML override behavior

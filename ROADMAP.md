@@ -131,6 +131,13 @@ Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
   latency, with the same learner-model behavior as text.
 - Swapping STT or TTS backend is a config change, not a code change.
 
+**Status (built 2026-07-20):** the loop is live end-to-end (`faria serve` + browser at
+localhost:8765) with identical learner-model behavior — verified. Backend swap is a config
+change — met. Latency is the open item: **~4.5s** to first audio on pure CPU (measured:
+STT ~2s + first Claude token ~2s + TTS ~0.5s) vs. the <2s budget; instrumentation is in
+place and the closing paths (chiefly CUDA for whisper) are in ADR-022. The headset test
+itself needs a human with a microphone — that's you.
+
 ## Phase 3 — Phone client
 
 - Single mobile-friendly web page served by FastAPI: pick a language, hold-to-talk (or VAD),

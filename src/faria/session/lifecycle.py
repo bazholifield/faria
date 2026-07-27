@@ -47,6 +47,8 @@ from faria.domain.correction import (
 )
 from faria.domain.levels import aggregate_overall, days_since, decay_confidence, update_dimension
 from faria.domain.models import ErrorEvent, LanguageProfile, Learner, SessionContext, Utterance
+from faria.domain.taxonomy import ErrorCategory, ErrorSubcategory, Severity
+from faria.speech.stt import TranscriptionResult
 from faria.tutor.brain import TutorBrain
 from faria.tutor.control import SESSION_CONTROL_TOOL, SessionStateChange, parse_control_call
 from faria.tutor.prompts import assemble_system_prompt
@@ -95,13 +97,18 @@ class SessionRunner:
     # -- lifecycle ------------------------------------------------------------
 
     def start(
-        self, learner_name: str, language: str | None = None, goal: str | None = None
+        self,
+        learner_name: str,
+        language: str | None = None,
+        goal: str | None = None,
+        mode: str = "text",
     ) -> SessionContext:
         """Start a session. ``language`` omitted -> home base (the learner's
         native language, ambient companion mode); given -> start directly in
-        that target language (focused practice)."""
+        that target language (focused practice). ``mode`` is "text" (CLI) or
+        "audio" (the Phase 2 speech loop)."""
         self._learner = self._repo.get_or_create_learner(learner_name)
-        session = self._repo.create_session(self._learner.id, mode="text", goal=goal)
+        session = self._repo.create_session(self._learner.id, mode=mode, goal=goal)
         self._session_id = session.id
         self._home_language = self._learner.native_language
 
@@ -114,18 +121,31 @@ class SessionRunner:
         self._rebuild_prompt()
         return self.context
 
-    def turn(self, user_text: str) -> Iterator[str]:
-        """One conversation turn: yields the tutor reply as text deltas."""
+    def turn(self, user_text: str, stt: TranscriptionResult | None = None) -> Iterator[str]:
+        """One conversation turn: yields the tutor reply as text deltas.
+
+        ``stt`` is present for audio sessions: word confidences land in the
+        utterance's meta JSON, and low-confidence words on an otherwise
+        confident utterance become phonology:pronunciation_suspected events
+        (ROADMAP Phase 2)."""
         assert (
             self._session_id is not None
             and self._policy is not None
             and self._ctx is not None
         ), "call start() first"
         self._policy.start_turn(self._turn_state)  # budget window tracks turns from day one
+        meta = self._stt_meta(stt) if stt is not None else None
         learner_utt = self._repo.add_utterance(
-            self._session_id, self._turn_index, "learner", user_text, language=self._active_language
+            self._session_id,
+            self._turn_index,
+            "learner",
+            user_text,
+            language=self._active_language,
+            meta=meta,
         )
         self._turn_index += 1
+        if stt is not None:
+            self._log_pronunciation_suspects(stt, learner_utt.id)
         self._history.append({"role": "user", "content": user_text})
 
         # No point asking the model to grammar-check the learner's own native
@@ -241,6 +261,60 @@ class SessionRunner:
             if lang != self._active_language
         ]
         return frequency, others
+
+    # -- audio: STT metadata + pronunciation suspicion -------------------------
+
+    @staticmethod
+    def _stt_meta(stt: TranscriptionResult) -> dict:
+        return {
+            "stt": {
+                "confidence": round(stt.confidence, 3),
+                "detected_language": stt.language,  # kept for future evidence-routing refinement
+                "low_words": [
+                    [w.word, round(w.confidence, 2)] for w in stt.words if w.confidence < 0.7
+                ],
+            }
+        }
+
+    def _log_pronunciation_suspects(self, stt: TranscriptionResult, utterance_id: int) -> None:
+        """Low-confidence words on an otherwise-confident utterance -> logged
+        phonology events. Deliberately bypasses CorrectionPolicy.decide():
+        these are STT suspicions, not model-detected errors — never corrected,
+        never recapped, but pattern-counted so "he consistently garbles
+        'juntos'" becomes visible over time."""
+        assert self._ctx is not None and self._session_id is not None
+        if self._active_language == self._home_language:
+            return  # no pronunciation tracking for the learner's native language
+        threshold = self._settings.audio.pronunciation_suspect_threshold
+        if stt.confidence <= 0.5:
+            return  # whole utterance is shaky: an audio-quality problem, not pronunciation
+        for w in stt.words:
+            if w.confidence > threshold:
+                continue
+            word_key = "".join(ch for ch in w.word.lower() if ch.isalpha())
+            if not word_key:
+                continue
+            feature_key = f"phonology:pronunciation_suspected:{word_key}"
+            pattern = self._repo.upsert_pattern(
+                self._ctx.profile.id,
+                ErrorCategory.PHONOLOGY,
+                ErrorSubcategory.PRONUNCIATION_SUSPECTED,
+                feature_key,
+                f"STT repeatedly uncertain about '{word_key}'",
+                fossilization_threshold=self._settings.correction.fossilization_threshold,
+            )
+            event = ErrorEvent(
+                utterance_id=utterance_id,
+                category=ErrorCategory.PHONOLOGY,
+                subcategory=ErrorSubcategory.PRONUNCIATION_SUSPECTED,
+                severity=Severity.SLIP,
+                confidence=round(min(1.0 - w.confidence, 0.6), 2),  # a suspicion, never inline-worthy
+                feature_key=feature_key,
+                span_text=w.word.strip(),
+                detector="stt:faster-whisper",
+                action="logged_silent",
+            )
+            self._repo.record_error_event(self._session_id, event, pattern.id)
 
     # -- annotation sidecar ---------------------------------------------------
 

@@ -8,6 +8,17 @@ dependencies = [
     "anthropic>=0.116",
     "pydantic>=2.7",
     "python-dotenv>=1.0",
+    # Phase 2: audio + server
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "faster-whisper>=1.0",
+    "piper-tts>=1.2",
+    "webrtcvad>=2.0.10",
+    # webrtcvad imports pkg_resources at runtime; setuptools>=81 removed it.
+    # Drop this pin if webrtcvad ever gets a release without that import.
+    "setuptools<81",
+    "numpy>=1.26",
+    "httpx>=0.27",
 ]
 
 [project.optional-dependencies]

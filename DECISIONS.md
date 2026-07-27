@@ -242,3 +242,57 @@ focus threshold — the old bug was that a still-rare error had no existing key 
 list in the prompt. Confirmed live: a repeated "tengo vs. tiene" error correctly accumulated
 onto one pattern (occurrence_count 1 → 2) after this fix, where it had previously fragmented
 into three separate one-off patterns across two sessions.
+
+## ADR-021 — Audio: the browser owns the hardware; the backend owns everything else
+
+WSL2 microphone access is notoriously unreliable, and the product vision was always
+thin-client anyway. **Decision:** the backend never touches audio devices. The browser
+(Windows at the desk, phone in Phase 3) captures mic audio via an AudioWorklet, downsamples
+to 16 kHz Int16 PCM in the page, and streams raw frames over the websocket; TTS comes back
+as raw PCM the browser schedules through WebAudio. Deliberate deviations from the original
+sketch, and other calls bundled here:
+
+- **AudioWorklet PCM instead of MediaRecorder.** MediaRecorder produces webm/opus, which
+  would force an ffmpeg/opus-decode dependency server-side. Raw PCM keeps the server
+  dependency-free and the client is still ~60 lines of vanilla JS, no build toolchain.
+- **VAD is server-side** (webrtcvad behind an injectable `SpeechDetector` protocol,
+  `speech/vad.py`): the client stays dumb, and utterance-boundary tuning
+  (`vad_silence_ms` etc.) lives in config where it can be tuned without touching the client.
+- **Half-duplex v1:** mic frames are dropped while the tutor is transcribing/thinking/
+  speaking, and the segmenter is reset on state transitions so stale audio can't replay
+  into the next turn. Barge-in is explicitly future work.
+- **STT auto-detects language per utterance** (whisper `language=None`): in companion mode
+  the learner may answer in a language other than the active one ("switch back to English
+  please", spoken in English while Spanish is active) and a forced decode would garble it.
+  Detected language is stored in utterance meta; the utterance is still *tagged* with the
+  active language, same as text mode.
+- **One websocket = one session = one DB connection**; the WS handler is the second
+  transport driving the same SessionRunner the CLI drives (ADR-001 paying off — zero
+  session-logic changes for audio beyond the STT-metadata hook).
+- **Concurrency:** a receiver task drains the socket continuously; a single main task does
+  all sending. Sync/blocking work (whisper, piper, Claude streaming, DB) runs in executor
+  threads; sqlite connections drop `check_same_thread` since access is sequential per
+  connection.
+- Practical consequence of webrtcvad: it needs `pkg_resources`, so setuptools is pinned <81
+  in dependencies until webrtcvad ships a fix.
+
+## ADR-022 — Latency: measured, instrumented, and honestly not yet at <2s on CPU
+
+Per-stage timings (utterance-end → transcript → first Claude token → first audio) are
+logged per turn and sent to the client, so tuning is against numbers, not vibes. Measured on
+this machine (WSL2, CPU-only, 3s Spanish utterance):
+
+- whisper "small" int8: 5–9s per utterance — **unusable**; "base" ≈ 1.5–2.1s with equal
+  accuracy on clean headset speech → "base" + greedy decoding is the shipped default.
+- Steady-state end-to-end: **~4.5s** to first tutor audio (stt ~2.0s + Claude first token
+  ~1.9s + first-sentence TTS ~0.5s), plus the 700 ms VAD silence wait in live use. One run
+  hit 27s on an API-side spike (SDK retry) — rare but real; a client-side "still
+  thinking" cue matters more than shaving the median.
+- Sentence-streaming TTS works as designed: the tutor's audio starts while the reply is
+  still generating (8s of speech began 0.5s after the first sentence completed).
+
+The <2s exit criterion is NOT met on pure CPU. Paths to close, in expected-impact order:
+CUDA for whisper via WSL2 GPU passthrough (turns 2s of STT into ~0.2s — the single biggest
+win), `vad_silence_ms` 700→500, prompt caching once the assembled prompt crosses the
+cacheable minimum, and (if ever acceptable) a faster conversation model. Revisit with the
+desktop GPU before shipping Phase 3.

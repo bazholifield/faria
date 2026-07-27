@@ -50,6 +50,10 @@ def main(argv: list[str] | None = None) -> int:
     patterns.add_argument("--name", default=None)
     patterns.add_argument("--limit", type=int, default=5)
 
+    serve = sub.add_parser("serve", help="Run the audio server (browser client at /)")
+    serve.add_argument("--host", default=None, help="Override [server].host")
+    serve.add_argument("--port", type=int, default=None, help="Override [server].port")
+
     sub.add_parser("migrate", help="Apply pending database migrations and exit")
 
     args = parser.parse_args(argv)
@@ -65,8 +69,25 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "patterns":
         return _show_patterns(args, settings, conn)
+    if args.command == "serve":
+        conn.close()
+        return _serve(args, settings)
 
     return _run_chat(args, settings, conn)
+
+
+def _serve(args: argparse.Namespace, settings: Settings) -> int:
+    import uvicorn
+
+    from faria.server.app import create_app
+
+    host = args.host or settings.server.host
+    port = args.port or settings.server.port
+    print(f"[faria] loading speech models (first run downloads them)...")
+    app = create_app(settings)
+    print(f"[faria] open http://localhost:{port} in your browser (headset recommended)")
+    uvicorn.run(app, host=host, port=port, log_level="warning")
+    return 0
 
 
 def _run_chat(args: argparse.Namespace, settings: Settings, conn) -> int:

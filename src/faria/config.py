@@ -58,11 +58,58 @@ class MemoryConfig(BaseModel):
 
 
 class AudioConfig(BaseModel):
-    """Phase 2 placeholders; parsed now so the file format is stable."""
+    """Phase 2 audio pipeline knobs.
+
+    The client (browser) sends 16 kHz mono Int16 PCM; everything server-side
+    (VAD, whisper) is built around that rate. TTS output keeps each voice's
+    native rate — the browser resamples on playback via WebAudio.
+    """
 
     stt_default: str = "faster-whisper"
-    tts_default: str = "piper"
+    tts_default: str = "piper"  # piper | openai
     sample_rate: int = 16000
+
+    # faster-whisper. Default is "base": benchmarked on this WSL2 CPU,
+    # "small" ran at ~3x realtime (7-9s for a 3s utterance — busts the <2s
+    # budget) while "base" runs at ~0.6x realtime (~1.5s) with equal accuracy
+    # on clean headset speech. Move up to "small"/"medium" if stt_device can
+    # be "cuda" (WSL2 CUDA passthrough with a desktop GPU).
+    stt_model: str = "base"       # tiny | base | small | medium | large-v3 ...
+    stt_device: str = "auto"      # auto | cpu | cuda
+    stt_compute: str = "int8"     # int8 is the sane CPU default
+    # Words at/below this STT probability on an otherwise-confident utterance
+    # get logged as phonology:pronunciation_suspected events (ROADMAP Phase 2).
+    pronunciation_suspect_threshold: float = 0.5
+
+    # VAD utterance segmentation (webrtcvad)
+    vad_aggressiveness: int = 2   # 0 (lenient) .. 3 (aggressive filtering)
+    vad_silence_ms: int = 700     # this much trailing silence ends an utterance
+    vad_min_speech_ms: int = 250  # shorter blips are discarded as noise
+    vad_max_utterance_s: int = 45 # hard cap; emit even if the learner keeps going
+
+    # Piper: voices auto-download to voices_dir on first use.
+    voices_dir: Path = Path("data/voices")
+    # Per-language Piper voice IDs. No Basque voice exists in the Piper
+    # catalog (the TTS twin of the Whisper-Basque STT gap, ADR-010) — `eu`
+    # will need the API backend or a community model when it matters.
+    piper_voices: dict[str, str] = {
+        "en": "en_US-lessac-medium",
+        "es": "es_ES-sharvard-medium",
+        "fr": "fr_FR-siwis-medium",
+        "de": "de_DE-thorsten-medium",
+        "ar": "ar_JO-kareem-medium",
+    }
+
+    # OpenAI TTS (tts_default = "openai"); needs OPENAI_API_KEY in .env.
+    openai_tts_model: str = "gpt-4o-mini-tts"
+    openai_tts_voice: str = "alloy"
+
+
+class ServerConfig(BaseModel):
+    """Phase 2/3 server. 127.0.0.1 for the desk; 0.0.0.0 for LAN/Tailscale."""
+
+    host: str = "127.0.0.1"
+    port: int = 8765
 
 
 class Settings(BaseModel):
@@ -70,6 +117,7 @@ class Settings(BaseModel):
     correction: CorrectionConfig = CorrectionConfig()
     memory: MemoryConfig = MemoryConfig()
     audio: AudioConfig = AudioConfig()
+    server: ServerConfig = ServerConfig()
     data_dir: Path = DEFAULT_DATA_DIR
 
     @property

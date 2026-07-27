@@ -15,9 +15,16 @@ from typing import Iterator
 
 
 def connect(db_path: Path) -> sqlite3.Connection:
-    """Open the database with sane pragmas, creating parent dirs as needed."""
+    """Open the database with sane pragmas, creating parent dirs as needed.
+
+    check_same_thread=False because the Phase 2 server runs blocking DB work
+    via asyncio.to_thread, which hops executor threads between calls. Access
+    is still strictly sequential per connection (one WS session = one
+    connection, one operation at a time), so this is safe — it disables a
+    guard, not a lock we rely on.
+    """
     db_path.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.execute("PRAGMA journal_mode = WAL")
