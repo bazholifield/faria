@@ -346,3 +346,57 @@ plus levers and an audition path — `piper_length_scale` (1.1: slower, more del
 mentor-ish) and `faria say --voice <id>` which writes WAVs; six US-male candidates are
 pre-generated in `data/say/` for the user to judge. The true wizened-old-man voice is a
 Phase 4 cloning job; this pass makes voice choice a config decision instead of an accident.
+
+## ADR-025 — STT hallucination filtering: Silero VAD + whisper's own speech signals
+
+Second headset session: whisper transcribes random words when the user said nothing —
+its notorious hallucinate-on-silence, made worse by the small/base model. **Decision — a
+layered filter, most-accurate-signal first:**
+
+1. **faster-whisper's built-in Silero VAD** (`vad_filter=True`) strips non-speech BEFORE
+   decoding. This is the single biggest lever — verified: pure silence, white noise, and a
+   120 Hz hum all decode to empty text and are dropped. A real utterance (even padded with
+   a second of leading/trailing silence) passes cleanly.
+2. **A pure `is_probable_speech()` gate** (testable, no I/O) on whisper's own per-segment
+   signals — mean `no_speech_prob` (drop > 0.6), mean `avg_logprob` (drop < -1.0), mean word
+   confidence (drop < 0.45) — plus a non-linguistic-junk filter (pure punctuation, music
+   glyphs, bracketed "[Music]"/"(wind)" stage directions). Deliberately **no word blocklist**:
+   blocking whisper's classic silence-fillers ("gracias", "you", "thank you") would also drop
+   legitimate short learner answers, so real words are left to the probabilistic gates.
+3. **webrtcvad aggressiveness 3** as the cheap first gate (keeps whisper from running on pure
+   silence at all). Considered a segmenter-level voiced-ratio gate too but **removed it**: the
+   mandatory ~700 ms of end-of-utterance trailing silence inflates the denominator and would
+   drop short real turns — and Silero is a far better noise filter than an energy ratio anyway.
+
+Verified live over the websocket: 2 s of loud white noise → no transcription, no turn (the
+"only transcribe sounds actually directed at it" behavior). True speaker-specific recognition
+(enrollment / voice ID) remains future work as the user noted; this makes it *functional*.
+
+## ADR-026 — Mid-sentence TTS language routing needs a real detector (lingua, not py3langid)
+
+The v1 sentence-level routing (ADR-024) still read foreign *phrases inside* an otherwise-base
+sentence in the wrong voice. **Decision:** split each sentence into contiguous same-language
+runs and synthesize each in its own voice ("You could say [en] / bonjour mon ami [fr] / to
+greet a friend [en]" — verified end to end, the French voice speaks the French phrase).
+
+The load-bearing lesson: **the detector is everything, and py3langid isn't good enough.** It
+classified "Allons manger" and "bonjour mon ami" as English and Spanish "qué" as French — no
+amount of thresholding around a wrong classifier helps. Switched to **lingua**
+(`lingua-language-detector`), purpose-built for short/mixed text, whose
+`detect_multiple_languages_of` returns the code-switch segmentation with character offsets
+directly. Constrained to the languages we have voices for, it gives **zero false switches on
+monolingual base text** (the safety invariant — a false switch is a real glitch, a missed
+phrase is just the status quo) while catching common multi-word foreign phrases. Guardrails
+kept: a foreign run under 5 letters reverts to base, and any doubt falls back to base.
+
+Mechanics: an API voice that code-switches natively (`Synthesizer.handles_code_switching`,
+True for OpenAI) skips the split entirely; the WS `audio_format` message already re-announces
+sample rate per chunk, so different-rate voices mid-sentence "just work" (same-rate voices
+switch silently — correct). **All configured Piper voices preload at server startup**, not
+per-session: an earlier per-session background warm downloaded missing voices *during* a
+session and starved the Claude stream (the reply never arrived) — pay that cost once at boot.
+
+Residual limits (documented, not fixed): lingua still misses some phrases in context
+("Allons manger", "je ne sais quoi") which then read in the base voice; and mid-sentence the
+*speaker* changes (Piper = different speaker per language). Both are the Phase 4 cloned-voice
+job. py3langid dependency dropped.

@@ -26,6 +26,7 @@ class FasterWhisperTranscriber(Transcriber):
         # Import here so the CLI text path never pays the ctranslate2 import.
         from faster_whisper import WhisperModel
 
+        self._config = config
         self._model = WhisperModel(
             config.stt_model,
             device=config.stt_device,
@@ -46,12 +47,20 @@ class FasterWhisperTranscriber(Transcriber):
             beam_size=1,  # greedy: benchmarked as the right CPU tradeoff (see module docstring)
             word_timestamps=True,  # per-word probabilities feed pronunciation suspicion
             condition_on_previous_text=False,  # utterances are independent; avoids hallucination loops
+            # faster-whisper's built-in Silero VAD strips non-speech BEFORE
+            # decoding — the single biggest lever against hallucinate-on-silence
+            # (ADR-025). Left on by default; config can disable for debugging.
+            vad_filter=self._config.stt_vad_filter,
         )
 
         words: list[WordSpan] = []
         texts: list[str] = []
+        seg_no_speech: list[float] = []
+        seg_logprob: list[float] = []
         for segment in segments:  # generator — consuming it runs the actual decode
             texts.append(segment.text)
+            seg_no_speech.append(segment.no_speech_prob)
+            seg_logprob.append(segment.avg_logprob)
             for w in segment.words or []:
                 words.append(
                     WordSpan(
@@ -69,4 +78,7 @@ class FasterWhisperTranscriber(Transcriber):
             language=info.language,
             confidence=overall,
             words=words,
+            # No segments at all (Silero stripped everything) reads as silence.
+            no_speech_prob=float(np.mean(seg_no_speech)) if seg_no_speech else 1.0,
+            avg_logprob=float(np.mean(seg_logprob)) if seg_logprob else -10.0,
         )

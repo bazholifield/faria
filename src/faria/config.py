@@ -86,8 +86,19 @@ class AudioConfig(BaseModel):
     # never corrected and never counted toward pattern recurrence.
     stt_suspect_threshold: float = 0.7
 
-    # VAD utterance segmentation (webrtcvad)
-    vad_aggressiveness: int = 2   # 0 (lenient) .. 3 (aggressive filtering)
+    # Hallucination filtering (ADR-025). Whisper invents words on silence/noise;
+    # these gates drop a transcript that doesn't look like real speech.
+    stt_vad_filter: bool = True         # run faster-whisper's built-in Silero VAD
+    stt_no_speech_max: float = 0.6      # drop if mean no_speech_prob above this
+    stt_logprob_min: float = -1.0       # drop if mean avg_logprob below this
+    stt_min_confidence: float = 0.45    # drop if mean word confidence below this
+
+    # VAD utterance segmentation (webrtcvad). This is the CHEAP first gate that
+    # keeps whisper from running on pure silence; faster-whisper's Silero VAD
+    # (stt_vad_filter) is the accurate second gate. Aggressiveness 3 leans
+    # toward "only real speech triggers" — the user's complaint was noise
+    # getting transcribed, so bias toward fewer false triggers (ADR-025).
+    vad_aggressiveness: int = 3   # 0 (lenient) .. 3 (aggressive filtering)
     vad_silence_ms: int = 700     # this much trailing silence ends an utterance
     vad_min_speech_ms: int = 250  # shorter blips are discarded as noise
     vad_max_utterance_s: int = 45 # hard cap; emit even if the learner keeps going

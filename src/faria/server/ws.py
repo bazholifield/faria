@@ -47,7 +47,7 @@ from faria.domain.levels import band
 from faria.server.app import ServerDeps
 from faria.session.lifecycle import SessionRunner
 from faria.speech.sentences import SentenceAssembler
-from faria.speech.stt import TranscriptionResult
+from faria.speech.stt import TranscriptionResult, is_probable_speech
 from faria.speech.vad import UtteranceSegmenter, Utterance
 
 log = logging.getLogger("faria.ws")
@@ -95,8 +95,8 @@ async def _run_session(ws: WebSocket, deps: ServerDeps, conn) -> None:
             "level": band(ctx.profile.level_overall) if ctx.profile.level_overall else None,
         }
     )
-    # Warm the likely voices so the first sentence (and a mid-reply language
-    # switch) doesn't stall on a model load/download.
+    # Voices are preloaded at server startup (app.py), so this is a cheap
+    # cache touch — kept as a safety net for a TTS backend that didn't warm.
     for lang in {runner.active_language, ctx.learner.native_language}:
         await asyncio.to_thread(deps.tts.preload, lang)
 
@@ -166,8 +166,12 @@ async def _run_turn(
     t_transcript = time.monotonic()
 
     text = stt.text.strip()
-    if len(text) < 2:
-        # VAD fired on noise, or whisper produced nothing usable — just resume.
+    if not is_probable_speech(stt, deps.settings.audio):
+        # VAD fired on noise, or whisper hallucinated on silence (ADR-025) —
+        # drop it silently and keep listening. This is the "only transcribe
+        # sounds actually directed at it" behavior.
+        log.info("dropped non-speech: %r (no_speech=%.2f logprob=%.2f conf=%.2f)",
+                 text[:40], stt.no_speech_prob, stt.avg_logprob, stt.confidence)
         segmenter.reset()
         await _set_state(ws, state, "listening")
         return
@@ -183,26 +187,31 @@ async def _run_turn(
     audio_format_sent = {"rate": None}
 
     async def speak(sentence: str) -> None:
-        # Route each sentence to its own language's voice (ADR-024): in
-        # English mode a Spanish aside gets the Spanish voice, not English
-        # phonemes mangling it. On any doubt the router returns the active
-        # language, so worst case is the status quo.
-        tts_language = speak_language
-        if deps.lang_router is not None:
-            tts_language = deps.lang_router.detect(sentence, default=speak_language)
-        chunks = await asyncio.to_thread(
-            lambda: list(deps.tts.synthesize(sentence, tts_language))
-        )
-        for chunk in chunks:
-            if not chunk.pcm:
+        # Split each sentence into per-language runs and synthesize each in its
+        # own voice (ADR-026): in English mode a Spanish phrase gets the Spanish
+        # voice mid-sentence, not English phonemes mangling it. Runs default to
+        # the active language on any doubt, so worst case is the status quo. An
+        # API voice that code-switches natively skips the split.
+        if deps.lang_router is not None and not deps.tts.handles_code_switching:
+            runs = deps.lang_router.split_runs(sentence, default=speak_language)
+        else:
+            runs = [(sentence, speak_language)]
+        for run_text, run_language in runs:
+            if not run_text.strip():
                 continue
-            if audio_format_sent["rate"] != chunk.sample_rate:
-                await ws.send_json({"type": "audio_format", "sample_rate": chunk.sample_rate})
-                audio_format_sent["rate"] = chunk.sample_rate
-            if timings["first_audio_s"] is None:
-                timings["first_audio_s"] = round(time.monotonic() - t_utt_end, 2)
-                await _set_state(ws, state, "speaking")
-            await ws.send_bytes(chunk.pcm)
+            chunks = await asyncio.to_thread(
+                lambda t=run_text, l=run_language: list(deps.tts.synthesize(t, l))
+            )
+            for chunk in chunks:
+                if not chunk.pcm:
+                    continue
+                if audio_format_sent["rate"] != chunk.sample_rate:
+                    await ws.send_json({"type": "audio_format", "sample_rate": chunk.sample_rate})
+                    audio_format_sent["rate"] = chunk.sample_rate
+                if timings["first_audio_s"] is None:
+                    timings["first_audio_s"] = round(time.monotonic() - t_utt_end, 2)
+                    await _set_state(ws, state, "speaking")
+                await ws.send_bytes(chunk.pcm)
 
     async for delta in _iter_turn(runner, text, stt):
         if timings["first_delta_s"] is None:

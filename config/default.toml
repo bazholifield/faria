@@ -54,10 +54,17 @@ pronunciation_suspect_threshold = 0.5
 # Below this STT confidence a word is treated as possibly mistranscribed:
 # flagged to the tutor, never corrected, never pattern-counted (ADR-023).
 stt_suspect_threshold = 0.7
+# Hallucination filtering (ADR-025): whisper invents words on silence/noise.
+stt_vad_filter = true           # faster-whisper's built-in Silero VAD (the big win)
+stt_no_speech_max = 0.6         # drop transcript if mean no_speech_prob above this
+stt_logprob_min = -1.0          # drop if mean avg_logprob below this
+stt_min_confidence = 0.45       # drop if mean word confidence below this
 # Speaking pace: >1.0 slower/more deliberate (mentor-ish), <1.0 faster.
 piper_length_scale = 1.1
-# VAD utterance segmentation
-vad_aggressiveness = 2          # 0 lenient .. 3 aggressive
+# VAD utterance segmentation. Aggressiveness 3 = fewer false triggers on noise
+# (raise vad_silence_ms if it cuts you off; lower aggressiveness if it misses
+# quiet speech).
+vad_aggressiveness = 3          # 0 lenient .. 3 aggressive
 vad_silence_ms = 700            # trailing silence that ends your turn
 vad_min_speech_ms = 250
 vad_max_utterance_s = 45

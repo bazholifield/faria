@@ -15,6 +15,10 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from faria.config import AudioConfig
 
 
 @dataclass(frozen=True)
@@ -31,6 +35,36 @@ class TranscriptionResult:
     language: str
     confidence: float                       # overall, 0..1
     words: list[WordSpan] = field(default_factory=list)
+    # Whisper's own speechiness signals, for hallucination filtering (ADR-025).
+    # Defaults are the "definitely fine" values so non-whisper backends and
+    # test fakes pass the gate without setting them.
+    no_speech_prob: float = 0.0
+    avg_logprob: float = 0.0
+
+
+def is_probable_speech(result: TranscriptionResult, config: "AudioConfig") -> bool:
+    """Does this transcript look like real speech, or whisper hallucinating on
+    silence/noise (ADR-025)? Combines length, whisper's own no_speech/logprob
+    signals, mean word confidence, and a non-linguistic-junk filter. Kept pure
+    and testable; the WS loop calls it to decide whether a turn happened."""
+    text = result.text.strip()
+    if len(text) < 2:
+        return False
+    # Pure punctuation / music glyphs / bracketed stage directions ("[Music]",
+    # "(wind)") are whisper silence-fillers, never a learner turn. Real words
+    # are left to the probabilistic gates below (blocklisting real words like
+    # "gracias" would drop legitimate short answers).
+    if not any(ch.isalpha() for ch in text):
+        return False
+    if text[0] in "[(" and text[-1] in ")]":
+        return False
+    if result.no_speech_prob > config.stt_no_speech_max:
+        return False
+    if result.avg_logprob < config.stt_logprob_min:
+        return False
+    if result.words and result.confidence < config.stt_min_confidence:
+        return False
+    return True
 
 
 class Transcriber(ABC):

@@ -61,6 +61,16 @@ def _default_deps(settings: Settings) -> ServerDeps:
         from faria.speech.piper_tts import PiperSynthesizer
 
         tts = PiperSynthesizer(settings.audio)
+        # Preload EVERY configured voice at boot (downloading any that are
+        # missing), so mid-sentence language runs (ADR-026) and pivots never
+        # download or load a voice DURING a session — doing so mid-session
+        # contends with the Claude stream and stalls the reply. The shared
+        # synthesizer caches them for the life of the server.
+        for lang in settings.audio.piper_voices:
+            try:
+                tts.preload(lang)
+            except Exception:  # noqa: BLE001 — a missing voice shouldn't stop boot
+                pass
 
     return ServerDeps(
         settings=settings,

@@ -29,6 +29,10 @@ _PCM_SAMPLE_RATE = 24000  # response_format="pcm" is 24 kHz mono s16le per the d
 
 
 class OpenAISynthesizer(Synthesizer):
+    # A single OpenAI voice pronounces foreign phrases natively, so the server
+    # skips per-run splitting for this backend (ADR-026).
+    handles_code_switching = True
+
     def __init__(self, config: AudioConfig) -> None:
         self._config = config
         api_key = os.environ.get("OPENAI_API_KEY")

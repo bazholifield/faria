@@ -118,6 +118,10 @@ class UtteranceSegmenter:
         voiced_count = sum(1 for _, v in frames if v)
         if voiced_count < self._min_speech_frames:
             return None  # a blip, not speech
+        # No voiced-ratio gate here: the mandatory trailing silence would
+        # deflate the ratio and drop short real turns. Noise filtering is
+        # Silero's job downstream (stt_vad_filter), which is far more accurate
+        # than an energy ratio (ADR-025).
         pcm = b"".join(f for f, _ in frames)
         return Utterance(
             pcm=pcm,

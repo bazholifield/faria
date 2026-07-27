@@ -23,6 +23,11 @@ class AudioChunk:
 
 
 class Synthesizer(ABC):
+    #: True if one voice already handles mixed-language text well (an API voice),
+    #: so the server should NOT split a sentence into per-language runs for it
+    #: (ADR-026). False for single-language local voices like Piper.
+    handles_code_switching: bool = False
+
     @abstractmethod
     def synthesize(self, text: str, language: str, voice: str | None = None) -> Iterator[AudioChunk]:
         """Yield audio for one sentence/fragment as chunks become available."""

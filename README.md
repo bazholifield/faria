@@ -78,7 +78,7 @@ faria/
 │   │   ├── openai_tts.py       # API TTS option (opt-in; needs OPENAI_API_KEY)
 │   │   ├── vad.py              # Utterance segmentation over the mic stream (webrtcvad)
 │   │   ├── sentences.py        # Streams Claude deltas into per-sentence TTS handoffs
-│   │   └── lang_router.py      # Per-sentence language ID -> right voice for asides (ADR-024)
+│   │   └── lang_router.py      # Mid-sentence language ID (lingua) -> right voice per run (ADR-026)
 │   └── server/                 # FastAPI server (Phase 2)
 │       ├── app.py              # App factory with injectable deps (tests use fakes)
 │       ├── ws.py               # The realtime loop: PCM in -> VAD -> STT -> tutor -> TTS out
