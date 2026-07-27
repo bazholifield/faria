@@ -205,6 +205,76 @@ def test_same_span_reported_twice_in_one_call_is_deduplicated(repo):
     assert patterns[0].feature_key == "morphosyntax:agreement:yo_tener"
 
 
+def test_stt_suspect_words_quarantine_errors_and_annotate_history(repo):
+    """ADR-023: an 'error' on a word the STT flagged as uncertain is logged
+    without pattern linking (recurrence untouched), forced silent, and the
+    history copy of the turn carries a transcription note."""
+    from faria.speech.stt import TranscriptionResult, WordSpan
+
+    runner, brain = _make_runner(repo)
+    runner.start("bazh", language="es", mode="audio")
+
+    base_error = {
+        "category": "morphosyntax",
+        "subcategory": "conjugation",
+        "severity": 2,
+        "confidence": 0.9,
+        "explanation": "x",
+        "interference_source": None,
+        "handled": "not_addressed",
+    }
+    brain.queue(
+        "Ya veo.",
+        errors=[
+            {**base_error, "span_text": "fuemos al parque",  # real error, confident word
+             "correction": "fuimos al parque",
+             "feature_key": "morphosyntax:conjugation:preterite_ir"},
+            {**base_error, "span_text": "grimpar la montaña",  # 'grimpar' = STT noise
+             "correction": "escalar la montaña",
+             "feature_key": "lexis:word_formation:grimpar"},
+        ],
+    )
+    stt = TranscriptionResult(
+        text="ayer fuemos al parque para grimpar la montaña",
+        language="es",
+        confidence=0.85,
+        words=[
+            WordSpan("fuemos", 0.5, 0.9, 0.92),
+            WordSpan("grimpar", 1.4, 1.9, 0.31),  # below stt_suspect_threshold
+        ],
+    )
+    list(runner.turn("ayer fuemos al parque para grimpar la montaña", stt=stt))
+
+    # only the confident error touched patterns
+    patterns = repo.list_patterns(runner.context.profile.id)
+    keys = [p.feature_key for p in patterns if not p.feature_key.startswith("phonology:")]
+    assert keys == ["morphosyntax:conjugation:preterite_ir"]
+
+    # the suspect one is on the record, quarantined
+    row = runner._repo._conn.execute(
+        "SELECT pattern_id, action, detector FROM error_events WHERE span_text LIKE '%grimpar%' "
+        "AND category != 'phonology'"
+    ).fetchone()
+    assert row["pattern_id"] is None
+    assert row["action"] == "logged_silent"
+    assert row["detector"].endswith(":stt_suspect")
+
+    # the model was told which word not to trust
+    user_turn = runner._history[0]["content"]
+    assert "[transcription note:" in user_turn and "grimpar" in user_turn
+
+
+def test_audio_mode_prompt_carries_transcript_humility(repo):
+    runner, brain = _make_runner(repo)
+    runner.start("bazh", language="es", mode="audio")
+    assert "transcription note" in runner._system
+    assert "suspect the transcript first" in runner._system
+
+    runner2, _ = _make_runner(repo)
+    runner2.start("bazh", language="es")  # text mode
+    assert "transcription note" not in runner2._system
+
+
 def test_annotation_sidecar_feeds_correction_policy(repo):
     runner, brain = _make_runner(repo)
     runner.start("bazh", language="es")

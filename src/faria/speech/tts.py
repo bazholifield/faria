@@ -30,3 +30,7 @@ class Synthesizer(ABC):
     @abstractmethod
     def voices(self, language: str) -> list[str]:
         """Available voice identifiers for a language."""
+
+    def preload(self, language: str) -> None:
+        """Optional warm-up (download/load the language's voice ahead of the
+        first sentence). No-op by default; local backends override."""

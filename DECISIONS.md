@@ -296,3 +296,53 @@ CUDA for whisper via WSL2 GPU passthrough (turns 2s of STT into ~0.2s — the si
 win), `vad_silence_ms` 700→500, prompt caching once the assembled prompt crosses the
 cacheable minimum, and (if ever acceptable) a faster conversation model. Revisit with the
 desktop GPU before shipping Phase 3.
+
+## ADR-023 — The transcript is a witness, not a fact: STT-uncertainty humility
+
+First real headset session surfaced the ASR-cascade failure: whisper mistranscribes, the
+tutor confidently "corrects" a phrase the learner never said. Infuriating, and structurally
+fixable because we have word-level STT confidences. **Decision — three layers:**
+
+1. **Quarantine gate (deterministic):** words below `stt_suspect_threshold` (0.7) are
+   suspect. Any sidecar-reported error whose span contains a suspect word is recorded for
+   the audit trail but with `pattern_id = NULL` (recurrence untouched), `action =
+   logged_silent`, capped confidence, and a `:stt_suspect` detector suffix — uncertain
+   evidence never becomes correction pressure or pattern history.
+2. **Transcription note (per turn):** the history copy of a learner turn (not the persisted
+   utterance) appends `[transcription note: uncertain words — ...]`; the audio prompt
+   section teaches the convention: never correct a flagged word; if a phrase seems absurd,
+   suspect the transcript first, ask what they meant, and offer the natural phrasing.
+3. **Policy shift (all modes):** unprompted EXPLICIT correction is banned outright in the
+   recast-family styles — live sessions showed the model repeatedly going explicit despite
+   softer directives (`model_action` receipts prove it), so the directive now bans the
+   move by name. BREAKDOWN-severity errors in recast styles become CLARIFIED ("what were
+   you trying to say?" + a modeled phrasing) instead of explicit correction — an absurd
+   utterance is now treated as a communication repair, and in audio it may well be a
+   mistranscription anyway. Full explicit explanations remain available on request, and
+   the `explicit` style still exists for opting in.
+
+Consequence: some real errors on suspect words go untracked — the sweep (which reads the
+clean transcript, not confidences) partially compensates, and losing a data point beats
+teaching from noise.
+
+## ADR-024 — Per-sentence TTS language routing; voices are auditioned, not assumed
+
+Second live finding: in English mode the tutor quotes a Spanish phrase — exactly what a
+language companion should do — and the English Piper voice mangles it. **Decision:** each
+sentence is language-identified just before synthesis (py3langid, CONSTRAINED to the
+languages we have voices for — constrained short-text LID is reliable where open-set LID
+is noisy) and routed to that language's voice; short fragments and low-confidence calls
+fall back to the active language, so the worst case is the status quo. Voices for the
+active + home languages preload at session start so a mid-reply switch doesn't stall on a
+model load. Known residue: mixed sentences ("the word 'sobremesa' means…") read in the
+dominant language's voice — per-word switching is a non-goal; a code-switching API voice
+(Phase 4, XTTS/ElevenLabs) is the real fix, and it's also the only real fix for the
+*same-person-across-languages* problem, since Piper voices are different speakers per
+language.
+
+Voice character ("American, well-traveled, wizened old man"): Piper has no age-styled
+voices and I can't listen, so the default is a first-guess candidate (`en_US-john-medium`)
+plus levers and an audition path — `piper_length_scale` (1.1: slower, more deliberate,
+mentor-ish) and `faria say --voice <id>` which writes WAVs; six US-male candidates are
+pre-generated in `data/say/` for the user to judge. The true wizened-old-man voice is a
+Phase 4 cloning job; this pass makes voice choice a config decision instead of an accident.

@@ -51,6 +51,11 @@ stt_model = "base"
 stt_device = "auto"
 stt_compute = "int8"
 pronunciation_suspect_threshold = 0.5
+# Below this STT confidence a word is treated as possibly mistranscribed:
+# flagged to the tutor, never corrected, never pattern-counted (ADR-023).
+stt_suspect_threshold = 0.7
+# Speaking pace: >1.0 slower/more deliberate (mentor-ish), <1.0 faster.
+piper_length_scale = 1.1
 # VAD utterance segmentation
 vad_aggressiveness = 2          # 0 lenient .. 3 aggressive
 vad_silence_ms = 700            # trailing silence that ends your turn
@@ -59,9 +64,11 @@ vad_max_utterance_s = 45
 voices_dir = "data/voices"      # Piper voices auto-download here on first use
 
 [audio.piper_voices]
-# Piper voice per language. No Basque (eu) voice exists in the Piper catalog —
+# Piper voice per language. Audition candidates with:
+#   faria say --language en --voice en_US-norman-medium --text "..."
+# then set your pick here. No Basque (eu) voice exists in the Piper catalog —
 # the TTS twin of the Whisper-Basque STT gap; use the openai backend for eu.
-en = "en_US-lessac-medium"
+en = "en_US-john-medium"
 es = "es_ES-sharvard-medium"
 fr = "fr_FR-siwis-medium"
 de = "de_DE-thorsten-medium"

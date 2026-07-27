@@ -45,8 +45,12 @@ Priority order; first match wins:
       immediately — even at frequency `off`. Repairing understanding is
       conversation, not correction, and never counts against the budget.
   R2. severity >= 3 (DISRUPTIVE/BREAKDOWN) -> inline, in the profile's style:
-      CORRECTED_RECAST by default at any level; CORRECTED_EXPLICIT only when
-      style=explicit or severity == BREAKDOWN.
+      CORRECTED_RECAST by default at any level. BREAKDOWN in a recast-family
+      style is CLARIFIED, not corrected (ADR-023): an utterance that makes no
+      sense gets "what were you trying to say?" plus a model phrasing — treat
+      it as a communication repair, not a mistake to flag (it may well be a
+      mistranscription in audio mode). CORRECTED_EXPLICIT only when
+      style=explicit.
   R3. Pattern with occurrence_count >= recurrence_escalation_threshold ->
       inline (in the profile's style), and the pattern is on the prompt's
       focus list.
@@ -219,6 +223,16 @@ class CorrectionPolicy:
             'speaker would ("Yo voy a la playa ayer" -> "Ah, ¿fuiste a la playa '
             'ayer?"). No meta-commentary, no "small correction:", no grammar labels.'
         )
+        unprompted_ban = (
+            "Unprompted EXPLICIT correction is off the table entirely: never "
+            "quote the learner's error back at them, never say what they "
+            "\"should\" have said, never volunteer a conjugation rundown. If "
+            "what they said makes no sense to you, don't correct it — ask "
+            "naturally what they meant, then offer the natural way to say it "
+            "(\"ah, quieres decir...\"). Full explicit explanations only when "
+            "the learner ASKS (\"how do I say...\", \"was that right?\") — "
+            "then answer generously."
+        )
         if self.style is CorrectionStyle.EXPLICIT:
             return (
                 "name the error in one short phrase, give the correct form, then "
@@ -227,12 +241,10 @@ class CorrectionPolicy:
         if self.style is CorrectionStyle.RECAST_PLUS_NOTE:
             return (
                 f"correct by RECASTING — {recast_example} You may add at most one "
-                "very short note (a few words) when the error will clearly recur."
+                f"very short note (a few words) when the error will clearly recur. "
+                f"{unprompted_ban}"
             )
-        return (
-            f"correct by RECASTING — {recast_example} Reserve an explicit "
-            "correction for moments where communication has actually broken down."
-        )
+        return f"correct by RECASTING — {recast_example} {unprompted_ban}"
 
     # -- post-turn: sidecar -> decisions -------------------------------------
 
@@ -323,6 +335,11 @@ class CorrectionPolicy:
         return per_turn, per_window
 
     def _inline_action(self, error: ErrorEvent) -> CorrectionAction:
-        if self.style is CorrectionStyle.EXPLICIT or error.severity is Severity.BREAKDOWN:
+        if self.style is CorrectionStyle.EXPLICIT:
             return CorrectionAction.CORRECTED_EXPLICIT
+        if error.severity is Severity.BREAKDOWN:
+            # A nonsensical utterance gets "what did you mean?" + a modeled
+            # phrasing, never a correction lecture — it may not even be what
+            # the learner said (ADR-023).
+            return CorrectionAction.CLARIFIED
         return CorrectionAction.CORRECTED_RECAST

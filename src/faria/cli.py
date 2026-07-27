@@ -54,6 +54,12 @@ def main(argv: list[str] | None = None) -> int:
     serve.add_argument("--host", default=None, help="Override [server].host")
     serve.add_argument("--port", type=int, default=None, help="Override [server].port")
 
+    say = sub.add_parser("say", help="Synthesize text to a WAV file (voice auditioning)")
+    say.add_argument("--text", required=True)
+    say.add_argument("--language", default="en")
+    say.add_argument("--voice", default=None, help="Piper voice id (default: configured voice)")
+    say.add_argument("--out", default=None, help="Output path (default: data/say/<voice>.wav)")
+
     sub.add_parser("migrate", help="Apply pending database migrations and exit")
 
     args = parser.parse_args(argv)
@@ -72,8 +78,33 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "serve":
         conn.close()
         return _serve(args, settings)
+    if args.command == "say":
+        conn.close()
+        return _say(args, settings)
 
     return _run_chat(args, settings, conn)
+
+
+def _say(args: argparse.Namespace, settings: Settings) -> int:
+    """Audition voices: synthesize once, write a WAV, play it from Windows
+    (data/ is reachable at \\\\wsl$\\...\\faria\\data)."""
+    import wave
+    from pathlib import Path
+
+    from faria.speech.piper_tts import PiperSynthesizer
+
+    tts = PiperSynthesizer(settings.audio)
+    chunks = [c for c in tts.synthesize(args.text, args.language, voice=args.voice) if c.pcm]
+    voice_label = args.voice or settings.audio.piper_voices.get(args.language, args.language)
+    out = Path(args.out) if args.out else Path("data/say") / f"{voice_label}.wav"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with wave.open(str(out), "wb") as wav:
+        wav.setnchannels(1)
+        wav.setsampwidth(2)
+        wav.setframerate(chunks[0].sample_rate)
+        wav.writeframes(b"".join(c.pcm for c in chunks))
+    print(f"[faria] wrote {out} ({voice_label})")
+    return 0
 
 
 def _serve(args: argparse.Namespace, settings: Settings) -> int:

@@ -95,6 +95,10 @@ async def _run_session(ws: WebSocket, deps: ServerDeps, conn) -> None:
             "level": band(ctx.profile.level_overall) if ctx.profile.level_overall else None,
         }
     )
+    # Warm the likely voices so the first sentence (and a mid-reply language
+    # switch) doesn't stall on a model load/download.
+    for lang in {runner.active_language, ctx.learner.native_language}:
+        await asyncio.to_thread(deps.tts.preload, lang)
 
     segmenter = UtteranceSegmenter(deps.settings.audio, deps.detector_factory())
     events: asyncio.Queue[Any] = asyncio.Queue()
@@ -179,8 +183,15 @@ async def _run_turn(
     audio_format_sent = {"rate": None}
 
     async def speak(sentence: str) -> None:
+        # Route each sentence to its own language's voice (ADR-024): in
+        # English mode a Spanish aside gets the Spanish voice, not English
+        # phonemes mangling it. On any doubt the router returns the active
+        # language, so worst case is the status quo.
+        tts_language = speak_language
+        if deps.lang_router is not None:
+            tts_language = deps.lang_router.detect(sentence, default=speak_language)
         chunks = await asyncio.to_thread(
-            lambda: list(deps.tts.synthesize(sentence, speak_language))
+            lambda: list(deps.tts.synthesize(sentence, tts_language))
         )
         for chunk in chunks:
             if not chunk.pcm:

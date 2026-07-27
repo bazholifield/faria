@@ -21,6 +21,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from faria.config import Settings
+from faria.speech.lang_router import SentenceLanguageRouter
 from faria.speech.stt import Transcriber, TranscriberRegistry
 from faria.speech.tts import Synthesizer
 from faria.speech.vad import SpeechDetector, default_detector
@@ -37,6 +38,7 @@ class ServerDeps:
     tts: Synthesizer
     detector_factory: Callable[[], SpeechDetector]  # one detector per connection (stateful)
     brain_factory: Callable[[], object] = field(default=lambda: None)  # returns a TutorBrain-alike
+    lang_router: SentenceLanguageRouter | None = None  # per-sentence TTS routing (ADR-024)
 
 
 def _default_deps(settings: Settings) -> ServerDeps:
@@ -66,6 +68,8 @@ def _default_deps(settings: Settings) -> ServerDeps:
         tts=tts,
         detector_factory=lambda: default_detector(settings.audio.vad_aggressiveness),
         brain_factory=lambda: TutorBrain(settings.models),
+        # constrained to the languages we can actually speak
+        lang_router=SentenceLanguageRouter(list(settings.audio.piper_voices)),
     )
 
 

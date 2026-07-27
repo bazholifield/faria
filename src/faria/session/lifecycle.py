@@ -75,6 +75,7 @@ class SessionRunner:
         self._system: str = ""
         self._history: list[dict] = []
         self._turn_index: int = 0
+        self._mode: str = "text"
         self._turn_state = TurnState()  # shared across languages: one correction budget per session
         self._last_pivot_turn: int = -(10**6)  # far in the past, so the first pivot is never blocked
 
@@ -110,6 +111,7 @@ class SessionRunner:
         self._learner = self._repo.get_or_create_learner(learner_name)
         session = self._repo.create_session(self._learner.id, mode=mode, goal=goal)
         self._session_id = session.id
+        self._mode = mode
         self._home_language = self._learner.native_language
 
         starting_language = language or self._home_language
@@ -144,9 +146,19 @@ class SessionRunner:
             meta=meta,
         )
         self._turn_index += 1
+        suspect_words: set[str] = set()
         if stt is not None:
             self._log_pronunciation_suspects(stt, learner_utt.id)
-        self._history.append({"role": "user", "content": user_text})
+            suspect_words = self._suspect_words(stt)
+        # The persisted utterance is the clean transcript; the HISTORY copy may
+        # carry a bracketed transcription note so the model knows which words
+        # not to trust (ADR-023). The prompt's audio section explains the
+        # convention.
+        history_text = user_text
+        if suspect_words:
+            flagged = ", ".join(sorted(suspect_words))
+            history_text = f"{user_text}\n[transcription note: uncertain words — {flagged}]"
+        self._history.append({"role": "user", "content": history_text})
 
         # No point asking the model to grammar-check the learner's own native
         # language — the annotation tool only rides along in a target language.
@@ -173,7 +185,7 @@ class SessionRunner:
         self._history.append({"role": "assistant", "content": reply_text})
 
         if detecting_errors:
-            self._process_annotations(final, learner_utt.id)
+            self._process_annotations(final, learner_utt.id, suspect_words)
         self._process_control_calls(final)
 
     def end(self) -> SessionSummary | None:
@@ -244,6 +256,7 @@ class SessionRunner:
             self._policy.prompt_directives(self._ctx.focus_patterns, self._ctx.profile.level_overall),
             pivot_frequency=frequency,
             other_known_languages=other_languages,
+            audio=self._mode == "audio",
         )
 
     def _pivot_settings(self) -> tuple[str, list[str]]:
@@ -263,6 +276,19 @@ class SessionRunner:
         return frequency, others
 
     # -- audio: STT metadata + pronunciation suspicion -------------------------
+
+    def _suspect_words(self, stt: TranscriptionResult) -> set[str]:
+        """Words the recognizer itself wasn't sure about — candidates for
+        mistranscription, not learner errors (ADR-023). Normalized to
+        lowercase alpha for span matching."""
+        threshold = self._settings.audio.stt_suspect_threshold
+        out = set()
+        for w in stt.words:
+            if w.confidence < threshold:
+                normalized = "".join(ch for ch in w.word.lower() if ch.isalpha())
+                if normalized:
+                    out.add(normalized)
+        return out
 
     @staticmethod
     def _stt_meta(stt: TranscriptionResult) -> dict:
@@ -318,7 +344,9 @@ class SessionRunner:
 
     # -- annotation sidecar ---------------------------------------------------
 
-    def _process_annotations(self, final: Message, learner_utterance_id: int) -> None:
+    def _process_annotations(
+        self, final: Message, learner_utterance_id: int, suspect_words: set[str] | None = None
+    ) -> None:
         assert self._ctx is not None and self._policy is not None and self._session_id is not None
         detector = f"sidecar:{final.model}"
         seen_spans: set[str] = set()
@@ -335,6 +363,23 @@ class SessionRunner:
                 if span_key and span_key in seen_spans:
                     continue
                 seen_spans.add(span_key)
+                # ADR-023: an "error" inside a word the STT itself flagged as
+                # uncertain is quarantined — kept on the record for later
+                # inspection, but no pattern link (recurrence untouched), no
+                # correction, and a marked detector so these rows are
+                # excludable from any analysis.
+                if suspect_words and self._span_is_suspect(raw_event.span_text, suspect_words):
+                    self._repo.record_error_event(
+                        self._session_id,
+                        replace(
+                            raw_event,
+                            action="logged_silent",
+                            confidence=min(raw_event.confidence, 0.3),
+                            detector=f"{detector}:stt_suspect",
+                        ),
+                        pattern_id=None,
+                    )
+                    continue
                 pattern = self._repo.upsert_pattern(
                     self._ctx.profile.id,
                     raw_event.category,
@@ -349,6 +394,16 @@ class SessionRunner:
                 self._repo.record_error_event(
                     self._session_id, replace(raw_event, action=action), pattern.id
                 )
+
+    @staticmethod
+    def _span_is_suspect(span_text: str | None, suspect_words: set[str]) -> bool:
+        if not span_text:
+            return False
+        span_norm = {
+            "".join(ch for ch in token.lower() if ch.isalpha())
+            for token in span_text.split()
+        }
+        return bool(span_norm & suspect_words)
 
     # -- session control tool -------------------------------------------------
 

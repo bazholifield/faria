@@ -34,9 +34,17 @@ class PiperSynthesizer(Synthesizer):
         voice_id = self._config.piper_voices.get(language)
         return [voice_id] if voice_id else []
 
+    def preload(self, language: str) -> None:
+        """Download+load the language's voice ahead of first use, so a
+        mid-reply language switch (ADR-024) doesn't stall on a model load."""
+        if voice_id := self._config.piper_voices.get(language):
+            self._load(voice_id)
+
     def synthesize(
         self, text: str, language: str, voice: str | None = None
     ) -> Iterator[AudioChunk]:
+        from piper import SynthesisConfig
+
         voice_id = voice or self._config.piper_voices.get(language)
         if voice_id is None:
             raise ValueError(
@@ -44,7 +52,8 @@ class PiperSynthesizer(Synthesizer):
                 "(see [audio.piper_voices] in config; note there is no Basque voice)"
             )
         model = self._load(voice_id)
-        for chunk in model.synthesize(text):
+        syn_config = SynthesisConfig(length_scale=self._config.piper_length_scale)
+        for chunk in model.synthesize(text, syn_config=syn_config):
             yield AudioChunk(
                 pcm=chunk.audio_int16_bytes,
                 sample_rate=chunk.sample_rate,

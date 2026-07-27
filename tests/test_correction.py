@@ -85,10 +85,12 @@ def test_disruptive_gets_recast_by_default():
     assert p.decide(event(), None, fresh_turn(p), None) == CorrectionAction.CORRECTED_RECAST
 
 
-def test_breakdown_is_explicit_even_in_recast_style():
+def test_breakdown_in_recast_style_becomes_clarification():
+    """ADR-023: a nonsensical utterance gets 'what did you mean?' + a modeled
+    phrasing — never a correction lecture (it may be a mistranscription)."""
     p = policy()
     err = event(severity=Severity.BREAKDOWN)
-    assert p.decide(err, None, fresh_turn(p), None) == CorrectionAction.CORRECTED_EXPLICIT
+    assert p.decide(err, None, fresh_turn(p), None) == CorrectionAction.CLARIFIED
 
 
 def test_explicit_style_names_the_error():
@@ -138,8 +140,21 @@ def test_minimal_lets_disruptive_pass_but_not_breakdown():
     state = fresh_turn(p)
     assert p.decide(event(severity=Severity.DISRUPTIVE), None, state, None) == \
         CorrectionAction.DEFERRED_RECAP
+    # breakdown still gets addressed inline — as a clarification (ADR-023)
     assert p.decide(event(severity=Severity.BREAKDOWN, key="k2"), None, state, None) == \
-        CorrectionAction.CORRECTED_EXPLICIT
+        CorrectionAction.CLARIFIED
+
+
+def test_explicit_style_keeps_explicit_for_breakdown():
+    p = policy(style=CorrectionStyle.EXPLICIT)
+    err = event(severity=Severity.BREAKDOWN)
+    assert p.decide(err, None, fresh_turn(p), None) == CorrectionAction.CORRECTED_EXPLICIT
+
+
+def test_recast_directives_ban_unprompted_explicit_correction():
+    text = policy().prompt_directives([], None)
+    assert "Unprompted EXPLICIT correction is off the table" in text
+    assert "ask" in text.lower()  # the ask-what-they-meant move is spelled out
 
 
 def test_aggressive_corrects_minor_and_doubles_caps():

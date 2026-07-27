@@ -23,8 +23,12 @@ faria chat                    # text companion mode (English home base; ask to s
 faria chat --language es      # text focused practice; /end for summary, /quit to abort
 faria serve                   # voice: open http://localhost:8765 in a browser w/ mic
 faria patterns --language es  # your recurring error patterns, with examples
+faria say --voice en_US-norman-medium --text "..."   # audition a TTS voice -> data/say/
 pytest                        # run the test suite
 ```
+
+Six US-male voice auditions are pre-generated in `data/say/` — listen (from Windows:
+`\\wsl$\...\faria\data\say`), pick, and set `[audio.piper_voices].en` in config.
 
 First `faria serve` run downloads the speech models (~500 MB whisper + ~60 MB per Piper
 voice) into `data/`. On WSL2, browse from Windows — the browser owns the microphone and
@@ -73,7 +77,8 @@ faria/
 │   │   ├── piper_tts.py        # Piper implementation (local, free; auto-downloads voices)
 │   │   ├── openai_tts.py       # API TTS option (opt-in; needs OPENAI_API_KEY)
 │   │   ├── vad.py              # Utterance segmentation over the mic stream (webrtcvad)
-│   │   └── sentences.py        # Streams Claude deltas into per-sentence TTS handoffs
+│   │   ├── sentences.py        # Streams Claude deltas into per-sentence TTS handoffs
+│   │   └── lang_router.py      # Per-sentence language ID -> right voice for asides (ADR-024)
 │   └── server/                 # FastAPI server (Phase 2)
 │       ├── app.py              # App factory with injectable deps (tests use fakes)
 │       ├── ws.py               # The realtime loop: PCM in -> VAD -> STT -> tutor -> TTS out

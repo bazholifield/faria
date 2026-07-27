@@ -80,6 +80,11 @@ class AudioConfig(BaseModel):
     # Words at/below this STT probability on an otherwise-confident utterance
     # get logged as phonology:pronunciation_suspected events (ROADMAP Phase 2).
     pronunciation_suspect_threshold: float = 0.5
+    # Words below this STT probability are treated as possibly MIStranscribed
+    # (ADR-023): flagged to the tutor in a transcription note, and any error
+    # the sidecar reports on them is quarantined — logged for the record but
+    # never corrected and never counted toward pattern recurrence.
+    stt_suspect_threshold: float = 0.7
 
     # VAD utterance segmentation (webrtcvad)
     vad_aggressiveness: int = 2   # 0 (lenient) .. 3 (aggressive filtering)
@@ -89,16 +94,21 @@ class AudioConfig(BaseModel):
 
     # Piper: voices auto-download to voices_dir on first use.
     voices_dir: Path = Path("data/voices")
-    # Per-language Piper voice IDs. No Basque voice exists in the Piper
-    # catalog (the TTS twin of the Whisper-Basque STT gap, ADR-010) — `eu`
-    # will need the API backend or a community model when it matters.
+    # Per-language Piper voice IDs. The en default is a first-guess "older
+    # American man" candidate — audition alternatives with `faria say` and
+    # override here (ADR-024). No Basque voice exists in the Piper catalog
+    # (the TTS twin of the Whisper-Basque STT gap, ADR-010) — `eu` needs the
+    # API backend or a community model when it matters.
     piper_voices: dict[str, str] = {
-        "en": "en_US-lessac-medium",
+        "en": "en_US-john-medium",
         "es": "es_ES-sharvard-medium",
         "fr": "fr_FR-siwis-medium",
         "de": "de_DE-thorsten-medium",
         "ar": "ar_JO-kareem-medium",
     }
+    # Speaking pace: >1.0 is slower/more deliberate (1.1 reads as unhurried —
+    # part of the mentor character), <1.0 faster.
+    piper_length_scale: float = 1.1
 
     # OpenAI TTS (tts_default = "openai"); needs OPENAI_API_KEY in .env.
     openai_tts_model: str = "gpt-4o-mini-tts"

@@ -84,6 +84,7 @@ def assemble_system_prompt(
     policy_directives: str | None = None,
     pivot_frequency: str = "off",
     other_known_languages: list[str] | None = None,
+    audio: bool = False,
 ) -> str:
     """Build the system prompt for the currently active language.
 
@@ -123,11 +124,32 @@ def assemble_system_prompt(
     if pivot_frequency != "off" and other_known_languages:
         sections.append(_pivot_section(pivot_frequency, other_known_languages))
 
-    # 7. Session goal
+    # 7. Audio-session ground rules (ADR-023): the transcript is fallible.
+    if audio:
+        sections.append(_AUDIO_INSTRUCTIONS)
+
+    # 8. Session goal
     if ctx.goal:
         sections.append(f"Today's session goal: {ctx.goal}")
 
     return "\n\n".join(sections)
+
+
+_AUDIO_INSTRUCTIONS = (
+    "This is a SPOKEN conversation: the learner talks, and you read a "
+    "speech-recognition transcript — which can be wrong. A learner turn may "
+    "end with a bracketed [transcription note: ...] listing words the "
+    "recognizer was unsure of; that note is machine metadata, NOT the "
+    "learner's words — never respond to it directly and never report errors "
+    "inside it. Ground rules that follow from fallible transcripts: (1) never "
+    "correct or annotate a flagged word — the learner may not have said it; "
+    "(2) if a phrase seems absurd or out of character for this learner, "
+    "suspect the transcript first: ask naturally what they meant, and offer "
+    "the natural way to say what they were probably going for; (3) ignore "
+    "anything that is obviously transcription noise rather than speech. Also: "
+    "your replies are spoken aloud — no lists, no headings, no formatting, "
+    "nothing you wouldn't say with your voice."
+)
 
 
 def _language_section(ctx: SessionContext, is_home_base: bool, target: str, native: str) -> str:
