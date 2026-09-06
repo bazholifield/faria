@@ -138,6 +138,53 @@ STT ~2s + first Claude token ~2s + TTS ~0.5s) vs. the <2s budget; instrumentatio
 place and the closing paths (chiefly CUDA for whisper) are in ADR-022. The headset test
 itself needs a human with a microphone — that's you.
 
+## Phase 2.5 — Developer console
+
+Tuning this thing is now the bottleneck: the persona still reads more teacher than mentor,
+endpointing still cuts me off, and voices still sound like different people per language.
+All three are tuning problems, and none of them can be judged from memory. A separate
+localhost console (ADR-027) for working *on* the tutor rather than talking to it.
+
+- **Run metadata substrate (built):** every session records the full resolved config, the
+  exact assembled system prompt (content-addressed, one row per rebuild), and per-call
+  tokens/cost/latency across all three call sites — conversation, summary, sweep (ADR-028,
+  migration 0005). Persona text moved out of Python into editable `.md` files, so
+  "which prompt produced this run" has an answer.
+- **Run ledger (built):** sessions listed with cost, latency against the <2s budget, and the
+  prompt version that produced them; per-run detail shows transcript, per-turn spend, the
+  verbatim prompt, and which config knobs have drifted since.
+- **Prompt lab — render + edit (built):** the assembled prompt for any profile/language,
+  broken into labeled sections with character counts, against real profile data and with no
+  API call; correction/pivot/audio/persona overrides re-render it without persisting
+  anything. Persona text is editable in the browser and reloads in place. Strictly
+  read-only against the learner model: previewing an unstudied language does not create its
+  profile, and viewing a prompt does not decay the focus list it is showing.
+- **Prompt lab — replay (next):** run recorded learner turns through two prompt variants
+  side by side, each turn against its real frozen context, with cost per variant. Plus
+  cheap objective persona metrics (questions per reply, share of turns ending in a
+  question, reply length) so "tries too hard to teach" becomes a number, not only a vibe.
+- **Voice lab:** audition Piper voices in-browser, `piper_length_scale` slider, and a
+  language-router inspector showing how a code-switched sentence splits into per-language
+  runs (the ADR-026 residual limits, made visible).
+- **Turn-taking lab:** record mic snippets, replay the *same* audio through the segmenter at
+  different `vad_silence_ms`/aggressiveness values to see where each would cut. Endpointing
+  can't be tuned live — every trial is a different utterance. Needs opt-in audio retention.
+- **Annotation browser:** walk a session's error events with detector provenance, severity,
+  and policy `action` vs the model's `model_action`; adjudicate them into a gold set that
+  becomes a detector regression suite.
+- **Config console:** knob editor generated from the pydantic schema, each knob tagged with
+  when it takes effect (next turn / next session / component reload / restart). Needs
+  `Settings` to become reloadable rather than a boot-time value.
+- **Language wizard:** add a language end to end — name, Piper catalog search, download,
+  audition, STT override. Needs the scattered language identity (`_LANG_NAMES`,
+  `piper_voices`, the client's `<select>`) consolidated into one registry.
+
+**Exit criteria**
+- I can tell, from data rather than memory, whether a persona edit improved anything.
+- Two prompt variants can be compared over the same recorded turns without doing two live
+  sessions.
+- A VAD setting can be chosen by replaying one recording, not by guessing between utterances.
+
 ## Phase 3 — Phone client
 
 - Single mobile-friendly web page served by FastAPI: pick a language, hold-to-talk (or VAD),

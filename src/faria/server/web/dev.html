@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Faria — run ledger</title>
+<link rel="stylesheet" href="/static/dev.css">
+<style>
+  #detail { margin-top: 1.2rem; border: 1px solid #302b23; border-radius: 10px;
+            padding: 1rem 1.1rem; display: none; }
+  #detail h2 { font: 400 0.95rem/1 Georgia, serif; margin: 0 0 0.8rem; opacity: 0.85;
+               letter-spacing: 0.08em; }
+  .turn { padding: 0.45rem 0.7rem; border-left: 2px solid #2a251e; margin-bottom: 0.4rem; }
+  .turn.learner { border-left-color: #4a5c3c; }
+  .turn.tutor { border-left-color: #3a4652; }
+  .turn .who { font-size: 0.68rem; opacity: 0.45; text-transform: uppercase;
+               letter-spacing: 0.05em; }
+  .turn .t { white-space: pre-wrap; }
+  .turn .m { font-size: 0.72rem; opacity: 0.45; margin-top: 0.2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>FARIA</h1>
+  <nav>
+    <a href="/" class="active">run ledger</a>
+    <a href="/prompts">prompt lab</a>
+  </nav>
+  <span class="spacer"></span>
+  <span class="sub" id="dbPath"></span>
+  <button id="refresh">Refresh</button>
+</header>
+
+<div id="ledger"><div class="empty">loading…</div></div>
+<div id="detail"></div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+let currentPromptVersion = null;
+let openRun = null;
+
+const fmtCost = (v) => v == null ? '<span class="muted">—</span>' : "$" + v.toFixed(4);
+const fmtSecs = (v) => v == null ? '<span class="muted">—</span>' : v.toFixed(2) + "s";
+const fmtInt = (v) => (v || 0).toLocaleString();
+const esc = (s) => String(s ?? "").replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+
+// The <2s budget from ADR-022 — colour it so regressions are visible at a glance.
+function latencyClass(v) {
+  if (v == null) return "muted";
+  if (v <= 2) return "good";
+  if (v <= 4) return "warn";
+  return "bad";
+}
+
+async function api(path) {
+  const res = await fetch("/api" + path);
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function loadLedger() {
+  const data = await api("/runs");
+  currentPromptVersion = data.current_prompt_version;
+  const rows = data.runs;
+  if (!rows.length) {
+    $("ledger").innerHTML = '<div class="empty">No sessions recorded yet. '
+      + 'Run <code>faria chat</code> or <code>faria serve</code>, then refresh.</div>';
+    return;
+  }
+  $("ledger").innerHTML = `
+    <table>
+      <thead><tr>
+        <th>#</th><th>started</th><th>mode</th><th>langs</th>
+        <th class="num">turns</th><th class="num">1st audio</th><th class="num">worst</th>
+        <th class="num">tokens in</th><th class="num">out</th><th class="num">cost</th>
+        <th>prompt</th><th>status</th>
+      </tr></thead>
+      <tbody>${rows.map(runRow).join("")}</tbody>
+    </table>`;
+  for (const tr of document.querySelectorAll("#ledger tbody tr")) {
+    tr.onclick = () => showDetail(Number(tr.dataset.id));
+  }
+}
+
+function runRow(r) {
+  const stale = r.prompt_version && r.prompt_version !== currentPromptVersion;
+  const promptCell = r.prompt_version
+    ? `<span class="pill ${stale ? "stale" : ""}" title="${stale
+        ? "persona text has changed since this run" : "matches current persona text"}"
+      >${r.prompt_version.slice(0, 8)}</span>`
+    : '<span class="muted">—</span>';
+  return `<tr data-id="${r.id}" class="clickable${openRun === r.id ? " open" : ""}">
+    <td>${r.id}</td>
+    <td>${esc(r.started_at)}</td>
+    <td>${esc(r.mode)}</td>
+    <td>${r.languages.join(" ") || '<span class="muted">—</span>'}</td>
+    <td class="num">${r.learner_turns}</td>
+    <td class="num ${latencyClass(r.first_audio_median_s)}">${fmtSecs(r.first_audio_median_s)}</td>
+    <td class="num ${latencyClass(r.first_audio_worst_s)}">${fmtSecs(r.first_audio_worst_s)}</td>
+    <td class="num">${fmtInt(r.input_tokens)}</td>
+    <td class="num">${fmtInt(r.output_tokens)}</td>
+    <td class="num">${fmtCost(r.cost_usd)}</td>
+    <td>${promptCell}</td>
+    <td class="${r.status === "completed" ? "" : "muted"}">${esc(r.status)}</td>
+  </tr>`;
+}
+
+async function showDetail(id) {
+  openRun = id;
+  for (const tr of document.querySelectorAll("#ledger tbody tr")) {
+    tr.classList.toggle("open", Number(tr.dataset.id) === id);
+  }
+  const d = await api("/runs/" + id);
+  const box = $("detail");
+  box.style.display = "block";
+  box.innerHTML = `
+    <h2>Session ${d.id} · ${esc(d.mode)} · ${esc(d.started_at)}</h2>
+    <div class="grid">
+      ${stat("cost", fmtCost(d.totals.cost_usd))}
+      ${stat("api calls", d.totals.calls)}
+      ${stat("tokens in / out", fmtInt(d.totals.input_tokens) + " / " + fmtInt(d.totals.output_tokens))}
+      ${stat("cache reads", fmtInt(d.totals.cache_read_tokens))}
+      ${stat("median 1st audio", fmtSecs(d.totals.first_audio_median_s))}
+      ${stat("faria version", esc(d.faria_version || "—"))}
+    </div>
+    ${detailPrompts(d)}
+    ${detailDrift(d)}
+    ${detailOffline(d)}
+    ${detailTurns(d)}
+    ${d.summary ? `<h3>Session summary</h3><pre>${esc(d.summary)}</pre>` : ""}
+    <h3>Config snapshot</h3>
+    <pre>${esc(JSON.stringify(d.config_snapshot, null, 2) || "not recorded (session predates migration 0005)")}</pre>`;
+  for (const el of box.querySelectorAll("[data-prompt]")) {
+    el.onclick = () => showPrompt(el.dataset.prompt);
+  }
+  box.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+const stat = (label, value) =>
+  `<div class="stat"><div class="label">${label}</div><div class="value">${value}</div></div>`;
+
+function detailPrompts(d) {
+  if (!d.prompts.length) return "";
+  const stale = d.prompt_version && d.prompt_version !== d.current_prompt_version;
+  const note = stale
+    ? ` <span class="pill stale">persona text has changed since this run</span>`
+    : "";
+  return `<h3>System prompts used${note}</h3>
+    <table><thead><tr><th>#</th><th>language</th><th class="num">chars</th><th>hash</th><th></th></tr></thead>
+    <tbody>${d.prompts.map(p => `<tr>
+      <td>${p.seq}</td><td>${esc(p.language_name)}</td>
+      <td class="num">${fmtInt(p.chars)}</td><td class="muted">${p.hash.slice(0, 10)}</td>
+      <td><button data-prompt="${p.hash}">view exact text</button></td>
+    </tr>`).join("")}</tbody></table>`;
+}
+
+function detailDrift(d) {
+  if (!d.config_drift.length) {
+    return d.config_snapshot
+      ? `<h3>Config drift</h3><div class="muted">Identical to current config.</div>` : "";
+  }
+  return `<h3>Config drift — ${d.config_drift.length} knob(s) differ from current</h3>
+    <table><thead><tr><th>knob</th><th>this run</th><th>now</th></tr></thead>
+    <tbody>${d.config_drift.map(c => `<tr>
+      <td>${esc(c.key)}</td><td>${esc(JSON.stringify(c.run))}</td>
+      <td>${esc(JSON.stringify(c.current))}</td></tr>`).join("")}</tbody></table>`;
+}
+
+function detailOffline(d) {
+  if (!d.offline_calls.length) return "";
+  return `<h3>End-of-session calls</h3>
+    <table><thead><tr><th>stage</th><th>language</th><th>model</th>
+      <th class="num">in</th><th class="num">out</th><th class="num">cost</th></tr></thead>
+    <tbody>${d.offline_calls.map(c => `<tr>
+      <td>${esc(c.stage)}</td><td>${esc(c.language || "—")}</td><td>${esc(c.model || "—")}</td>
+      <td class="num">${fmtInt(c.input_tokens)}</td><td class="num">${fmtInt(c.output_tokens)}</td>
+      <td class="num">${fmtCost(c.cost_usd)}</td></tr>`).join("")}</tbody></table>`;
+}
+
+function detailTurns(d) {
+  if (!d.turns.length) return "";
+  return `<h3>Transcript</h3>` + d.turns.map(t => {
+    let meta = "";
+    if (t.metrics) {
+      const m = t.metrics, bits = [];
+      if (m.stt_s != null) bits.push(`stt ${m.stt_s}s`);
+      if (m.first_delta_s != null) bits.push(`first token ${m.first_delta_s}s`);
+      if (m.first_audio_s != null) bits.push(`first audio ${m.first_audio_s}s`);
+      if (m.input_tokens) bits.push(`${fmtInt(m.input_tokens)} in / ${fmtInt(m.output_tokens)} out`);
+      if (m.cost_usd != null) bits.push("$" + m.cost_usd.toFixed(4));
+      meta = bits.join(" · ");
+    }
+    return `<div class="turn ${t.speaker}">
+      <div class="who">${t.speaker} · ${esc(t.language)}</div>
+      <div class="t">${esc(t.text)}</div>
+      ${meta ? `<div class="m">${meta}</div>` : ""}</div>`;
+  }).join("");
+}
+
+async function showPrompt(hash) {
+  const p = await api("/prompts/" + hash);
+  const used = p.used_by.map(u => `session ${u.session_id} (${u.language})`).join(", ");
+  const box = $("detail");
+  const pane = document.createElement("div");
+  pane.innerHTML = `<h3>Prompt ${p.hash.slice(0, 10)} — used by ${esc(used)}</h3>
+    <pre>${esc(p.text)}</pre>`;
+  box.appendChild(pane);
+  pane.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+async function boot() {
+  try {
+    const cfg = await api("/config");
+    $("dbPath").textContent = cfg.db_path;
+    await loadLedger();
+  } catch (e) {
+    $("ledger").innerHTML = `<div class="empty">failed to load: ${esc(e.message)}</div>`;
+  }
+}
+
+$("refresh").onclick = boot;
+boot();
+</script>
+</body>
+</html>

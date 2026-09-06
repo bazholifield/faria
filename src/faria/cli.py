@@ -60,6 +60,15 @@ def main(argv: list[str] | None = None) -> int:
     say.add_argument("--voice", default=None, help="Piper voice id (default: configured voice)")
     say.add_argument("--out", default=None, help="Output path (default: data/say/<voice>.wav)")
 
+    dev = sub.add_parser("dev", help="Run the developer console (localhost only)")
+    dev.add_argument("--port", type=int, default=8766, help="Console port (default 8766)")
+    dev.add_argument(
+        "--db",
+        default=None,
+        help="Database to inspect (default: the configured tutor DB). Point this at "
+        "a dev DB to browse experiment runs instead of real sessions.",
+    )
+
     sub.add_parser("migrate", help="Apply pending database migrations and exit")
 
     args = parser.parse_args(argv)
@@ -78,6 +87,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "serve":
         conn.close()
         return _serve(args, settings)
+    if args.command == "dev":
+        conn.close()
+        return _dev(args, settings)
     if args.command == "say":
         conn.close()
         return _say(args, settings)
@@ -118,6 +130,32 @@ def _serve(args: argparse.Namespace, settings: Settings) -> int:
     app = create_app(settings)
     print(f"[faria] open http://localhost:{port} in your browser (headset recommended)")
     uvicorn.run(app, host=host, port=port, log_level="warning")
+    return 0
+
+
+def _dev(args: argparse.Namespace, settings: Settings) -> int:
+    """The developer console (ADR-027).
+
+    Hard-bound to 127.0.0.1 with no override flag: this app reads the whole
+    learner model and will grow config editing and API-spending panels, and
+    `faria serve` is the surface meant to be reachable from a phone. On WSL2
+    a loopback bind is still reachable from the Windows browser via localhost
+    forwarding, so nothing is lost by refusing to listen wider.
+    """
+    from pathlib import Path
+
+    import uvicorn
+
+    from faria.server.dev import create_dev_app
+
+    db_path = Path(args.db) if args.db else settings.db_path
+    if not db_path.exists():
+        print(f"[faria] no database at {db_path} — run `faria migrate` first.", file=sys.stderr)
+        return 1
+
+    app = create_dev_app(db_path, settings)
+    print(f"[faria] dev console on http://localhost:{args.port} (reading {db_path})")
+    uvicorn.run(app, host="127.0.0.1", port=args.port, log_level="warning")
     return 0
 
 

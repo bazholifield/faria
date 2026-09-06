@@ -99,6 +99,46 @@ class ErrorEvent:
 
 
 @dataclass(frozen=True)
+class TokenUsage:
+    """The four token counts one API call reports (turn_metrics columns).
+
+    Built from an SDK usage object via ``from_usage``. Every field defaults to
+    zero and reads defensively — a scripted fake brain in tests reports no
+    usage at all, and a missing count should cost nothing, not raise.
+    """
+
+    input_tokens: int = 0
+    output_tokens: int = 0
+    cache_read_tokens: int = 0
+    cache_write_tokens: int = 0
+
+    @classmethod
+    def from_usage(cls, usage: object | None) -> "TokenUsage":
+        if usage is None:
+            return cls()
+        return cls(
+            input_tokens=_int_attr(usage, "input_tokens"),
+            output_tokens=_int_attr(usage, "output_tokens"),
+            cache_read_tokens=_int_attr(usage, "cache_read_input_tokens"),
+            cache_write_tokens=_int_attr(usage, "cache_creation_input_tokens"),
+        )
+
+    @property
+    def total(self) -> int:
+        return (
+            self.input_tokens
+            + self.output_tokens
+            + self.cache_read_tokens
+            + self.cache_write_tokens
+        )
+
+
+def _int_attr(obj: object, name: str) -> int:
+    value = getattr(obj, name, 0)
+    return int(value) if isinstance(value, (int, float)) else 0
+
+
+@dataclass(frozen=True)
 class SummaryRow:
     session_id: int
     summary_text: str

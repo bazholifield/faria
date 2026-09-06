@@ -7,6 +7,7 @@ dataclasses from domain/models.py.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sqlite3
 
@@ -19,6 +20,7 @@ from faria.domain.models import (
     LevelDimensionRow,
     Session,
     SummaryRow,
+    TokenUsage,
     Utterance,
 )
 from faria.domain.taxonomy import ErrorCategory, ErrorSubcategory, Severity
@@ -448,6 +450,124 @@ class Repository:
             status=row["status"],
             occurrence_count=row["occurrence_count"],
         )
+
+    # -- run metadata (migration 0005) ---------------------------------------
+    # What produced a session, kept alongside what was said in it: the config
+    # and prompt text in force, and per-call latency and token cost. Without
+    # these, comparing two runs of a tuned prompt is guesswork.
+
+    def stamp_session_run(
+        self,
+        session_id: int,
+        config_snapshot: dict,
+        prompt_template_version: str,
+        faria_version: str,
+    ) -> None:
+        with transaction(self._conn) as conn:
+            conn.execute(
+                """
+                UPDATE sessions
+                SET config_snapshot = ?, prompt_template_version = ?, faria_version = ?
+                WHERE id = ?
+                """,
+                (
+                    json.dumps(config_snapshot, ensure_ascii=False, sort_keys=True),
+                    prompt_template_version,
+                    faria_version,
+                    session_id,
+                ),
+            )
+
+    def record_session_prompt(self, session_id: int, language: str, text: str) -> str:
+        """Store one assembled system prompt and link it to the session.
+
+        Content-addressed: the same prompt text across many sessions is stored
+        once. Returns the hash. Called on every prompt rebuild, so a session
+        that switches languages three times has four rows.
+        """
+        digest = hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
+        with transaction(self._conn) as conn:
+            conn.execute(
+                "INSERT OR IGNORE INTO prompt_versions (hash, text) VALUES (?, ?)",
+                (digest, text),
+            )
+            seq = conn.execute(
+                "SELECT COALESCE(MAX(seq) + 1, 0) AS next FROM session_prompts WHERE session_id = ?",
+                (session_id,),
+            ).fetchone()["next"]
+            conn.execute(
+                """
+                INSERT INTO session_prompts (session_id, seq, language, prompt_hash)
+                VALUES (?, ?, ?, ?)
+                """,
+                (session_id, seq, language, digest),
+            )
+        return digest
+
+    def get_prompt(self, prompt_hash: str) -> str | None:
+        row = self._conn.execute(
+            "SELECT text FROM prompt_versions WHERE hash = ?", (prompt_hash,)
+        ).fetchone()
+        return row["text"] if row else None
+
+    def record_turn_metrics(
+        self,
+        session_id: int,
+        stage: str,
+        turn_index: int | None = None,
+        language: str | None = None,
+        model: str | None = None,
+        usage: TokenUsage | None = None,
+        cost_usd: float | None = None,
+    ) -> int:
+        """One API call's tokens and cost. Returns the row id so the audio
+        layer can attach its timings once the turn finishes."""
+        usage = usage or TokenUsage()
+        with transaction(self._conn) as conn:
+            cur = conn.execute(
+                """
+                INSERT INTO turn_metrics
+                    (session_id, turn_index, language, stage, model, input_tokens,
+                     output_tokens, cache_read_tokens, cache_write_tokens, cost_usd)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    session_id,
+                    turn_index,
+                    language,
+                    stage,
+                    model,
+                    usage.input_tokens,
+                    usage.output_tokens,
+                    usage.cache_read_tokens,
+                    usage.cache_write_tokens,
+                    cost_usd,
+                ),
+            )
+        return cur.lastrowid
+
+    def attach_turn_timings(
+        self,
+        metric_id: int,
+        stt_s: float | None = None,
+        first_delta_s: float | None = None,
+        first_audio_s: float | None = None,
+    ) -> None:
+        """Second write for an audio turn: the stage timings ws.py measures.
+
+        Split from record_turn_metrics because the token counts are known when
+        the model call ends, while first_audio_s isn't known until TTS has
+        flushed — and a text session never has either.
+        """
+        with transaction(self._conn) as conn:
+            conn.execute(
+                """
+                UPDATE turn_metrics
+                SET stt_s = ?, first_delta_s = ?, first_audio_s = ?
+                WHERE id = ?
+                """,
+                (stt_s, first_delta_s, first_audio_s, metric_id),
+            )
 
     # -- summaries -----------------------------------------------------------
 

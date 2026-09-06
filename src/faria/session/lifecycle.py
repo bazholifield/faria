@@ -46,12 +46,20 @@ from faria.domain.correction import (
     TurnState,
 )
 from faria.domain.levels import aggregate_overall, days_since, decay_confidence, update_dimension
-from faria.domain.models import ErrorEvent, LanguageProfile, Learner, SessionContext, Utterance
+from faria.domain.models import (
+    ErrorEvent,
+    LanguageProfile,
+    Learner,
+    SessionContext,
+    TokenUsage,
+    Utterance,
+)
 from faria.domain.taxonomy import ErrorCategory, ErrorSubcategory, Severity
 from faria.speech.stt import TranscriptionResult
 from faria.tutor.brain import TutorBrain
 from faria.tutor.control import SESSION_CONTROL_TOOL, SessionStateChange, parse_control_call
-from faria.tutor.prompts import assemble_system_prompt
+from faria.tutor.pricing import estimate_cost
+from faria.tutor.prompts import assemble_system_prompt, prompt_template_version
 from faria.tutor.schema import ERROR_ANNOTATION_TOOL, parse_annotated_errors
 from faria.tutor.summarizer import SessionSummary, generate_summary, to_summary_row
 from faria.tutor.sweep import SessionSweep, SweepLevelObservation, generate_sweep
@@ -78,6 +86,7 @@ class SessionRunner:
         self._mode: str = "text"
         self._turn_state = TurnState()  # shared across languages: one correction budget per session
         self._last_pivot_turn: int = -(10**6)  # far in the past, so the first pivot is never blocked
+        self._last_metric_id: int | None = None  # conversation row awaiting audio timings
 
     @property
     def context(self) -> SessionContext:
@@ -120,6 +129,7 @@ class SessionRunner:
             self._contexts[starting_language].profile
         )
         self._active_language = starting_language
+        self._stamp_run()
         self._rebuild_prompt()
         return self.context
 
@@ -172,6 +182,12 @@ class SessionRunner:
                 yield delta
             final = stream.get_final_message()
 
+        self._record_call_metrics(
+            stage="conversation",
+            final=final,
+            turn_index=learner_utt.turn_index,
+            language=self._active_language,
+        )
         reply_text = "".join(
             block.text for block in final.content if block.type == "text"
         )
@@ -196,7 +212,11 @@ class SessionRunner:
             self._repo.end_session(self._session_id, status="abandoned")
             return None
 
-        summary = generate_summary(utterances, self._settings.models)
+        summary = generate_summary(
+            utterances,
+            self._settings.models,
+            on_usage=lambda response: self._record_call_metrics("summary", response),
+        )
         self._repo.store_summary(
             to_summary_row(summary, self._session_id, self._settings.models.summarizer)
         )
@@ -258,6 +278,13 @@ class SessionRunner:
             other_known_languages=other_languages,
             audio=self._mode == "audio",
         )
+        # Keep the exact text, not just a version tag: reading back what was
+        # actually sent is the difference between an evidence trail and a
+        # label (migration 0005).
+        if self._session_id is not None:
+            self._repo.record_session_prompt(
+                self._session_id, self._active_language, self._system
+            )
 
     def _pivot_settings(self) -> tuple[str, list[str]]:
         """(pivot_frequency, other eligible languages) — a session-wide concept
@@ -274,6 +301,78 @@ class SessionRunner:
             if lang != self._active_language
         ]
         return frequency, others
+
+    # -- run metadata ----------------------------------------------------------
+    # Every session records what produced it (config + prompt text) and what
+    # each API call cost in tokens and seconds. See migration 0005.
+
+    def _stamp_run(self) -> None:
+        assert self._session_id is not None
+        from faria import __version__
+
+        self._repo.stamp_session_run(
+            self._session_id,
+            config_snapshot=self._settings.model_dump(mode="json"),
+            prompt_template_version=prompt_template_version(),
+            faria_version=__version__,
+        )
+
+    def _record_call_metrics(
+        self,
+        stage: str,
+        final: object,
+        turn_index: int | None = None,
+        language: str | None = None,
+    ) -> None:
+        """Persist one API call's token usage and estimated cost.
+
+        Tolerant by design: a brain that reports no usage (the scripted fake in
+        tests, or a backend that omits it) still gets a row, with zeros. A
+        metrics write must never be the thing that breaks a conversation, so
+        failures here are swallowed rather than propagated.
+        """
+        if self._session_id is None:
+            return
+        model = getattr(final, "model", None)
+        usage = TokenUsage.from_usage(getattr(final, "usage", None))
+        try:
+            metric_id = self._repo.record_turn_metrics(
+                self._session_id,
+                stage=stage,
+                turn_index=turn_index,
+                language=language,
+                model=model,
+                usage=usage,
+                cost_usd=estimate_cost(model, usage),
+            )
+        except Exception:  # noqa: BLE001 — telemetry must not break the session
+            return
+        if stage == "conversation":
+            self._last_metric_id = metric_id
+
+    def attach_turn_timings(
+        self,
+        stt_s: float | None = None,
+        first_delta_s: float | None = None,
+        first_audio_s: float | None = None,
+    ) -> None:
+        """Attach the audio pipeline's stage timings to the turn just finished.
+
+        Called by the websocket layer (ws.py), which is the only place that
+        knows them — the text CLI has no STT or TTS stage. Safe to call when
+        no turn has run: it's a no-op.
+        """
+        if self._last_metric_id is None:
+            return
+        try:
+            self._repo.attach_turn_timings(
+                self._last_metric_id,
+                stt_s=stt_s,
+                first_delta_s=first_delta_s,
+                first_audio_s=first_audio_s,
+            )
+        except Exception:  # noqa: BLE001 — telemetry must not break the session
+            pass
 
     # -- audio: STT metadata + pronunciation suspicion -------------------------
 
@@ -495,7 +594,14 @@ class SessionRunner:
         for language in target_languages:
             if language not in self._contexts:
                 self._contexts[language] = self._load_language_context(language)
-            sweep = generate_sweep(utterances, language, self._settings.models)
+            sweep = generate_sweep(
+                utterances,
+                language,
+                self._settings.models,
+                on_usage=lambda response, lang=language: self._record_call_metrics(
+                    "sweep", response, language=lang
+                ),
+            )
             self._apply_sweep(sweep, self._contexts[language].profile.id)
 
     def _apply_sweep(self, sweep: SessionSweep, profile_id: int) -> None:

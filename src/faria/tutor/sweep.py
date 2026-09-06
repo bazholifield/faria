@@ -37,7 +37,7 @@ Design notes:
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Callable, Literal
 
 import anthropic
 from pydantic import BaseModel, Field
@@ -103,11 +103,18 @@ def _render_with_turn_indices(utterances: list[Utterance]) -> str:
 
 
 def generate_sweep(
-    utterances: list[Utterance], target_language: str, models: ModelsConfig
+    utterances: list[Utterance],
+    target_language: str,
+    models: ModelsConfig,
+    on_usage: Callable[[object], None] | None = None,
 ) -> SessionSweep:
     """One structured-output pass over the transcript, scoped to one target
     language; validated by pydantic. Call once per target language a
-    multilingual session touched (see module docstring)."""
+    multilingual session touched (see module docstring).
+
+    ``on_usage`` receives the raw response for token/cost accounting — a
+    multilingual session runs this once per language, so sweeps are often the
+    larger half of a session's bill."""
     client = anthropic.Anthropic()
     target = language_name(target_language)
     response = client.messages.parse(
@@ -131,6 +138,8 @@ def generate_sweep(
         ],
         output_format=SessionSweep,
     )
+    if on_usage is not None:
+        on_usage(response)
     parsed = response.parsed_output
     if parsed is None:
         raise RuntimeError("Sweep returned unparseable output")

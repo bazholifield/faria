@@ -12,6 +12,9 @@ EXPECTED_TABLES = {
     "error_events",
     "session_summaries",
     "schema_migrations",
+    "prompt_versions",
+    "session_prompts",
+    "turn_metrics",
 }
 
 
@@ -36,9 +39,9 @@ def test_migrations_are_idempotent(tmp_path):
 def test_0002_upgrade_preserves_existing_profiles(tmp_path):
     """The path a real DB takes: 0001 applied with data, then later migrations land.
 
-    Only 0001 is pre-registered, so this also exercises 0002-0004 landing
-    together in one apply_migrations() call — a real upgrade scenario, not an
-    artifact of the test setup.
+    Only 0001 is pre-registered, so this also exercises every later migration
+    landing together in one apply_migrations() call — a real upgrade scenario,
+    not an artifact of the test setup.
     """
     from importlib.resources import files
 
@@ -63,6 +66,7 @@ def test_0002_upgrade_preserves_existing_profiles(tmp_path):
         "0002_correction_style.sql",
         "0003_model_action.sql",
         "0004_learner_scoped_sessions.sql",
+        "0005_run_metadata.sql",
     ]
 
     row = conn.execute("SELECT * FROM language_profiles WHERE language = 'es'").fetchone()
@@ -74,7 +78,7 @@ def test_0002_upgrade_preserves_existing_profiles(tmp_path):
 
 
 def test_0003_upgrade_preserves_existing_error_events(tmp_path):
-    """The path a real DB takes: 0001+0002 applied with data, then 0003+0004 land."""
+    """The path a real DB takes: 0001+0002 applied with data, then the rest land."""
     from importlib.resources import files
 
     conn = connect(tmp_path / "m.db")
@@ -104,7 +108,11 @@ def test_0003_upgrade_preserves_existing_error_events(tmp_path):
     conn.commit()
 
     applied = apply_migrations(conn)
-    assert applied == ["0003_model_action.sql", "0004_learner_scoped_sessions.sql"]
+    assert applied == [
+        "0003_model_action.sql",
+        "0004_learner_scoped_sessions.sql",
+        "0005_run_metadata.sql",
+    ]
 
     row = conn.execute("SELECT * FROM error_events").fetchone()
     assert row["detector"] == "sidecar:test"  # existing data survived
@@ -116,7 +124,7 @@ def test_0003_upgrade_preserves_existing_error_events(tmp_path):
 
 
 def test_0004_upgrade_backfills_language_and_rescopes_sessions(tmp_path):
-    """0001-0003 applied with data (spanning two profiles/sessions), then 0004 lands."""
+    """0001-0003 applied with data (spanning two profiles/sessions), then the rest land."""
     from importlib.resources import files
 
     conn = connect(tmp_path / "m.db")
@@ -147,7 +155,7 @@ def test_0004_upgrade_backfills_language_and_rescopes_sessions(tmp_path):
     conn.commit()
 
     applied = apply_migrations(conn)
-    assert applied == ["0004_learner_scoped_sessions.sql"]
+    assert applied == ["0004_learner_scoped_sessions.sql", "0005_run_metadata.sql"]
 
     sessions = {r["id"]: dict(r) for r in conn.execute("SELECT * FROM sessions")}
     assert sessions[1]["learner_id"] == 1

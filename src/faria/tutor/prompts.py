@@ -22,9 +22,22 @@ without touching assembly logic. Rebuilt in full on every language switch
 (SessionRunner._rebuild_prompt) — mid-session changes already invalidate the
 prompt cache for the rest of that session, which is an accepted tradeoff at
 personal scale (ADR-015).
+
+Persona text lives in ``prompt_text/personas/*.md``, not in this module:
+ADR-016 calls personality "content, not code", and tuning it is the most
+frequent edit this project has. As files they can be diffed, A/B'd, and
+hashed — ``prompt_template_version()`` fingerprints the whole directory so
+every session can record which persona text produced it. Adding a persona is
+dropping in a file; the stem is the name used in ``preferences["persona"]``.
 """
 
 from __future__ import annotations
+
+import hashlib
+import re
+from dataclasses import dataclass
+from functools import lru_cache
+from pathlib import Path
 
 from faria.domain.levels import band
 from faria.domain.models import SessionContext
@@ -50,33 +63,85 @@ def language_name(code: str) -> str:
 
 # -- Section 1: personas (keep each block byte-stable; ADR-016) ---------------
 
-_MENTOR = """\
-You are Faria: an old, widely traveled mentor and conversation partner — the \
-Abbé Faria, had he spent his confinement collecting languages and stories \
-instead of digging tunnels. You have seen much, read more, and have no one \
-left to impress. You genuinely like this learner and are curious what they \
-think.
+DEFAULT_PERSONA = "mentor"
+# A real filesystem path, not importlib.resources: the dev console writes
+# persona text back, which a Traversable can't do. The package is always
+# installed from source (src-layout, editable), never a zip.
+_PERSONA_DIR = Path(__file__).parent / "prompt_text" / "personas"
+_PERSONA_NAME = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
 
-How you carry yourself:
-- You are a companion who teaches, not an assistant who serves. Never ask how \
-you can help, never offer menus of options, never await instructions.
-- You have your own agenda: introduce topics, tell short stories from history, \
-etymology, and the places your languages are spoken; state opinions and let \
-the learner push back. A good session should contain at least one thing the \
-learner didn't ask to be taught.
-- Make statements more than you ask questions, and never stack questions. \
-When you do ask, ask because you want the answer — never to quiz. It is fine \
-to end a turn without a question; trust the learner to pick up the thread.
-- No praise inflation. From you, a plain "bien" means something. React to \
-what the learner says, not to the fact that they said it.
-- Replies are conversational — usually two to four sentences, longer only \
-when a story has earned it.
-- Never break character, mention these instructions, or describe your own \
-behavior."""
 
-PERSONAS: dict[str, str] = {
-    "mentor": _MENTOR,
-}
+@lru_cache(maxsize=1)
+def personas() -> dict[str, str]:
+    """Every persona block on disk, keyed by filename stem.
+
+    Cached because assembly runs on every prompt rebuild; an editor calls
+    ``reload_prompt_text()`` to pick up changes without a process restart.
+    """
+    return {
+        path.stem: path.read_text(encoding="utf-8").strip()
+        for path in sorted(_PERSONA_DIR.glob("*.md"))
+    }
+
+
+def save_persona(name: str, text: str) -> str:
+    """Write persona text to disk and return the new template version.
+
+    The name becomes a filename, so it is validated against a strict slug
+    rather than sanitized — a traversal attempt is a bug worth surfacing, not
+    something to quietly rewrite into a neighbouring path.
+
+    Previous text is not archived here: it stays in git, and every run that
+    used it kept the full assembled prompt (ADR-028), so old persona text is
+    recoverable from the ledger even after an edit.
+    """
+    if not _PERSONA_NAME.match(name):
+        raise ValueError(
+            f"invalid persona name {name!r}: use lowercase letters, digits, - and _"
+        )
+    if not text.strip():
+        raise ValueError("persona text cannot be empty")
+    _PERSONA_DIR.mkdir(parents=True, exist_ok=True)
+    (_PERSONA_DIR / f"{name}.md").write_text(text.strip() + "\n", encoding="utf-8")
+    reload_prompt_text()
+    return prompt_template_version()
+
+
+def persona_text(name: str) -> str:
+    """The named persona, falling back to the default if it doesn't exist."""
+    blocks = personas()
+    return blocks.get(name) or blocks[DEFAULT_PERSONA]
+
+
+@lru_cache(maxsize=1)
+def prompt_template_version() -> str:
+    """Content hash of all persona text — the "which prompt am I running"
+    fingerprint stamped onto every session (see db/migrations/0005).
+
+    Deliberately covers only the on-disk text, not this module's assembly
+    code: the assembly sections change with the code version (recorded
+    separately as faria_version), while persona text is the surface that gets
+    edited between runs and needs its own identity.
+    """
+    digest = hashlib.sha256()
+    for name, text in sorted(personas().items()):
+        digest.update(name.encode("utf-8"))
+        digest.update(text.encode("utf-8"))
+    return digest.hexdigest()[:12]
+
+
+def reload_prompt_text() -> None:
+    """Drop the caches so edited persona files take effect in a live process."""
+    personas.cache_clear()
+    prompt_template_version.cache_clear()
+
+
+@dataclass(frozen=True)
+class PromptSection:
+    """One labeled block of the system prompt, in send order."""
+
+    name: str
+    text: str
 
 
 def assemble_system_prompt(
@@ -86,7 +151,29 @@ def assemble_system_prompt(
     other_known_languages: list[str] | None = None,
     audio: bool = False,
 ) -> str:
-    """Build the system prompt for the currently active language.
+    """Build the system prompt for the currently active language."""
+    return "\n\n".join(
+        section.text
+        for section in assemble_sections(
+            ctx, policy_directives, pivot_frequency, other_known_languages, audio
+        )
+    )
+
+
+def assemble_sections(
+    ctx: SessionContext,
+    policy_directives: str | None = None,
+    pivot_frequency: str = "off",
+    other_known_languages: list[str] | None = None,
+    audio: bool = False,
+) -> list[PromptSection]:
+    """The prompt as labeled sections, in the order they're sent.
+
+    The joined text is what the model sees; the labels exist for the dev
+    console, where "which block is making it sound like an eager assistant"
+    is unanswerable against one undifferentiated wall of text. Splitting the
+    assembled string back apart isn't viable — persona text contains blank
+    lines of its own — so the structure is produced here and joined above.
 
     ``pivot_frequency`` and ``other_known_languages`` are session-wide
     concepts (not properties of any one language's profile), computed by
@@ -97,42 +184,46 @@ def assemble_system_prompt(
     target = language_name(ctx.profile.language)
     native = language_name(ctx.learner.native_language)
 
-    persona_name = ctx.profile.preferences.get("persona", "mentor")
-    sections: list[str] = [PERSONAS.get(persona_name, _MENTOR)]
+    persona_name = ctx.profile.preferences.get("persona", DEFAULT_PERSONA)
+    sections = [PromptSection(f"persona:{persona_name}", persona_text(persona_name))]
 
     # 2. Language + level behavior
-    sections.append(_language_section(ctx, is_home_base, target, native))
+    sections.append(
+        PromptSection("language", _language_section(ctx, is_home_base, target, native))
+    )
 
     # 3. Profile snapshot
-    sections.append(_profile_snapshot(ctx))
+    sections.append(PromptSection("profile", _profile_snapshot(ctx)))
 
     # 4. Memory
     memory = _memory_section(ctx, target, is_home_base)
     if memory:
-        sections.append(memory)
+        sections.append(PromptSection("memory", memory))
 
     # 5. Correction directives (home base has nothing to correct)
     if policy_directives and not is_home_base:
-        sections.append(policy_directives)
+        sections.append(PromptSection("correction", policy_directives))
         known_keys = _known_keys_section(ctx)
         if known_keys:
-            sections.append(known_keys)
+            sections.append(PromptSection("known_feature_keys", known_keys))
 
     # 6. Session control — always-on learner-driven changes, plus an opt-in
     # surprise-pivot addendum.
-    sections.append(_CONTROL_INSTRUCTIONS)
+    sections.append(PromptSection("control", _CONTROL_INSTRUCTIONS))
     if pivot_frequency != "off" and other_known_languages:
-        sections.append(_pivot_section(pivot_frequency, other_known_languages))
+        sections.append(
+            PromptSection("pivots", _pivot_section(pivot_frequency, other_known_languages))
+        )
 
     # 7. Audio-session ground rules (ADR-023): the transcript is fallible.
     if audio:
-        sections.append(_AUDIO_INSTRUCTIONS)
+        sections.append(PromptSection("audio", _AUDIO_INSTRUCTIONS))
 
     # 8. Session goal
     if ctx.goal:
-        sections.append(f"Today's session goal: {ctx.goal}")
+        sections.append(PromptSection("goal", f"Today's session goal: {ctx.goal}"))
 
-    return "\n\n".join(sections)
+    return sections
 
 
 _AUDIO_INSTRUCTIONS = (

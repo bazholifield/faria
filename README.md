@@ -47,10 +47,39 @@ cp .env.example .env          # then put your ANTHROPIC_API_KEY in .env
 faria chat                    # text companion mode (English home base; ask to switch)
 faria chat --language es      # text focused practice; /end for summary, /quit to abort
 faria serve                   # voice: open http://localhost:8765 in a browser w/ mic
+faria dev                     # developer console: http://localhost:8766 (run ledger)
 faria patterns --language es  # your recurring error patterns, with examples
 faria say --voice en_US-norman-medium --text "..."   # audition a TTS voice -> data/say/
 pytest                        # run the test suite
 ```
+
+## Tuning it
+
+`faria dev` is a separate, localhost-only console for working *on* the tutor rather than
+talking to it (ADR-027) — deliberately not part of `faria serve`, which is the learner
+surface and the one Phase 3 exposes to a phone. Two panels so far:
+
+- **Run ledger** (`/`) — every session with the config and the exact system prompt that
+  produced it, plus per-turn latency and API spend (ADR-028). Click a run for its
+  transcript, token costs, which knobs have drifted since, and the prompt text verbatim.
+- **Prompt lab** (`/prompts`) — the assembled prompt for any language, broken into labeled
+  sections, rendered from real profile data with no API call. Change persona, correction
+  frequency/style, pivots, or audio mode and watch the prompt change; edit persona text on
+  the left and it reloads in place. Read-only against the learner model: previewing a
+  language you've never studied doesn't create its profile.
+
+Experiments belong in a scratch database so a hundred throwaway turns can't move your real
+CEFR estimate:
+
+```bash
+FARIA_DATA_DIR=data/dev faria chat --language es   # writes to data/dev/faria.db
+faria dev --db data/dev/faria.db                   # ledger over the experiments
+```
+
+Persona text lives in `src/faria/tutor/prompt_text/personas/*.md`, not in Python — edit a
+file, start a session, and the ledger records which persona version produced it. Adding a
+persona is dropping in a file; its stem is the name used in the profile's `persona`
+preference.
 
 Six US-male voice auditions are pre-generated in `data/say/` — listen (from Windows:
 `\\wsl$\...\faria\data\say`), pick, and set `[audio.piper_voices].en` in config.
@@ -73,13 +102,14 @@ faria/
 ├── data/                       # Runtime data — SQLite DB (gitignored, created on first run)
 ├── src/faria/
 │   ├── __init__.py             # Package marker + version
-│   ├── cli.py                  # `faria chat`, `faria patterns`, `faria migrate`
+│   ├── cli.py                  # `faria chat`, `faria serve`, `faria dev`, `faria patterns`, ...
 │   ├── config.py               # Settings: code defaults <- TOML overrides <- env vars
 │   ├── db/
 │   │   ├── connection.py       # SQLite connection factory (WAL, foreign keys, Row factory)
 │   │   ├── migrate.py          # Forward-only migration runner over db/migrations/*.sql
 │   │   ├── migrations/         # 0001 schema, 0002 correction style, 0003 model_action,
-│   │   │                       # 0004 learner-scoped sessions + per-utterance language
+│   │   │                       # 0004 learner-scoped sessions + per-utterance language,
+│   │   │                       # 0005 run metadata (config/prompt/cost per session)
 │   │   └── repository.py       # Typed data access — the only module that writes SQL
 │   ├── domain/                 # Pedagogy lives here; no I/O, no LLM calls
 │   │   ├── models.py           # Dataclasses mirroring DB rows + SessionContext aggregate
@@ -89,6 +119,8 @@ faria/
 │   ├── tutor/                  # Everything that talks to the Claude API
 │   │   ├── brain.py            # Streaming client wrapper around the Messages API
 │   │   ├── prompts.py          # System-prompt assembly: persona, home base, pivots
+│   │   ├── prompt_text/        # Persona blocks as editable .md files (ADR-016/028)
+│   │   ├── pricing.py          # Per-model token prices -> cost estimates for the ledger
 │   │   ├── schema.py           # Tool schema + parser for the error-annotation sidecar
 │   │   ├── control.py          # Tool schema + parser for session control (switch/correct/pivot)
 │   │   ├── summarizer.py       # End-of-session narrative summary (messages.parse)
@@ -104,11 +136,13 @@ faria/
 │   │   ├── vad.py              # Utterance segmentation over the mic stream (webrtcvad)
 │   │   ├── sentences.py        # Streams Claude deltas into per-sentence TTS handoffs
 │   │   └── lang_router.py      # Mid-sentence language ID (lingua) -> right voice per run (ADR-026)
-│   └── server/                 # FastAPI server (Phase 2)
-│       ├── app.py              # App factory with injectable deps (tests use fakes)
+│   └── server/                 # FastAPI servers
+│       ├── app.py              # Learner app factory with injectable deps (tests use fakes)
 │       ├── ws.py               # The realtime loop: PCM in -> VAD -> STT -> tutor -> TTS out
 │       ├── rest.py             # Read-only views: /api/profiles, /api/patterns/{lang}
-│       └── web/                # Browser client: index.html + mic-capture worklet
+│       ├── dev.py              # Developer console, separate + localhost-only (ADR-027)
+│       └── web/                # index.html + worklet.js (learner client);
+│                               # dev.html (ledger), prompts.html (prompt lab), dev.css
 └── tests/
     ├── conftest.py             # tmp-DB fixture
     ├── test_config.py          # Defaults + TOML override behavior
@@ -118,7 +152,9 @@ faria/
     ├── test_correction.py      # Correction policy rules, one test per rule
     ├── test_levels.py          # Level-estimator properties (inertia, decay, aggregation)
     ├── test_schema.py          # Annotation-sidecar parsing
-    └── test_control.py         # Session-control-tool parsing
+    ├── test_control.py         # Session-control-tool parsing
+    ├── test_run_metadata.py    # Config snapshots, prompt trail, token/cost capture
+    └── test_dev_server.py      # Console endpoints over a real DB
 ```
 
 The pedagogy modules (`correction.py`, `levels.py`, `prompts.py`) carry working

@@ -1,0 +1,61 @@
+/* Shared styles for the developer console pages (dev.html, prompts.html).
+   No build step (ADR-011): one stylesheet, two plain pages, no framework. */
+
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 1.25rem 1.5rem; min-height: 100vh;
+  background: #14120f; color: #e8e2d5;
+  font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+header { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap;
+         border-bottom: 1px solid #302b23; padding-bottom: 0.8rem; margin-bottom: 1.1rem; }
+h1 { font: 400 1.15rem/1 Georgia, serif; letter-spacing: 0.14em; margin: 0; }
+.sub { opacity: 0.45; font-size: 0.78rem; }
+.spacer { margin-left: auto; }
+a { color: #9ab8c9; }
+nav a { margin-right: 0.9rem; text-decoration: none; opacity: 0.6; font-size: 0.8rem; }
+nav a:hover { opacity: 1; }
+nav a.active { opacity: 1; border-bottom: 1px solid #6a93ae; padding-bottom: 2px; }
+
+button, select, input, textarea {
+  font: inherit; color: inherit; background: #221f1a;
+  border: 1px solid #3a352c; border-radius: 6px; padding: 0.32rem 0.6rem;
+}
+button { cursor: pointer; background: #2c2820; }
+button:hover { background: #3a3428; }
+button:disabled { opacity: 0.4; cursor: default; }
+button.primary { background: #34412c; border-color: #4a5c3c; }
+button.primary:hover { background: #3f5035; }
+label { font-size: 0.72rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.05em; }
+
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: 0.42rem 0.7rem; border-bottom: 1px solid #241f19; }
+th { font-weight: normal; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase;
+     letter-spacing: 0.06em; }
+tbody tr.clickable { cursor: pointer; }
+tbody tr.clickable:hover { background: #1d1a15; }
+tbody tr.open { background: #221f1a; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.muted { opacity: 0.35; }
+.pill { border: 1px solid #3a352c; border-radius: 999px; padding: 0.05rem 0.5rem;
+        font-size: 0.72rem; opacity: 0.8; }
+.pill.stale { border-color: #6b4a2a; color: #c9a15a; }
+.good { color: #7fae6a; } .warn { color: #c9a15a; } .bad { color: #c97f6a; }
+
+h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em;
+     opacity: 0.5; font-weight: normal; margin: 1.3rem 0 0.5rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.9rem; }
+.stat { border: 1px solid #2a251e; border-radius: 8px; padding: 0.55rem 0.7rem; }
+.stat .label { font-size: 0.68rem; opacity: 0.45; text-transform: uppercase;
+               letter-spacing: 0.05em; }
+.stat .value { font-size: 1.05rem; margin-top: 0.15rem; font-variant-numeric: tabular-nums; }
+pre { background: #100e0c; border: 1px solid #2a251e; border-radius: 8px;
+      padding: 0.8rem; overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+      font-size: 0.8rem; line-height: 1.5; max-height: 26rem; overflow-y: auto; }
+.empty { opacity: 0.4; padding: 2rem 0; text-align: center; }
+.toast { position: fixed; bottom: 1.2rem; right: 1.2rem; padding: 0.5rem 0.9rem;
+         border-radius: 8px; border: 1px solid #4a5c3c; background: #26301f;
+         font-size: 0.8rem; opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+.toast.show { opacity: 1; }
+.toast.error { border-color: #6b3a2a; background: #302019; }

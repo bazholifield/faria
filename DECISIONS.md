@@ -400,3 +400,62 @@ Residual limits (documented, not fixed): lingua still misses some phrases in con
 ("Allons manger", "je ne sais quoi") which then read in the base voice; and mid-sentence the
 *speaker* changes (Piper = different speaker per language). Both are the Phase 4 cloned-voice
 job. py3langid dependency dropped.
+
+## ADR-027 — The developer console is a separate, localhost-only app
+
+Tuning this project means editing prompt text, trying voices, moving thresholds, and judging
+whether any of it helped — work that wants a UI, but not the *learner's* UI. ADR-015 stands:
+the learner reshapes a session by talking to it, and Faria must never become a settings
+screen with a chat window attached.
+
+**Decision:** a second FastAPI app (`server/dev.py`, `faria dev`, port 8766) that is not
+mounted on `faria serve`. The split is drawn on audience and blast radius: `faria serve` is
+the learner surface, thin by design, and Phase 3 exposes it to a phone over LAN/Tailscale;
+the console reads the whole learner model and will grow config editing, prompt editing, and
+panels that spend API money. Those must not ride on a surface that leaves the machine. It
+binds 127.0.0.1 with **no override flag** — WSL2 forwards loopback to the Windows browser, so
+refusing to listen wider costs nothing here. There is no auth (ADR-012), which is exactly why
+the bind is not configurable.
+
+Division of labor: the conversation tunes *this session*; the console tunes *defaults and
+prompt text between sessions*, and shows the evidence for whether a change was an improvement.
+
+Consequence: some duplicated wiring across two apps, and the console loads no speech models
+(it never synthesizes — voice auditioning, when it lands, will need its own synthesizer
+instance or a shared one behind an interface).
+
+## ADR-028 — Runs are reproducible: config snapshots, content-addressed prompts, per-call metrics
+
+Before this, a session recorded what was *said* but nothing about what produced it. "Does the
+new persona read less like a robot teacher?" was therefore unanswerable except by memory —
+the same failure mode as free-text error labels (ADR-009): without a stable record, nothing
+aggregates.
+
+**Decision** (migration 0005), mirroring the evidence/estimate split of ADR-004 — keep the raw
+material, not just the running figure:
+
+- `sessions.config_snapshot` stores the **full resolved Settings** as JSON, not a diff against
+  defaults. A diff needs matching code to interpret, which defeats the purpose of a snapshot;
+  disk is free at personal scale. The console diffs a run's snapshot against current config
+  and shows only the knobs that drifted, which is the question you actually have.
+- `prompt_versions` is **content-addressed** (hash → exact assembled prompt text) with
+  `session_prompts` linking each prompt a session used, in rebuild order. A session rebuilds
+  its prompt on every language switch (ADR-015), so this is one-to-many. Identical prompts
+  across sessions collapse to one row, which makes "these two runs were the same setup"
+  a primary-key comparison rather than an eyeball diff.
+- `turn_metrics` records one row per API call, tagged `conversation` | `summary` | `sweep`.
+  All three spend money — on a short live session the end-of-session pair was 36% of the bill —
+  so honest cost means capturing all three, not just the conversation.
+
+Prices live in a local table (`tutor/pricing.py`) because the API doesn't return them. An
+unknown model yields cost `None`, never a guessed number; the resolved id the API echoes back
+may carry a date suffix, so pricing falls back to longest-prefix match (verified live:
+`claude-haiku-4-5-20251001` prices as `claude-haiku-4-5`).
+
+Telemetry writes are wrapped and swallowed: a metrics failure must never break a conversation.
+
+**Persona text moved out of Python** into `tutor/prompt_text/personas/*.md` as part of this —
+ADR-016 already called personality "content, not code", and a content hash over that directory
+(`prompt_template_version()`) is what makes "which prompt produced this run" a real question.
+Files can be diffed and A/B'd; a string constant in a module cannot. The move was verified
+byte-identical so prompt caching is unaffected.

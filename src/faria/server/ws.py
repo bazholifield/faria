@@ -223,6 +223,16 @@ async def _run_turn(
     if (rest := assembler.flush()) is not None:
         await speak(rest)
 
+    # Persist alongside the token counts the runner already recorded for this
+    # turn, so latency can be charted against the config that produced it
+    # (migration 0005) instead of only appearing in the log.
+    await asyncio.to_thread(
+        runner.attach_turn_timings,
+        stt_s=timings["stt_s"],
+        first_delta_s=timings["first_delta_s"],
+        first_audio_s=timings["first_audio_s"],
+    )
+
     switched = runner.active_language != speak_language
     await ws.send_json(
         {

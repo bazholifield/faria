@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Faria — prompt lab</title>
+<link rel="stylesheet" href="/static/dev.css">
+<style>
+  .lab { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.2rem; }
+  @media (max-width: 1100px) { .lab { grid-template-columns: minmax(0, 1fr); } }
+  .panel { border: 1px solid #302b23; border-radius: 10px; padding: 0.9rem 1rem; }
+  .panel > h2 { font: 400 0.95rem/1 Georgia, serif; margin: 0 0 0.8rem; opacity: 0.85;
+                letter-spacing: 0.08em; }
+  .controls { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: end;
+              margin-bottom: 0.9rem; }
+  .field { display: flex; flex-direction: column; gap: 0.2rem; }
+  .field select, .field input { min-width: 8rem; }
+  #editor { width: 100%; min-height: 26rem; resize: vertical; line-height: 1.55;
+            background: #100e0c; }
+  .editbar { display: flex; gap: 0.6rem; align-items: center; margin-top: 0.7rem;
+             flex-wrap: wrap; }
+  .dirty { color: #c9a15a; font-size: 0.75rem; }
+  .section { border: 1px solid #2a251e; border-radius: 8px; margin-bottom: 0.5rem;
+             overflow: hidden; }
+  .section > summary { padding: 0.45rem 0.7rem; cursor: pointer; font-size: 0.78rem;
+                       display: flex; gap: 0.6rem; align-items: center; }
+  .section > summary:hover { background: #1d1a15; }
+  .section .nm { color: #9ab8c9; }
+  .section .ch { margin-left: auto; opacity: 0.4; font-variant-numeric: tabular-nums; }
+  .section pre { margin: 0; border: none; border-top: 1px solid #241f19; border-radius: 0;
+                 max-height: 20rem; }
+  .section.persona { border-color: #3d4a33; }
+  .meta-row { display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.75rem;
+              opacity: 0.55; margin-bottom: 0.7rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>FARIA</h1>
+  <nav>
+    <a href="/">run ledger</a>
+    <a href="/prompts" class="active">prompt lab</a>
+  </nav>
+  <span class="spacer"></span>
+  <span class="sub" id="version"></span>
+</header>
+
+<div class="lab">
+  <div class="panel">
+    <h2>Persona text</h2>
+    <div class="controls">
+      <div class="field">
+        <label for="personaPick">editing</label>
+        <select id="personaPick"></select>
+      </div>
+      <div class="field">
+        <label for="newName">new persona</label>
+        <input id="newName" placeholder="e.g. storyteller" size="14">
+      </div>
+      <button id="create">Create</button>
+    </div>
+    <textarea id="editor" spellcheck="false"></textarea>
+    <div class="editbar">
+      <button id="save" class="primary">Save</button>
+      <button id="revert">Revert</button>
+      <span id="dirty" class="dirty"></span>
+      <span class="spacer"></span>
+      <span class="sub" id="chars"></span>
+    </div>
+    <p class="sub" style="margin-bottom:0">
+      Saving writes the file and reloads it in this process. Previous text stays in git,
+      and every recorded run kept its full assembled prompt — so old persona text is
+      recoverable from the ledger even after an edit.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Assembled prompt</h2>
+    <div class="controls">
+      <div class="field">
+        <label for="language">language</label>
+        <select id="language"></select>
+      </div>
+      <div class="field">
+        <label for="persona">persona</label>
+        <select id="persona"></select>
+      </div>
+      <div class="field">
+        <label for="freq">correction</label>
+        <select id="freq">
+          <option value="">(profile)</option>
+          <option>off</option><option>minimal</option>
+          <option>balanced</option><option>aggressive</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="style">style</label>
+        <select id="style">
+          <option value="">(profile)</option>
+          <option>recast</option><option>recast_plus_note</option><option>explicit</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="pivot">pivots</label>
+        <select id="pivot">
+          <option>off</option><option>occasional</option><option>frequent</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="audio">mode</label>
+        <select id="audio"><option value="false">text</option><option value="true">audio</option></select>
+      </div>
+      <div class="field">
+        <label for="goal">goal</label>
+        <input id="goal" placeholder="(none)" size="14">
+      </div>
+    </div>
+    <div class="meta-row" id="previewMeta"></div>
+    <div id="sections"><div class="empty">loading…</div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+let loaded = {};        // persona name -> text as last loaded from disk
+let currentPersona = null;
+
+async function api(path, opts) {
+  const res = await fetch("/api" + path, opts);
+  if (!res.ok) {
+    let msg = res.statusText;
+    try { msg = (await res.json()).detail || msg; } catch (e) { /* keep statusText */ }
+    throw new Error(msg);
+  }
+  return res.json();
+}
+
+function toast(msg, isError) {
+  const el = $("toast");
+  el.textContent = msg;
+  el.className = "toast show" + (isError ? " error" : "");
+  setTimeout(() => { el.className = "toast" + (isError ? " error" : ""); }, 2200);
+}
+
+// ---- persona editing ----
+
+function isDirty() {
+  return currentPersona && $("editor").value !== loaded[currentPersona];
+}
+
+function refreshDirty() {
+  const dirty = isDirty();
+  $("dirty").textContent = dirty ? "unsaved changes" : "";
+  $("chars").textContent = $("editor").value.length + " chars";
+  $("save").disabled = !dirty;
+  $("revert").disabled = !dirty;
+}
+
+async function loadPersonas(select) {
+  const data = await api("/personas");
+  $("version").textContent = "persona text " + data.version;
+  loaded = {};
+  for (const p of data.personas) loaded[p.name] = p.text;
+
+  const names = data.personas.map(p => p.name);
+  const keep = select || currentPersona;
+  currentPersona = names.includes(keep) ? keep : names[0];
+  $("personaPick").innerHTML = names.map(n =>
+    `<option${n === currentPersona ? " selected" : ""}>${esc(n)}</option>`).join("");
+  // the preview's persona dropdown offers the same set, plus "(profile)"
+  const previewPick = $("persona").value;
+  $("persona").innerHTML = '<option value="">(profile)</option>'
+    + names.map(n => `<option${n === previewPick ? " selected" : ""}>${esc(n)}</option>`).join("");
+  $("editor").value = loaded[currentPersona] ?? "";
+  refreshDirty();
+}
+
+async function savePersona() {
+  const name = currentPersona;
+  try {
+    const res = await api("/personas/" + encodeURIComponent(name), {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: $("editor").value }),
+    });
+    loaded[name] = $("editor").value.trim();
+    $("editor").value = loaded[name];
+    $("version").textContent = "persona text " + res.version;
+    refreshDirty();
+    toast("saved " + name + " — version " + res.version.slice(0, 8));
+    preview();  // the assembled prompt changed; show it
+  } catch (e) {
+    toast(e.message, true);
+  }
+}
+
+async function createPersona() {
+  const name = $("newName").value.trim();
+  if (!name) return;
+  // Seed from whatever is on screen: a new persona is nearly always an edit
+  // of an existing one, not a blank page.
+  try {
+    await api("/personas/" + encodeURIComponent(name), {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: $("editor").value }),
+    });
+    $("newName").value = "";
+    await loadPersonas(name);
+    toast("created " + name);
+    preview();
+  } catch (e) {
+    toast(e.message, true);
+  }
+}
+
+// ---- preview ----
+
+async function loadTargets() {
+  const data = await api("/preview-targets");
+  const seen = new Set(data.profiles.map(p => p.language));
+  // Languages with real history first; then the rest of the configured lineup,
+  // so you can preview a prompt for a language you haven't started yet.
+  const extras = ["en", "es", "fr", "de", "ar", "eu", "zh", "ja", "ko"].filter(c => !seen.has(c));
+  $("language").innerHTML =
+    data.profiles.map(p =>
+      `<option value="${p.language}">${esc(p.language_name)} — has history</option>`).join("")
+    + extras.map(c => `<option value="${c}">${esc(c)} — no profile yet</option>`).join("");
+}
+
+async function preview() {
+  const params = new URLSearchParams({
+    language: $("language").value,
+    pivot_frequency: $("pivot").value,
+    audio: $("audio").value,
+  });
+  for (const [key, id] of [["persona", "persona"], ["correction_frequency", "freq"],
+                           ["correction_style", "style"], ["goal", "goal"]]) {
+    if ($(id).value) params.set(key, $(id).value);
+  }
+  try {
+    const d = await api("/preview?" + params.toString());
+    const bits = [
+      d.is_home_base ? "home base" : "target language",
+      d.profile_exists
+        ? `level ${d.level_overall ? d.level_overall.toFixed(1) : "none yet"}`
+        : "no profile yet — defaults shown",
+      `correction ${d.correction_frequency} / ${d.correction_style}`,
+      `${d.chars} chars`,
+    ];
+    if (d.focus_patterns.length) {
+      bits.push(`${d.focus_patterns.length} focus pattern(s)`);
+    }
+    $("previewMeta").innerHTML = bits.map(b => `<span>${esc(b)}</span>`).join("");
+    $("sections").innerHTML = d.sections.map(sectionView).join("");
+  } catch (e) {
+    $("sections").innerHTML = `<div class="empty">preview failed: ${esc(e.message)}</div>`;
+  }
+}
+
+function sectionView(s) {
+  const isPersona = s.name.startsWith("persona:");
+  return `<details class="section${isPersona ? " persona" : ""}"${isPersona ? " open" : ""}>
+    <summary><span class="nm">${esc(s.name)}</span><span class="ch">${s.chars}</span></summary>
+    <pre>${esc(s.text)}</pre>
+  </details>`;
+}
+
+// ---- wiring ----
+
+$("personaPick").onchange = (e) => {
+  if (isDirty() && !confirm("Discard unsaved changes to " + currentPersona + "?")) {
+    e.target.value = currentPersona;
+    return;
+  }
+  currentPersona = e.target.value;
+  $("editor").value = loaded[currentPersona] ?? "";
+  refreshDirty();
+};
+$("editor").oninput = refreshDirty;
+$("save").onclick = savePersona;
+$("revert").onclick = () => { $("editor").value = loaded[currentPersona] ?? ""; refreshDirty(); };
+$("create").onclick = createPersona;
+for (const id of ["language", "persona", "freq", "style", "pivot", "audio"]) {
+  $(id).onchange = preview;
+}
+$("goal").onchange = preview;
+window.addEventListener("beforeunload", (e) => { if (isDirty()) e.preventDefault(); });
+
+(async function boot() {
+  try {
+    await loadPersonas();
+    await loadTargets();
+    await preview();
+  } catch (e) {
+    $("sections").innerHTML = `<div class="empty">failed to load: ${esc(e.message)}</div>`;
+  }
+})();
+</script>
+</body>
+</html>

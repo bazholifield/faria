@@ -15,6 +15,8 @@ spoken from them, rather than depending on any one language's profile.
 
 from __future__ import annotations
 
+from typing import Callable
+
 import anthropic
 from pydantic import BaseModel, Field
 
@@ -61,8 +63,18 @@ def render_transcript(utterances: list[Utterance]) -> str:
     return "\n".join(f"{u.speaker.upper()}: {u.text}" for u in utterances)
 
 
-def generate_summary(utterances: list[Utterance], models: ModelsConfig) -> SessionSummary:
-    """One structured-output call over the transcript; validated by pydantic."""
+def generate_summary(
+    utterances: list[Utterance],
+    models: ModelsConfig,
+    on_usage: Callable[[object], None] | None = None,
+) -> SessionSummary:
+    """One structured-output call over the transcript; validated by pydantic.
+
+    ``on_usage`` receives the raw response so the caller can record tokens and
+    cost (migration 0005). A callback rather than an extra return value: the
+    summary is what this function is *for*, and every existing caller keeps
+    working unchanged.
+    """
     client = anthropic.Anthropic()
     languages = sorted({u.language for u in utterances})
     lang_list = ", ".join(language_name(code) for code in languages)
@@ -81,6 +93,8 @@ def generate_summary(utterances: list[Utterance], models: ModelsConfig) -> Sessi
         messages=[{"role": "user", "content": render_transcript(utterances)}],
         output_format=SessionSummary,
     )
+    if on_usage is not None:
+        on_usage(response)
     parsed = response.parsed_output
     if parsed is None:
         raise RuntimeError("Summarizer returned unparseable output")
