@@ -236,15 +236,15 @@ design decisions. What's missing for a public portfolio is an outsider's way in,
 the pedagogy works, and a demo people can watch.
 
 - [ ] Outsider-first README: a 30-second pitch, a demo video or GIF, "the linguistics" (recast default and why orthography is never corrected in speech, the error taxonomy, the CEFR evidence model), an architecture diagram, cost and latency from the run ledger; the developer quickstart moves lower
-- [ ] Demo: a 2–3 minute screen recording of a voice session with a language pivot, a correction recap and the patterns view
-- [ ] Decide on a live demo: a text-mode Hugging Face Space where visitors bring their own API key, or video only (a hosted key would bill you for strangers' sessions)
+- [ ] **Demo recording (priority):** a 2–3 minute screen recording of a voice session with a language pivot, a correction recap and the patterns view
+- [ ] Later: a text-mode Hugging Face Space where visitors bring their own API key (never a hosted key, which would bill you for strangers' sessions)
 - [ ] Error-detection evaluation: adjudicate a gold set in the annotation browser (Phase 2.5), then precision and recall per error category
 - [ ] CEFR estimator check: the Phase 1 "play above/below my level" test, written up with the estimate's trajectory
 - [ ] Persona metrics from prompt-lab replay: one before/after persona edit with numbers (questions per reply, reply length)
 - [ ] Latency under the 2 s budget, or a clear account of the remaining gap (ADR-022: API STT or a GPU path)
 - [ ] GitHub Actions running the test suite (157 tests, fakes for the API; no key needed)
 - [ ] `DESIGN_NOTES.md`: a 2-page summary of the pedagogy decisions for teachers and linguists, linking the ADRs
-- [ ] Release checks: LICENSE; confirm test fixtures hold no real session transcripts; make the repo public. History is clean (no `.env` or `data/` ever committed); squashing the early "Phase X updates" commits is optional
+- [ ] Release checks: LICENSE: non-commercial (e.g. PolyForm Noncommercial), so others can read and run FARIA but not sell it; confirm test fixtures hold no real session transcripts; make the repo public. History is clean (no `.env` or `data/` ever committed); squashing the early "Phase X updates" commits is optional
 
 **Exit criteria**
 - Someone who has never seen FARIA understands what it does and why in under two minutes, from the README and video alone.
