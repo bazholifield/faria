@@ -1,5 +1,9 @@
 # Roadmap
 
+**Goal:** a voice-first language tutor and companion that converses at your level, corrects judiciously, and keeps a persistent learner model per language (see the workshop scenario below).
+
+**Now:** audio works end to end but takes ~4.5 s to first reply on CPU; the developer console's replay tool is next, then the phone client, with portfolio work alongside.
+
 Phases are cumulative; each has concrete exit criteria ("I can do X"). Pedagogy gets debugged
 in text (Phase 0–1) before audio complicates anything (Phase 2+).
 
@@ -25,7 +29,7 @@ What this imposes on the design, tracked through the phases below:
 - **Fully hands-free audio** eventually; even in text phases, behave as if the channel were
   speech (no spelling corrections, ever — ADR-013).
 
-## Phase 0 — Text-only core loop
+## 1. Phase 0: text-only core loop · Done
 
 The scaffold for this phase exists; the work is implementing the stubs and iterating on the
 pedagogy until conversations feel like a good tutor, not a chatbot with a persona.
@@ -46,14 +50,14 @@ pedagogy until conversations feel like a good tutor, not a chatbot with a person
 - Session summaries: on `/end`, Haiku writes a structured summary (topics, vocab, notable
   errors, level evidence, next focus) stored and injected into the next session.
 
-**Exit criteria**
+**Done when:**
 - I can hold a 15-minute Spanish conversation in the CLI that stays at my level.
 - Corrections arrive as natural recasts unless I've configured explicit mode; spelling and
   diacritics are never corrected in conversation; frequency `off` produces zero corrections.
 - Session 2 demonstrably knows what happened in session 1 (topics, promised follow-ups).
 - All of this works for a second language (French) with zero code changes.
 
-## Phase 1 — Learner model depth
+## 2. Phase 1: learner model depth · Done
 
 - Error-annotation sidecar live: the conversation call returns structured `error_events`
   (tool-use sidecar, schema in `tutor/schema.py`) which flow through the policy engine into
@@ -68,7 +72,7 @@ pedagogy until conversations feel like a good tutor, not a chatbot with a person
   (active → improving → resolved / fossilization_risk) updated from evidence.
 - Optional: spaCy-based syntactic-complexity metrics as a computed (non-LLM) signal.
 
-**Exit criteria**
+**Done when:**
 - After ~5 sessions, `faria` can show me my top-5 recurring error patterns per language,
   each with real example utterances and counts.
 - The CEFR estimate moves in the right direction when I deliberately play above/below
@@ -76,7 +80,7 @@ pedagogy until conversations feel like a good tutor, not a chatbot with a person
 - A recurring error I keep making gets escalated: the tutor starts correcting it inline
   and it appears in the focus list.
 
-## Phase 1.5 — Companion foundations: conversation as UI, multilingual sessions
+## 3. Phase 1.5: companion foundations (conversation as UI, multilingual sessions) · Done
 
 Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
 
@@ -98,7 +102,7 @@ Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
   stories, makes statements, no praise inflation, comfortable leading. Initiative knob
   (learner-led ↔ balanced ↔ tutor-led).
 
-**Exit criteria**
+**Done when:**
 - Mid-conversation "auf Deutsch, bitte" switches the tutor into German at my German level;
   subsequent errors land in the German profile, and "back to English" works the same way.
 - "Correct me less" changes behavior immediately and persists to my preferences.
@@ -107,7 +111,7 @@ Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
 - A transcript reads mentor-like: the tutor introduced at least one topic/story unprompted,
   and the conversation is not question-answer ping-pong.
 
-## Phase 2 — Audio
+## 4. Phase 2: audio · In progress · ~4.5 s to first audio vs the < 2 s target
 
 - STT adapter (`speech/stt.py`): faster-whisper local implementation behind the interface;
   per-language override registry. **Basque caveat:** Whisper's `eu` support is weak — the
@@ -126,7 +130,7 @@ Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
 - Pronunciation-suspected errors: low-confidence STT spans logged as `phonology` category
   events (suspected, low confidence) rather than treated as grammar errors.
 
-**Exit criteria**
+**Done when:**
 - Wearing a headset at my desk, I can hold a spoken conversation with < 2s response
   latency, with the same learner-model behavior as text.
 - Swapping STT or TTS backend is a config change, not a code change.
@@ -138,7 +142,7 @@ STT ~2s + first Claude token ~2s + TTS ~0.5s) vs. the <2s budget; instrumentatio
 place and the closing paths (chiefly CUDA for whisper) are in ADR-022. The headset test
 itself needs a human with a microphone — that's you.
 
-## Phase 2.5 — Developer console
+## 5. Phase 2.5: developer console · In progress · ledger and prompt lab built; replay next
 
 Tuning this thing is now the bottleneck: the persona still reads more teacher than mentor,
 endpointing still cuts me off, and voices still sound like different people per language.
@@ -179,13 +183,13 @@ localhost console (ADR-027) for working *on* the tutor rather than talking to it
   audition, STT override. Needs the scattered language identity (`_LANG_NAMES`,
   `piper_voices`, the client's `<select>`) consolidated into one registry.
 
-**Exit criteria**
+**Done when:**
 - I can tell, from data rather than memory, whether a persona edit improved anything.
 - Two prompt variants can be compared over the same recorded turns without doing two live
   sessions.
 - A VAD setting can be chosen by replaying one recording, not by guessing between utterances.
 
-## Phase 3 — Phone client
+## 6. Phase 3: phone client · Next
 
 - Single mobile-friendly web page served by FastAPI: pick a language, hold-to-talk (or VAD),
   hear replies. MediaRecorder + WebSocket; no build toolchain unless it earns its keep.
@@ -193,12 +197,12 @@ localhost console (ADR-027) for working *on* the tutor rather than talking to it
   the Tailscale HTTPS story since getUserMedia requires a secure context off-localhost —
   `tailscale cert` or serve over the tailnet HTTPS proxy).
 
-**Exit criteria**
+**Done when:**
 - From my phone on the couch (or away from home via Tailscale), I can do everything
   Phase 2 allowed at my desk.
 - Sessions started on the phone and at the desk land in the same learner model.
 
-## Phase 4 — Polish and extras
+## 7. Phase 4: polish and extras · Later
 
 - Custom tutor voice (XTTS or ElevenLabs adapter behind the existing TTS interface).
 - Mini-lesson library: structured prompts/content for culture, history, etymology,
@@ -209,7 +213,7 @@ localhost console (ADR-027) for working *on* the tutor rather than talking to it
   errors into conversation openers.
 - Maybe: Flutter native client, richer history/stats UI.
 
-**Exit criteria**
+**Done when:**
 - **The workshop test:** phone on the workbench, hands full — an hour of ambient English
   companionship with two language pivots (one mine, one the tutor's) and a feedback recap
   at the end, without touching the screen once.
@@ -228,24 +232,26 @@ embedding index over summaries/utterances, not a vector-DB service) when any of 
    full utterance history.
 3. Mini-lessons should be grounded in "what has this learner already been taught".
 
-## Portfolio track (runs alongside Phases 2.5–3)
+## 8. Portfolio track · Next
+
+*Runs alongside phases 2.5–3.*
 
 FARIA is the project that best shows the linguist first: a correction policy grounded in how
 recasts work, a two-level error taxonomy, a CEFR model with an evidence trail, and 28 recorded
 design decisions. What's missing for a public portfolio is an outsider's way in, evidence that
 the pedagogy works, and a demo people can watch.
 
-- [ ] Outsider-first README: a 30-second pitch, a demo video or GIF, "the linguistics" (recast default and why orthography is never corrected in speech, the error taxonomy, the CEFR evidence model), an architecture diagram, cost and latency from the run ledger; the developer quickstart moves lower
-- [ ] **Demo recording (priority):** a 2–3 minute screen recording of a voice session with a language pivot, a correction recap and the patterns view
-- [ ] Later: a text-mode Hugging Face Space where visitors bring their own API key (never a hosted key, which would bill you for strangers' sessions)
-- [ ] Error-detection evaluation: adjudicate a gold set in the annotation browser (Phase 2.5), then precision and recall per error category
-- [ ] CEFR estimator check: the Phase 1 "play above/below my level" test, written up with the estimate's trajectory
-- [ ] Persona metrics from prompt-lab replay: one before/after persona edit with numbers (questions per reply, reply length)
-- [ ] Latency under the 2 s budget, or a clear account of the remaining gap (ADR-022: API STT or a GPU path)
-- [ ] GitHub Actions running the test suite (157 tests, fakes for the API; no key needed)
-- [ ] `DESIGN_NOTES.md`: a 2-page summary of the pedagogy decisions for teachers and linguists, linking the ADRs
-- [ ] Release checks: LICENSE: non-commercial (e.g. PolyForm Noncommercial), so others can read and run FARIA but not sell it; confirm test fixtures hold no real session transcripts; make the repo public. History is clean (no `.env` or `data/` ever committed); squashing the early "Phase X updates" commits is optional
+- Outsider-first README: a 30-second pitch, a demo video or GIF, "the linguistics" (recast default and why orthography is never corrected in speech, the error taxonomy, the CEFR evidence model), an architecture diagram, cost and latency from the run ledger; the developer quickstart moves lower
+- **Demo recording (priority):** a 2–3 minute screen recording of a voice session with a language pivot, a correction recap and the patterns view
+- Later: a text-mode Hugging Face Space where visitors bring their own API key (never a hosted key, which would bill you for strangers' sessions)
+- Error-detection evaluation: adjudicate a gold set in the annotation browser (Phase 2.5), then precision and recall per error category
+- CEFR estimator check: the Phase 1 "play above/below my level" test, written up with the estimate's trajectory
+- Persona metrics from prompt-lab replay: one before/after persona edit with numbers (questions per reply, reply length)
+- Latency under the 2 s budget, or a clear account of the remaining gap (ADR-022: API STT or a GPU path)
+- GitHub Actions running the test suite (157 tests, fakes for the API; no key needed)
+- `DESIGN_NOTES.md`: a 2-page summary of the pedagogy decisions for teachers and linguists, linking the ADRs
+- Release checks: LICENSE: non-commercial (e.g. PolyForm Noncommercial), so others can read and run FARIA but not sell it; confirm test fixtures hold no real session transcripts; make the repo public. History is clean (no `.env` or `data/` ever committed); squashing the early "Phase X updates" commits is optional
 
-**Exit criteria**
+**Done when:**
 - Someone who has never seen FARIA understands what it does and why in under two minutes, from the README and video alone.
 - The pedagogy claims (corrections, error detection, level estimates) each have a number behind them.
