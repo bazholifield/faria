@@ -41,7 +41,7 @@ class PiperSynthesizer(Synthesizer):
             self._load(voice_id)
 
     def synthesize(
-        self, text: str, language: str, voice: str | None = None
+        self, text: str, language: str, voice: str | None = None, pace: float = 1.0
     ) -> Iterator[AudioChunk]:
         from piper import SynthesisConfig
 
@@ -52,7 +52,7 @@ class PiperSynthesizer(Synthesizer):
                 "(see [audio.piper_voices] in config; note there is no Basque voice)"
             )
         model = self._load(voice_id)
-        syn_config = SynthesisConfig(length_scale=self._config.piper_length_scale)
+        syn_config = SynthesisConfig(length_scale=self._config.piper_length_scale * pace)
         for chunk in model.synthesize(text, syn_config=syn_config):
             yield AudioChunk(
                 pcm=chunk.audio_int16_bytes,

@@ -459,3 +459,112 @@ ADR-016 already called personality "content, not code", and a content hash over 
 (`prompt_template_version()`) is what makes "which prompt produced this run" a real question.
 Files can be diffed and A/B'd; a string constant in a module cannot. The move was verified
 byte-identical so prompt caching is unaffected.
+
+## ADR-029 — An instant acknowledgement while the tutor thinks
+
+Recognition plus Claude's first sentence take a couple of seconds, and silence that long reads
+as "it didn't hear me". **Decision:** the moment a turn ends, play a short neutral backchannel
+("mm", "ajá", "je vois", "aha") in the tutor's own voice and pace (`speech/ack.py`). It is
+deliberately not every turn (`ack_probability` 0.7), never the same phrase twice in a row,
+never for under `ack_min_speech_s` of speech (a cough is not a turn), and never an agreement
+word ("vale", "right"), because the reply may disagree. Clips are synthesized once per session
+in the background; if one isn't ready, that turn simply has none, so picking never blocks a
+turn. The prompt tells the tutor a sound has often already played, so it doesn't open with a
+filler of its own. The real latency is unchanged; the perceived wait is what this fixes.
+
+## ADR-030 — Patience, pace and early transcription
+
+Three changes to end-of-turn timing and speaking speed, all by level:
+
+- **Patience:** the trailing silence that ends a turn grows as the level drops (A1 1100 ms …
+  B2 700 ms; home base keeps `vad_silence_ms`). Learners pause mid-sentence to find a word, and
+  a fixed 700 ms cut beginners off.
+- **Pace:** the voice slows at lower levels (`pace_by_level`, a length multiplier), and the
+  learner's own "slower / faster, please" goes through the control tool (`set_speech_pace`),
+  stored on the active language's profile, so asking for slower German doesn't slow English.
+- **Early transcription:** when a pause reaches `endpoint_probe_ms`, the audio so far is
+  transcribed speculatively. If the learner stays silent, the result is reused, so recognition
+  overlapped the wait instead of starting after it. If it arrives while they're still silent,
+  it also decides the ending (`speech/endpoint.py`): a transcript that trails off on a
+  connector, article or filler ("y…", "and…", "äh") waits `endpoint_hold_ms` longer; one that
+  ends in . ? or ! on a real word ends at `endpoint_early_ratio` of the usual wait.
+
+The "smart" half only helps when recognition is faster than the pause, which on this CPU is
+true for short turns only; with cloud recognition (`stt_default = "openai"`) it applies almost
+always. It is never worse than fixed timing: no verdict means the usual wait. Only one
+speculative transcription runs at a time, because the CPU is shared. A wrong "hold" costs a
+moment; a wrong "end" interrupts, so "end" needs both final punctuation and a non-connector
+last word, and words that can end a sentence ("I think so", "Kommst du mit?") are excluded.
+
+## ADR-031 — Barge-in
+
+Half-duplex v1 (ADR-021) meant talking over the tutor did nothing. **Decision:** while the
+tutor is speaking, or while the browser is still playing what was sent (the server tracks a
+playback estimate), the segmenter keeps listening; once `barge_in_min_ms` of speech
+accumulates, the server sends `stop_audio`, skips synthesizing the rest of the reply, keeps
+the learner's words in progress as the next turn, and adds "[note: the learner started talking
+over you]" to that turn so the tutor knows they may have missed the end. Speech heard while
+the tutor talks that never reaches the threshold is dropped as probable echo: a tutor that
+answers its own voice is the failure this guards against. Browser echo cancellation is on;
+a headset is the reliable setup. Claude's reply still finishes generating (for history and
+annotations); only the voice stops.
+
+## ADR-032 — Stressed recasts
+
+A recast often goes unnoticed: "¿Fuiste a la playa?" sounds like a friendly question, not a
+correction. Teachers lean on the corrected form, and lengthening plus a short pause are two of
+the main cues listeners hear as emphasis; both work with any voice, including Piper, which has
+no emphasis markup. **Decision:** in audio sessions the tutor wraps corrected words in
+asterisks (`¿*Fuiste* a la playa?`); the voice says them after `emphasis_pause_ms` and
+`emphasis_slowdown` slower, and the browser shows them in bold. The OpenAI voice gets the same
+pace changes as delivery instructions. Unmatched asterisks are dropped so one is never read
+aloud. Observed live: the tutor also stresses a newly taught word, which is arguably good
+teaching, so it is left alone for now.
+
+## ADR-033 — Prompt-cache warm-up and a cached history
+
+Measured: the first conversation call of a session took ~8 s to its first word with a cold
+cache, ~1.4 s once cached. **Decision:** at session start (and after a language switch, which
+rebuilds the prompt), send one `max_tokens=1` call with the exact tools + system prefix while
+the learner is still saying hello; the first real turn waits for it rather than racing it on
+the shared DB connection. Verified live: the warm-up wrote 6,273 tokens and the first turn then
+processed 2 uncached input tokens. A second cache breakpoint on the newest message caches the
+conversation history too, which matters for hour-long sessions. Warm-up calls are recorded as
+`stage = 'warmup'` (migration 0006). Haiku 5.5 was measured for comparison (0.8–2.6 s to first
+word vs Sonnet's 1.3–1.6 s cached): not a clear enough win to trade tutoring quality for;
+revisit with prompt-lab replay.
+
+## ADR-034 — The course layer: a syllabus offered as suggestions, review in conversation
+
+The goal moved from "a good conversation partner" to "a full course over an hour a day". A
+course needs a plan, but the learner's direction is explicit: nothing set in stone at the start
+of a session; the mentor suggests and sometimes decides; the learner chooses length and
+direction. **Decision:**
+
+- **Content** lives in `curriculum/<lang>.yaml` (grammar, can-do functions, vocabulary themes,
+  topic cards with checked facts), edited in the Helm's Syllabus tab and re-read when it
+  changes. Items the learner cuts are never offered.
+- **Planning** (`course/tracker.py`) adds an "Ideas" section to the prompt: words due for
+  review, one or two uncovered items at the learner's level (then the level above; lower
+  levels are assumed known, and their gaps surface as error patterns instead), items worth
+  revisiting, and up to two untold stories. It is framed explicitly as not an agenda. A
+  language with no level estimate gets a placement conversation instead: start simple, step up
+  every couple of turns, never announce a test.
+- **Recording** is a third one-shot tool, `note_teaching` (words taught, structures pointed
+  out, story told), for the same reason as annotate_errors: the model knows what it taught;
+  regex over its reply doesn't. Invented syllabus ids are ignored.
+- **Spaced review** is Leitner (`course/review.py`), reviewed in conversation, never as
+  flashcards. The learner using a word when it's due moves it up a box; an annotated error on
+  it sends it to box 1; the tutor using it pushes a due word back a day without promotion.
+  FSRS was considered and deferred: conversational evidence is too noisy to pay for its
+  precision. Words are matched by lemma (`course/lemmas.py`, simplemma when installed, exact
+  forms otherwise), with a leading article dropped and multi-word expressions matched as runs.
+- **Coverage** moves introduced → practised → solid from the end-of-session sweep, which now
+  also counts correct and incorrect uses of the tracked structures (solid after correct use
+  in `solid_after_sessions` separate sessions).
+- **Variety:** the mentor speaks one default variety per language (`course.varieties`) and
+  mentions other regions as colour when it comes up.
+
+Every course hook is best-effort: a failure is logged and the conversation continues.
+Migration 0006 adds the tables and backs the database up first (`<db>.pre-0006.bak`), as every
+migration now does.

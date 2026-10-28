@@ -200,6 +200,12 @@ def assemble_sections(
     if memory:
         sections.append(PromptSection("memory", memory))
 
+    # 4b. The course layer (ADR-034): ideas, never an agenda
+    if ctx.course is not None and not is_home_base:
+        course = _course_section(ctx, target)
+        if course:
+            sections.append(PromptSection("course", course))
+
     # 5. Correction directives (home base has nothing to correct)
     if policy_directives and not is_home_base:
         sections.append(PromptSection("correction", policy_directives))
@@ -239,7 +245,19 @@ _AUDIO_INSTRUCTIONS = (
     "the natural way to say what they were probably going for; (3) ignore "
     "anything that is obviously transcription noise rather than speech. Also: "
     "your replies are spoken aloud — no lists, no headings, no formatting, "
-    "nothing you wouldn't say with your voice."
+    "nothing you wouldn't say with your voice. The one exception: when you "
+    "recast an error, wrap just the corrected word or words in asterisks "
+    "(e.g. «Ah, ¿*fuiste* a la playa ayer?»); your voice says them with a "
+    "little stress so the learner notices the correction. Use it only for "
+    "recasts, at most once per reply. "
+    "Your voice starts as soon as your first sentence is complete, so open "
+    "with a short first sentence of a few words, then say the rest. A short "
+    "listening sound (like 'mm' or 'ajá') has often already played when you "
+    "start, so don't open with a filler of your own. A learner turn may also "
+    "end with [note: the learner started talking over you]: they cut you off, "
+    "so they may have missed the end of your last reply; respond to what they "
+    "said and bring back anything important briefly, without making a point "
+    "of it."
 )
 
 
@@ -265,8 +283,8 @@ _CONTROL_INSTRUCTIONS = (
     "The learner can reshape this session just by asking, at any point: switch "
     "which language you're speaking (e.g. 'let's do German', 'back to "
     "English'), change how much you correct them, change how you correct them "
-    "(recasts vs. explicit), or give you standing permission to occasionally "
-    "test them with a surprise switch. When they ask for any of these, call "
+    "(recasts vs. explicit), ask you to talk slower or faster, or give you "
+    "standing permission to occasionally test them with a surprise switch. When they ask for any of these, call "
     "update_session_state to make the change — don't just say you will and "
     "then keep behaving the old way. A language switch takes effect on your "
     "NEXT reply, in the new language. Whenever you call this tool, ALSO write "
@@ -340,6 +358,63 @@ def _memory_section(ctx: SessionContext, target: str, is_home_base: bool) -> str
             "in naturally; do not announce them as an agenda."
         )
     return "\n".join(lines)
+
+
+def _course_section(ctx: SessionContext, target: str) -> str | None:
+    """Suggestions from the syllabus and spaced review. The learner decides what to
+    talk about and for how long; the mentor decides when something fits."""
+    c = ctx.course
+    lines: list[str] = []
+    if c.variety:
+        lines.append(
+            f"Speak {c.variety} by default. When it comes up naturally, mention how "
+            "other regions say it, as a bit of colour, not a lesson."
+        )
+    if c.placement is not None:
+        probes = "; ".join(f"{level}: {', '.join(titles)}" for level, titles in c.placement)
+        lines.append(
+            f"You don't know this learner's {target} level yet, so this first conversation "
+            "also places them. Make it a friendly getting-to-know-you chat: start simple, "
+            "and every couple of turns try something a step harder, noticing how they cope "
+            f"and dropping back as soon as they struggle. Natural things to try, by level: "
+            f"{probes}. Never announce a test or ask them to rate themselves."
+        )
+    ideas: list[str] = []
+    if c.due_words:
+        words = ", ".join(f"{w} ({g})" if g else w for w, g in c.due_words)
+        ideas.append(
+            f"Words they learned before and are due to meet again: {words}. Use them "
+            "naturally, or make an opening for the learner to use them."
+        )
+    for item in c.new_items:
+        example = f' (e.g. "{item["example"]}")' if item.get("example") else ""
+        ideas.append(
+            f"Worth introducing if a natural moment comes [{item['id']}]: {item['title']}{example}. "
+            "Point it out lightly, in passing; don't turn it into a lesson."
+        )
+    for item in c.revisit_items:
+        ideas.append(f"They've used this before and it's due another airing [{item['id']}]: {item['title']}.")
+    for topic in c.topics:
+        facts = " ".join(topic.get("facts") or [])
+        angle = f" (fits: {topic['notes'].rstrip('.')})" if topic.get("notes") else ""
+        words = f" Words it brings: {', '.join(topic['words'])}." if topic.get("words") else ""
+        ideas.append(
+            f"A story you could tell if the conversation goes there [{topic['id']}]: "
+            f"{topic['title']}{angle}. Facts: {facts} Stick to these facts.{words}"
+        )
+    if ideas:
+        lines.append(
+            "Ideas you can draw on. None of this is an agenda: follow the learner, who "
+            "decides what to talk about and for how long. Suggest things when they fit, "
+            "and make your own call about when they do.\n- " + "\n- ".join(ideas)
+        )
+    lines.append(
+        "Bring in a new word or expression roughly every ten minutes of conversation, "
+        "more when the topic calls for it. Whenever you teach a word, point out one of "
+        "the structures above or tell one of the stories, record it with note_teaching "
+        "in the same message."
+    )
+    return "\n\n".join(lines)
 
 
 def _known_keys_section(ctx: SessionContext) -> str | None:

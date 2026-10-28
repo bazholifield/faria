@@ -1,0 +1,816 @@
+language: de
+name: German
+levels: [A1, A2, B1, B2]
+items:
+  # ---------------------------------------------------------------- A1
+  - id: de.a1.gender-articles
+    level: A1
+    strand: grammar
+    title: "Noun gender, articles and plurals"
+    notes: "der/die/das learned with every noun; a few reliable endings (-ung, -heit, -keit → die; -chen → das). Plurals come in several patterns."
+    example: "Der Tisch, die Lampe und das Bett sind neu."
+    english: "The table, the lamp and the bed are new."
+    status: draft
+  - id: de.a1.present-regular
+    level: A1
+    strand: grammar
+    title: "Present tense, sein and haben"
+    notes: "Regular endings; sein and haben fully irregular. German present also covers English 'I'm doing' and near future."
+    example: "Ich wohne in Chicago und arbeite an einer Schule."
+    english: "I live in Chicago and work at a school."
+    status: draft
+  - id: de.a1.stem-change
+    level: A1
+    strand: grammar
+    title: "Stem-changing verbs"
+    notes: "Changes only in du and er/sie/es: fahren → fährt, sprechen → spricht, lesen → liest."
+    example: "Er fährt jeden Tag mit dem Rad und spricht drei Sprachen."
+    english: "He cycles every day and speaks three languages."
+    status: draft
+  - id: de.a1.v2-word-order
+    level: A1
+    strand: grammar
+    title: "Verb second, and verb-first questions"
+    notes: "The verb is always the second element; anything can go first, the subject then follows the verb (Heute gehe ich…). English speakers put the subject second."
+    example: "Heute gehe ich ins Kino. Kommst du mit?"
+    english: "Today I'm going to the cinema. Are you coming?"
+    status: draft
+  - id: de.a1.accusative
+    level: A1
+    strand: grammar
+    title: "The accusative case"
+    notes: "Only masculine changes (der → den, ein → einen); accusative pronouns (mich, dich, ihn)."
+    example: "Ich habe einen Bruder. Kennst du ihn?"
+    english: "I have a brother. Do you know him?"
+    status: draft
+  - id: de.a1.nicht-kein
+    level: A1
+    strand: grammar
+    title: "nicht vs kein"
+    notes: "kein negates nouns with ein or no article; nicht negates everything else."
+    example: "Ich habe keine Zeit und ich bin nicht müde."
+    english: "I don't have time and I'm not tired."
+    status: draft
+  - id: de.a1.modal-verbs
+    level: A1
+    strand: grammar
+    title: "Modal verbs"
+    notes: "können, müssen, wollen, möchten, dürfen, sollen; the infinitive goes to the end."
+    example: "Ich möchte einen Kaffee, aber ich muss gleich gehen."
+    english: "I'd like a coffee, but I have to go soon."
+    status: draft
+  - id: de.a1.separable-verbs
+    level: A1
+    strand: grammar
+    title: "Separable verbs"
+    notes: "The prefix goes to the end of the clause: aufstehen → ich stehe um sieben auf."
+    example: "Ich stehe um sieben Uhr auf und rufe meine Mutter an."
+    english: "I get up at seven and call my mother."
+    status: draft
+  - id: de.a1.possessives
+    level: A1
+    strand: grammar
+    title: "Possessive articles"
+    notes: "mein, dein, sein, ihr, unser, euer, Ihr; endings like ein. sein = his, ihr = her/their."
+    example: "Das ist meine Schwester und ihr Freund."
+    english: "That's my sister and her boyfriend."
+    status: draft
+  - id: de.a1.questions
+    level: A1
+    strand: grammar
+    title: "W-questions and ja / nein / doch"
+    notes: "wer, was, wo, woher, wohin, wann, wie; doch to contradict a negative question."
+    example: "Kommst du nicht? — Doch, ich komme!"
+    english: "Aren't you coming? — Yes, I am!"
+    status: draft
+  - id: de.a1.es-gibt
+    level: A1
+    strand: grammar
+    title: "es gibt"
+    notes: "Existence takes the accusative: es gibt einen Park."
+    example: "In meiner Straße gibt es einen Bäcker und einen Park."
+    english: "There's a bakery and a park on my street."
+    status: draft
+  - id: de.a1.imperative
+    level: A1
+    strand: grammar
+    title: "The imperative"
+    notes: "du (komm!), ihr (kommt!), Sie (kommen Sie!); bitte and mal soften it."
+    example: "Komm doch mal vorbei! Setzen Sie sich bitte."
+    english: "Do come by! Please sit down."
+    status: draft
+  - id: de.a1.introduce-yourself
+    level: A1
+    strand: function
+    title: "Introduce yourself and others"
+    notes: "Name, origin, where you live, job; du vs Sie at first contact."
+    example: "Ich heiße Ana, ich komme aus den USA und wohne in Chicago."
+    english: "My name is Ana, I'm from the US and I live in Chicago."
+    status: draft
+  - id: de.a1.personal-information
+    level: A1
+    strand: function
+    title: "Ask for and give personal information"
+    notes: "Age, family, contact details; asking someone to repeat (Wie bitte?, Noch einmal, bitte)."
+    example: "Wie bitte? Können Sie das noch einmal sagen?"
+    english: "Sorry? Could you say that again?"
+    status: draft
+  - id: de.a1.order-food
+    level: A1
+    strand: function
+    title: "Order in a café or restaurant"
+    notes: "Ich hätte gern…, Ich nehme…, Zahlen, bitte; zusammen oder getrennt?"
+    example: "Ich hätte gern ein Wasser und eine Brezel. — Zusammen oder getrennt?"
+    english: "I'd like a water and a pretzel. — Together or separately?"
+    status: draft
+  - id: de.a1.shopping-prices
+    level: A1
+    strand: function
+    title: "Buy things and ask prices"
+    notes: "Was kostet…? / Wie viel kosten…?; numbers with units first (einundzwanzig)."
+    example: "Was kosten die Äpfel? — Zwei Euro das Kilo."
+    english: "How much are the apples? — Two euros a kilo."
+    status: draft
+  - id: de.a1.time-and-days
+    level: A1
+    strand: function
+    title: "Time, days and routines"
+    notes: "Wie spät ist es?, um acht Uhr, halb neun (= 8:30, a classic trap), montags."
+    example: "Montags fange ich um halb neun an."
+    english: "On Mondays I start at half past eight."
+    status: draft
+  - id: de.a1.likes-dislikes
+    level: A1
+    strand: function
+    title: "Say what you like and don't like"
+    notes: "gern + verb (ich koche gern), mögen + noun, lieber/am liebsten."
+    example: "Ich koche gern, aber ich esse lieber im Restaurant."
+    english: "I like cooking, but I prefer eating out."
+    status: draft
+  - id: de.a1.v-family
+    level: A1
+    strand: vocab
+    title: "Family"
+    words: [die Familie, die Mutter, der Vater, der Bruder, die Schwester, der Sohn, die Tochter, die Großeltern, der Cousin, der Partner]
+    status: draft
+  - id: de.a1.v-food
+    level: A1
+    strand: vocab
+    title: "Food and drink"
+    words: [das Brot, das Wasser, die Milch, der Käse, das Obst, das Fleisch, der Fisch, das Gemüse, das Frühstück, das Abendessen]
+    status: draft
+  - id: de.a1.v-home
+    level: A1
+    strand: vocab
+    title: "Home"
+    words: [das Haus, die Wohnung, die Küche, das Schlafzimmer, das Bad, der Tisch, der Stuhl, das Bett, das Fenster, die Tür]
+    status: draft
+  - id: de.a1.v-city
+    level: A1
+    strand: vocab
+    title: "Places in town"
+    words: [die Straße, der Laden, die Bäckerei, die Bank, der Bahnhof, der Park, das Museum, die Apotheke, in der Nähe, weit weg]
+    status: draft
+  - id: de.a1.v-daily-routine
+    level: A1
+    strand: vocab
+    title: "Daily routine"
+    words: [aufwachen, aufstehen, duschen, frühstücken, arbeiten, zu Mittag essen, sich ausruhen, nach Hause kommen, zu Abend essen, ins Bett gehen]
+    status: draft
+  - id: de.a1.v-clothes-colours
+    level: A1
+    strand: vocab
+    title: "Clothes and colours"
+    words: [das Hemd, die Hose, die Schuhe, der Mantel, das Kleid, rot, blau, grün, schwarz, weiß]
+    status: draft
+  - id: de.a1.topic-du-sie
+    level: A1
+    strand: topic
+    title: "Du or Sie?"
+    notes: "Meeting people, work, or when the learner isn't sure which to use."
+    facts:
+      - "German has an informal du and a formal Sie."
+      - "Switching to du is usually offered by the older or more senior person: 'Wollen wir uns duzen?'"
+      - "Among students and young people du is normal from the start."
+    words: [duzen, siezen, das Du anbieten]
+    status: draft
+  # ---------------------------------------------------------------- A2
+  - id: de.a2.perfekt-haben
+    level: A2
+    strand: grammar
+    title: "Perfekt with haben"
+    notes: "The spoken past: haben + participle at the end (ge-…-t / ge-…-en). Spoken German rarely uses the Präteritum of most verbs."
+    example: "Gestern habe ich lange geschlafen und dann einen Film gesehen."
+    english: "Yesterday I slept in and then watched a film."
+    status: draft
+  - id: de.a2.perfekt-sein
+    level: A2
+    strand: grammar
+    title: "Perfekt with sein"
+    notes: "Motion and change of state (gehen, fahren, aufstehen, werden), plus sein and bleiben."
+    example: "Wir sind nach Berlin gefahren und dort zwei Tage geblieben."
+    english: "We drove to Berlin and stayed there two days."
+    status: draft
+  - id: de.a2.dative
+    level: A2
+    strand: grammar
+    title: "The dative case"
+    notes: "dem/der/dem/den + -n in the plural; dative pronouns (mir, dir, ihm); the indirect object."
+    example: "Ich gebe dem Kind ein Buch und meiner Mutter Blumen."
+    english: "I'm giving the child a book and my mother flowers."
+    status: draft
+  - id: de.a2.dative-verbs
+    level: A2
+    strand: grammar
+    title: "Verbs with the dative"
+    notes: "helfen, danken, gefallen, gehören, schmecken; gefallen works like Spanish gustar (das gefällt mir)."
+    example: "Die Stadt gefällt mir. Kannst du mir helfen?"
+    english: "I like the city. Can you help me?"
+    status: draft
+  - id: de.a2.prepositions-fixed
+    level: A2
+    strand: grammar
+    title: "Prepositions with a fixed case"
+    notes: "Dative: mit, nach, bei, seit, von, zu, aus. Accusative: für, ohne, durch, gegen, um. Contractions (zum, beim, vom)."
+    example: "Ich fahre mit dem Bus zur Arbeit und gehe ohne meinen Schirm."
+    english: "I take the bus to work and go without my umbrella."
+    status: draft
+  - id: de.a2.two-way-prepositions
+    level: A2
+    strand: grammar
+    title: "Two-way prepositions"
+    notes: "in, an, auf, über, unter…: accusative for movement (wohin?), dative for location (wo?). legen/liegen, stellen/stehen."
+    example: "Ich lege das Buch auf den Tisch. Jetzt liegt es auf dem Tisch."
+    english: "I'm putting the book on the table. Now it's on the table."
+    status: draft
+  - id: de.a2.subordinate-clauses
+    level: A2
+    strand: grammar
+    title: "weil, dass, wenn: verb at the end"
+    notes: "Subordinate clauses send the conjugated verb to the end; a clause in front puts the main verb first (Wenn ich Zeit habe, komme ich)."
+    example: "Ich bleibe zu Hause, weil ich krank bin."
+    english: "I'm staying home because I'm ill."
+    status: draft
+  - id: de.a2.reflexive-verbs
+    level: A2
+    strand: grammar
+    title: "Reflexive verbs"
+    notes: "sich freuen (auf/über), sich treffen, sich erinnern; dative reflexive with a body part (ich wasche mir die Hände)."
+    example: "Ich freue mich auf das Wochenende."
+    english: "I'm looking forward to the weekend."
+    status: draft
+  - id: de.a2.comparatives
+    level: A2
+    strand: grammar
+    title: "Comparisons and superlatives"
+    notes: "-er als, so … wie, am -sten; umlaut in short adjectives (alt → älter); gut/besser/am besten, gern/lieber/am liebsten."
+    example: "Mein Bruder ist älter als ich, aber ich bin größer."
+    english: "My brother is older than me, but I'm taller."
+    status: draft
+  - id: de.a2.adjective-endings-intro
+    level: A2
+    strand: grammar
+    title: "Adjective endings: a first pass"
+    notes: "After der/die/das: -e or -en. Enough for common phrases (der neue Job, mit dem alten Auto)."
+    example: "Der neue Job ist toll, aber ich fahre noch mit dem alten Auto."
+    english: "The new job is great, but I'm still driving the old car."
+    status: draft
+  - id: de.a2.prateritum-basics
+    level: A2
+    strand: grammar
+    title: "Präteritum of sein, haben and the modals"
+    notes: "These few verbs use the Präteritum even in speech (war, hatte, konnte, musste)."
+    example: "Ich war gestern krank und konnte nicht kommen."
+    english: "I was ill yesterday and couldn't come."
+    status: draft
+  - id: de.a2.seit
+    level: A2
+    strand: grammar
+    title: "seit + present tense"
+    notes: "For 'have been doing': ich wohne seit drei Jahren hier. *Ich habe hier für drei Jahre gewohnt is an English-speaker error."
+    example: "Ich lerne seit zwei Jahren Deutsch."
+    english: "I've been learning German for two years."
+    status: draft
+  - id: de.a2.past-weekend
+    level: A2
+    strand: function
+    title: "Talk about last weekend or a trip"
+    notes: "Perfekt with sequencing (zuerst, dann, danach, am Ende), keeping verb-second after each."
+    example: "Am Samstag sind wir in die Berge gefahren, danach haben wir gegrillt."
+    english: "On Saturday we went to the mountains, then we had a barbecue."
+    status: draft
+  - id: de.a2.childhood
+    level: A2
+    strand: function
+    title: "Talk about your childhood"
+    notes: "früher vs heute; war/hatte plus Perfekt."
+    example: "Früher habe ich auf dem Land gewohnt, heute wohne ich in der Stadt."
+    english: "I used to live in the country; now I live in the city."
+    status: draft
+  - id: de.a2.invitations
+    level: A2
+    strand: function
+    title: "Make, accept and turn down invitations"
+    notes: "Hast du Lust…?, Wollen wir…?; declining with leider and a reason."
+    example: "Hast du Lust, ins Kino zu gehen? — Gern, aber heute kann ich leider nicht."
+    english: "Do you fancy going to the cinema? — I'd love to, but unfortunately I can't today."
+    status: draft
+  - id: de.a2.describe-people-places
+    level: A2
+    strand: function
+    title: "Describe people and places"
+    notes: "Appearance and character; your neighbourhood; es gibt, liegt."
+    example: "Mein Viertel ist ruhig und es gibt viele kleine Läden."
+    english: "My neighbourhood is quiet and there are lots of small shops."
+    status: draft
+  - id: de.a2.simple-advice
+    level: A2
+    strand: function
+    title: "Give and ask for simple advice"
+    notes: "Du solltest…, Warum … nicht?, imperative with doch mal."
+    example: "Du bist müde? Geh doch mal früher ins Bett!"
+    english: "You're tired? Why not go to bed earlier!"
+    status: draft
+  - id: de.a2.plans
+    level: A2
+    strand: function
+    title: "Talk about plans"
+    notes: "Present tense + time expression, vorhaben, wollen."
+    example: "Im Sommer habe ich vor, meine Freunde in Wien zu besuchen."
+    english: "This summer I'm planning to visit my friends in Vienna."
+    status: draft
+  - id: de.a2.v-travel
+    level: A2
+    strand: vocab
+    title: "Travel and transport"
+    words: [die Reise, die Fahrkarte, der Flug, das Gepäck, der Koffer, das Gleis, den Zug verpassen, buchen, die Unterkunft, umsteigen]
+    status: draft
+  - id: de.a2.v-health
+    level: A2
+    strand: vocab
+    title: "Health and the body"
+    words: [der Kopf, der Rücken, der Bauch, Kopfschmerzen haben, das Fieber, die Erkältung, der Arzt, das Rezept, der Termin, sich krank fühlen]
+    status: draft
+  - id: de.a2.v-work
+    level: A2
+    strand: vocab
+    title: "Work and jobs"
+    words: [die Arbeit, die Firma, der Chef, der Kollege, das Gehalt, die Besprechung, die Arbeitszeit, einstellen, kündigen, in Rente gehen]
+    status: draft
+  - id: de.a2.v-free-time
+    level: A2
+    strand: vocab
+    title: "Free time and hobbies"
+    words: [die Freizeit, ausgehen, wandern, malen, Gitarre spielen, das Spiel, die Serie, sich langweilen, basteln, das Wochenende]
+    status: draft
+  - id: de.a2.v-shopping
+    level: A2
+    strand: vocab
+    title: "Shopping and services"
+    words: [die Größe, anprobieren, die Umkleidekabine, der Schlussverkauf, umtauschen, der Kassenbon, die Karte, bar bezahlen, günstig, teuer]
+    status: draft
+  - id: de.a2.v-weather
+    level: A2
+    strand: vocab
+    title: "Weather and seasons"
+    words: [die Sonne scheint, es ist kalt, es regnet, es schneit, das Gewitter, der Wind, bewölkt, der Frühling, der Sommer, der Winter]
+    status: draft
+  - id: de.a2.topic-kaffee-und-kuchen
+    level: A2
+    strand: topic
+    title: "Kaffee und Kuchen"
+    notes: "Food, weekends, visiting family."
+    facts:
+      - "Kaffee und Kuchen is a German tradition of coffee and cake in the afternoon, especially on Sundays."
+      - "Popular cakes include Apfelkuchen, Käsekuchen and Schwarzwälder Kirschtorte."
+      - "Many bakeries sell cake by the slice."
+    words: [der Kuchen, die Torte, das Stück, die Bäckerei]
+    status: draft
+  - id: de.a2.topic-austria-switzerland
+    level: A2
+    strand: topic
+    title: "German in Austria and Switzerland"
+    notes: "Regional varieties, travel, or when an Austrian or Swiss word comes up."
+    facts:
+      - "In Austria January is Jänner, tomatoes are Paradeiser and potatoes are Erdäpfel."
+      - "In Switzerland people greet with Grüezi, and a bicycle is a Velo."
+      - "Swiss Standard German doesn't use the letter ß; it writes ss instead."
+    words: [der Jänner, die Paradeiser, Grüezi, das Velo]
+    status: draft
+  # ---------------------------------------------------------------- B1
+  - id: de.b1.adjective-declension
+    level: B1
+    strand: grammar
+    title: "Adjective declension: all three patterns"
+    notes: "After der-words, ein-words and no article. The hardest system for learners; aim for high-frequency phrases first."
+    example: "Ein guter Freund hat mir mit frischem Brot und heißem Kaffee geholfen."
+    english: "A good friend helped me out with fresh bread and hot coffee."
+    status: draft
+  - id: de.b1.prateritum
+    level: B1
+    strand: grammar
+    title: "Präteritum for storytelling"
+    notes: "Regular (-te) and strong (ging, kam, sah) forms; written and northern spoken narrative."
+    example: "Es war spät, als wir endlich ankamen."
+    english: "It was late when we finally arrived."
+    status: draft
+  - id: de.b1.plusquamperfekt
+    level: B1
+    strand: grammar
+    title: "Plusquamperfekt"
+    notes: "The past before the past, often with nachdem."
+    example: "Nachdem wir gegessen hatten, gingen wir spazieren."
+    english: "After we had eaten, we went for a walk."
+    status: draft
+  - id: de.b1.konjunktiv-ii
+    level: B1
+    strand: grammar
+    title: "Konjunktiv II: würde, wäre, hätte, könnte"
+    notes: "Politeness (Könnten Sie…?), wishes (Ich hätte gern…), advice (An deiner Stelle würde ich…)."
+    example: "Könnten Sie mir helfen? An deiner Stelle würde ich das Angebot annehmen."
+    english: "Could you help me? If I were you, I'd take the offer."
+    status: draft
+  - id: de.b1.wenn-konjunktiv
+    level: B1
+    strand: grammar
+    title: "Unreal conditions in the present"
+    notes: "Wenn ich Zeit hätte, würde ich…; also without wenn (Hätte ich Zeit, …)."
+    example: "Wenn ich mehr Zeit hätte, würde ich Klavier lernen."
+    english: "If I had more time, I'd learn the piano."
+    status: draft
+  - id: de.b1.relative-clauses
+    level: B1
+    strand: grammar
+    title: "Relative clauses"
+    notes: "Relative pronoun takes its case from its role in the clause (der Mann, den ich kenne / dem ich helfe); verb at the end; never omitted."
+    example: "Das ist der Kollege, mit dem ich jeden Tag zur Arbeit fahre."
+    english: "That's the colleague I drive to work with every day."
+    status: draft
+  - id: de.b1.passive
+    level: B1
+    strand: grammar
+    title: "The passive with werden"
+    notes: "werden + participle; Perfekt passive (ist … worden); von for the agent. Speech often uses man instead."
+    example: "Das Haus wurde 1890 gebaut. Hier wird viel diskutiert."
+    english: "The house was built in 1890. There's a lot of discussion here."
+    status: draft
+  - id: de.b1.genitive
+    level: B1
+    strand: grammar
+    title: "The genitive and its prepositions"
+    notes: "des/der + -(e)s; wegen, trotz, während; speech often replaces it with von + dative."
+    example: "Wegen des Wetters bleiben wir zu Hause. Das Auto meines Vaters ist alt."
+    english: "Because of the weather we're staying home. My father's car is old."
+    status: draft
+  - id: de.b1.zu-infinitive
+    level: B1
+    strand: grammar
+    title: "zu + infinitive, um … zu, ohne … zu"
+    notes: "Es ist schwer, … zu …; um … zu for purpose (*für zu is an English-speaker error)."
+    example: "Ich lerne Deutsch, um in Berlin zu arbeiten."
+    english: "I'm learning German in order to work in Berlin."
+    status: draft
+  - id: de.b1.prepositional-verbs
+    level: B1
+    strand: grammar
+    title: "Verbs with prepositions, da- and wo- compounds"
+    notes: "warten auf, sich interessieren für, denken an; darauf, wofür when the object is a thing."
+    example: "Worauf wartest du? — Auf den Bus. Ich warte schon lange darauf."
+    english: "What are you waiting for? — The bus. I've been waiting for it for ages."
+    status: draft
+  - id: de.b1.als-wenn-obwohl
+    level: B1
+    strand: grammar
+    title: "als vs wenn; obwohl, damit, nachdem"
+    notes: "als for a single past event, wenn for repeated or present/future ones."
+    example: "Als ich klein war, war ich oft krank. Wenn ich krank war, blieb ich zu Hause."
+    english: "When I was little, I was often ill. Whenever I was ill, I stayed home."
+    status: draft
+  - id: de.b1.futur-i
+    level: B1
+    strand: grammar
+    title: "Futur I and guesses"
+    notes: "werden + infinitive for promises, predictions and probability (er wird wohl krank sein)."
+    example: "Wo ist Max? — Er wird wohl noch im Büro sein."
+    english: "Where's Max? — He's probably still at the office."
+    status: draft
+  - id: de.b1.n-declension
+    level: B1
+    strand: grammar
+    title: "Weak masculine nouns (n-Deklination)"
+    notes: "der Student, der Kollege, der Herr add -n/-en outside the nominative."
+    example: "Ich habe den neuen Kollegen schon kennengelernt."
+    english: "I've already met the new colleague."
+    status: draft
+  - id: de.b1.tell-a-story
+    level: B1
+    strand: function
+    title: "Tell a story with background and events"
+    notes: "Präteritum or Perfekt, connectors (plötzlich, damals, schließlich), word order after each."
+    example: "Wir saßen beim Essen, als plötzlich der Strom ausfiel."
+    english: "We were having dinner when suddenly the power went out."
+    status: draft
+  - id: de.b1.opinions
+    level: B1
+    strand: function
+    title: "Give opinions, agree and disagree"
+    notes: "Ich finde, dass…; meiner Meinung nach (verb follows!); Da hast du recht / Da bin ich anderer Meinung."
+    example: "Meiner Meinung nach ist das nicht so einfach. Da bin ich anderer Meinung."
+    english: "In my opinion it's not that simple. I see it differently."
+    status: draft
+  - id: de.b1.feelings-wishes
+    level: B1
+    strand: function
+    title: "Express feelings, hopes and wishes"
+    notes: "Ich hoffe, dass…; Es tut mir leid, dass…; Ich wünschte, … (Konjunktiv II)."
+    example: "Es tut mir leid, dass du schon gehst. Ich wünschte, du könntest bleiben."
+    english: "I'm sorry you're already leaving. I wish you could stay."
+    status: draft
+  - id: de.b1.recommendations
+    level: B1
+    strand: function
+    title: "Recommend and advise"
+    notes: "Ich würde dir empfehlen…, An deiner Stelle…, Es wäre besser, wenn…"
+    example: "An deiner Stelle würde ich mit dem Zug fahren."
+    english: "If I were you, I'd take the train."
+    status: draft
+  - id: de.b1.travel-problems
+    level: B1
+    strand: function
+    title: "Sort out problems while travelling"
+    notes: "Complaining politely with Konjunktiv II; explaining what happened."
+    example: "Entschuldigung, ich hatte ein Doppelzimmer gebucht, kein Einzelzimmer."
+    english: "Excuse me, I'd booked a double room, not a single."
+    status: draft
+  - id: de.b1.summarise
+    level: B1
+    strand: function
+    title: "Summarise a film, book or news story"
+    notes: "Es geht um…, Der Film handelt von…, am Anfang, am Ende."
+    example: "Der Film handelt von einer Familie, die ihr Haus verliert."
+    english: "The film is about a family that loses its home."
+    status: draft
+  - id: de.b1.v-feelings
+    level: B1
+    strand: vocab
+    title: "Feelings and personality"
+    words: [stolz, peinlich, gestresst, enttäuscht, eifersüchtig, schüchtern, stur, empfindlich, die Vorfreude, sich schämen]
+    status: draft
+  - id: de.b1.v-media-tech
+    level: B1
+    strand: vocab
+    title: "Media and technology"
+    words: [die Nachrichten, die Zeitung, die sozialen Medien, herunterladen, das Passwort, der Bildschirm, der Link, ein Foto posten, das Handy, die App]
+    status: draft
+  - id: de.b1.v-environment
+    level: B1
+    strand: vocab
+    title: "The environment"
+    words: [die Umwelt, die Verschmutzung, recyceln, der Müll, der Klimawandel, die Dürre, Energie sparen, die Art, schützen, nachhaltig]
+    status: draft
+  - id: de.b1.v-education
+    level: B1
+    strand: vocab
+    title: "Education"
+    words: [das Fach, eine Prüfung bestehen, durchfallen, die Note, das Stipendium, das Studium, der Abschluss, sich einschreiben, das Gymnasium, die Uni]
+    status: draft
+  - id: de.b1.v-relationships
+    level: B1
+    strand: vocab
+    title: "Relationships"
+    words: [sich gut verstehen, sich verlieben, heiraten, sich trennen, sich streiten, sich versöhnen, das Vertrauen, der Nachbar, der Bekannte, vermissen]
+    status: draft
+  - id: de.b1.v-housing
+    level: B1
+    strand: vocab
+    title: "Housing"
+    words: [mieten, die Miete, der Vermieter, die Kaution, der Mietvertrag, möbliert, der Umzug, umziehen, das Viertel, die Nebenkosten]
+    status: draft
+  - id: de.b1.topic-compound-nouns
+    level: B1
+    strand: topic
+    title: "German compound nouns"
+    notes: "Any time a long word comes up, or for a laugh about long words."
+    facts:
+      - "German builds new nouns by joining words: Handschuh (hand + shoe) is a glove, Kühlschrank (cool + cupboard) a fridge."
+      - "The last part decides the gender: die Hand + der Schuh = der Handschuh."
+      - "Very long compounds are possible, like Donaudampfschifffahrt (Danube steamship travel)."
+    words: [der Handschuh, der Kühlschrank, zusammensetzen]
+    status: draft
+  - id: de.b1.topic-berlin-wall
+    level: B1
+    strand: topic
+    title: "The Berlin Wall"
+    notes: "History, Berlin, or around 9 November or 3 October."
+    facts:
+      - "The Berlin Wall divided the city from 1961 to 1989."
+      - "It fell on the night of 9 November 1989."
+      - "Germany was reunified on 3 October 1990, now the national holiday, Tag der Deutschen Einheit."
+    words: [die Mauer, die Wiedervereinigung, die Grenze, der Mauerfall]
+    status: draft
+  - id: de.b1.topic-capital-nouns
+    level: B1
+    strand: topic
+    title: "Why German capitalises nouns"
+    notes: "Spelling questions, or when the learner notices the capitals."
+    facts:
+      - "Every German noun is written with a capital letter: der Tisch, die Freiheit."
+      - "Capitalising all nouns became standard in the 17th and 18th centuries."
+      - "The 1996 spelling reform changed some rules, for example daß became dass."
+    words: [das Nomen, großschreiben, die Rechtschreibung]
+    status: draft
+  # ---------------------------------------------------------------- B2
+  - id: de.b2.konjunktiv-ii-past
+    level: B2
+    strand: grammar
+    title: "Konjunktiv II in the past"
+    notes: "hätte/wäre + participle for regrets and counterfactuals; with modals the double infinitive (hätte kommen sollen)."
+    example: "Wenn ich das gewusst hätte, wäre ich früher gekommen. Ich hätte anrufen sollen."
+    english: "If I'd known, I'd have come earlier. I should have called."
+    status: draft
+  - id: de.b2.konjunktiv-i
+    level: B2
+    strand: grammar
+    title: "Konjunktiv I for reported speech"
+    notes: "News and formal register (er sei, sie habe); recognise it, use it for reporting; speech prefers Konjunktiv II or indicative."
+    example: "Der Minister sagte, er habe nichts davon gewusst."
+    english: "The minister said he had known nothing about it."
+    status: draft
+  - id: de.b2.passive-advanced
+    level: B2
+    strand: grammar
+    title: "Passive with modals; Zustandspassiv"
+    notes: "muss gemacht werden; ist geöffnet (state) vs wird geöffnet (process)."
+    example: "Das muss bis Freitag erledigt werden. Das Geschäft ist bis acht geöffnet."
+    english: "That has to be done by Friday. The shop is open until eight."
+    status: draft
+  - id: de.b2.participle-attributes
+    level: B2
+    strand: grammar
+    title: "Extended participle attributes (recognition)"
+    notes: "Written German packs relative clauses before the noun: der gestern gekaufte Wagen."
+    example: "Der vor zwei Jahren eröffnete Bahnhof ist schon zu klein."
+    english: "The station that opened two years ago is already too small."
+    status: draft
+  - id: de.b2.nominalisation
+    level: B2
+    strand: grammar
+    title: "Nominalisation and noun-verb pairs"
+    notes: "Formal style: nach der Ankunft, eine Entscheidung treffen, zur Verfügung stellen."
+    example: "Nach langer Diskussion wurde eine Entscheidung getroffen."
+    english: "After long discussion, a decision was made."
+    status: draft
+  - id: de.b2.two-part-connectors
+    level: B2
+    strand: grammar
+    title: "Two-part connectors"
+    notes: "sowohl … als auch, weder … noch, entweder … oder, je … desto, nicht nur … sondern auch."
+    example: "Je mehr ich lese, desto besser verstehe ich."
+    english: "The more I read, the better I understand."
+    status: draft
+  - id: de.b2.modal-particles
+    level: B2
+    strand: grammar
+    title: "Modal particles: doch, ja, mal, eben, halt"
+    notes: "Untranslatable but everywhere in speech; they carry the speaker's attitude. Without them German sounds stiff."
+    example: "Das ist ja interessant! Komm doch mal vorbei. Das ist halt so."
+    english: "Oh, that's interesting! Do come by. That's just how it is."
+    status: draft
+  - id: de.b2.subjective-modals
+    level: B2
+    strand: grammar
+    title: "Subjective use of modal verbs"
+    notes: "Er soll reich sein (supposedly), sie muss krank sein (must be), er will es gesehen haben (claims)."
+    example: "Er soll sehr reich sein. Sie muss krank sein, sonst wäre sie hier."
+    english: "He's supposed to be very rich. She must be ill, or she'd be here."
+    status: draft
+  - id: de.b2.lassen
+    level: B2
+    strand: grammar
+    title: "lassen constructions"
+    notes: "Having something done (ich lasse mein Auto reparieren), letting, and sich lassen = can be (das lässt sich machen)."
+    example: "Ich lasse mir die Haare schneiden. Das lässt sich leicht erklären."
+    english: "I'm getting my hair cut. That's easy to explain."
+    status: draft
+  - id: de.b2.middle-field
+    level: B2
+    strand: grammar
+    title: "Word order in the middle field"
+    notes: "Pronouns before nouns, time–manner–place, and where nicht goes; what makes long sentences sound native."
+    example: "Ich habe es ihm gestern nicht mit Absicht gesagt."
+    english: "I didn't tell him yesterday on purpose."
+    status: draft
+  - id: de.b2.futur-ii
+    level: B2
+    strand: grammar
+    title: "Futur II"
+    notes: "Completed by a future point, and guesses about the past (er wird es vergessen haben)."
+    example: "Bis Montag werde ich das Buch gelesen haben. Er wird es vergessen haben."
+    english: "By Monday I'll have read the book. He must have forgotten."
+    status: draft
+  - id: de.b2.argue
+    level: B2
+    strand: function
+    title: "Argue a case and answer objections"
+    notes: "Zwar … aber, einerseits … andererseits, Dagegen spricht…, Alles in allem."
+    example: "Zwar ist es teuer, aber auf lange Sicht spart man Geld."
+    english: "It's expensive, admittedly, but in the long run you save money."
+    status: draft
+  - id: de.b2.speculate
+    level: B2
+    strand: function
+    title: "Speculate and hypothesise"
+    notes: "Counterfactuals, subjective modals, wohl / vermutlich, Futur II."
+    example: "Er hat sich vermutlich verlaufen. Wäre er früher losgegangen, wäre er schon hier."
+    english: "He's probably got lost. If he'd set off earlier, he'd be here by now."
+    status: draft
+  - id: de.b2.report
+    level: B2
+    strand: function
+    title: "Report what others said"
+    notes: "Konjunktiv I or II, reporting verbs (behaupten, bestreiten, zugeben, betonen)."
+    example: "Er bestritt, ihn gesehen zu haben, und betonte, er wisse von nichts."
+    english: "He denied seeing him and stressed that he knew nothing."
+    status: draft
+  - id: de.b2.abstract-topics
+    level: B2
+    strand: function
+    title: "Discuss abstract and social topics"
+    notes: "Generalising with man, die Gesellschaft; nominal style when it fits."
+    example: "Man gewöhnt sich an alles, aber die Technik entwickelt sich sehr schnell."
+    english: "You get used to everything, but technology moves very fast."
+    status: draft
+  - id: de.b2.register
+    level: B2
+    strand: function
+    title: "Adjust register: du, Sie, ihr"
+    notes: "When to use Sie, the offer to switch (Wollen wir uns duzen?), workplace and regional norms."
+    example: "Wollen wir uns duzen? — Gern, ich bin Lena."
+    english: "Shall we use du? — Sure, I'm Lena."
+    status: draft
+  - id: de.b2.anecdotes
+    level: B2
+    strand: function
+    title: "Tell anecdotes with emphasis and humour"
+    notes: "Reactions (Echt jetzt?, Krass!), intensifiers (total, voll, mega), modal particles for tone."
+    example: "Echt jetzt? Und was hast du gemacht? — Nichts, ich war total baff."
+    english: "Seriously? And what did you do? — Nothing, I was totally stunned."
+    status: draft
+  - id: de.b2.v-society
+    level: B2
+    strand: vocab
+    title: "Politics and society"
+    words: [die Regierung, die Wahlen, wählen, das Gesetz, die Ungleichheit, die Demonstration, der Bürger, das Recht, der Streik, die Steuer]
+    status: draft
+  - id: de.b2.v-economy
+    level: B2
+    strand: vocab
+    title: "Economy and working life"
+    words: [die Krise, die Arbeitslosigkeit, der befristete Vertrag, selbstständig, die Inflation, die Ersparnisse, die Schulden, investieren, der Gewinn, die Konkurrenz]
+    status: draft
+  - id: de.b2.v-science
+    level: B2
+    strand: vocab
+    title: "Science and research"
+    words: [die Forschung, das Experiment, die Entdeckung, nachweisen, die Hypothese, die Daten, der Fortschritt, der Impfstoff, die Studie, die künstliche Intelligenz]
+    status: draft
+  - id: de.b2.v-arts
+    level: B2
+    strand: vocab
+    title: "Arts and culture"
+    words: [das Werk, der Schriftsteller, das Gemälde, die Ausstellung, die Premiere, die Figur, die Handlung, das Drehbuch, die Kritik, die Inszenierung]
+    status: draft
+  - id: de.b2.v-argument
+    level: B2
+    strand: vocab
+    title: "Words for arguing"
+    words: [der Vorteil, der Nachteil, die Folge, der Standpunkt, dafür, dagegen, ansprechen, vertreten, ablehnen, zusammenfassend]
+    status: draft
+  - id: de.b2.v-colloquial
+    level: B2
+    strand: vocab
+    title: "Colloquial German"
+    words: [krass, geil, die Kohle, pennen, quatschen, echt, Bock haben, keine Ahnung, na ja, Feierabend]
+    status: draft
+  - id: de.b2.topic-luther
+    level: B2
+    strand: topic
+    title: "Luther's Bible and standard German"
+    notes: "History, religion, or how standard languages form."
+    facts:
+      - "Martin Luther translated the New Testament into German, published in 1522."
+      - "His translation was widely read and helped spread a common written German across many dialect regions."
+      - "Many German idioms come from Luther's Bible."
+    words: [die Übersetzung, die Bibel, die Mundart]
+    status: draft
+  - id: de.b2.topic-false-friends
+    level: B2
+    strand: topic
+    title: "Falsche Freunde"
+    notes: "Whenever the learner trips on one, or for a fun aside."
+    facts:
+      - "Gift means poison, not a present (a present is ein Geschenk)."
+      - "Bekommen means to get or receive, not to become (to become is werden)."
+      - "A Handy is a mobile phone."
+    words: [das Gift, das Geschenk, bekommen, das Handy]
+    status: draft

@@ -7,7 +7,7 @@ import json
 import pytest
 from fastapi.testclient import TestClient
 
-from faria.config import Settings
+from faria.config import AudioConfig, Settings
 from faria.db.connection import connect
 from faria.db.migrate import apply_migrations
 from faria.server.app import ServerDeps, create_app
@@ -34,7 +34,7 @@ class FakeStt(Transcriber):
 
 
 class FakeTts(Synthesizer):
-    def synthesize(self, text, language, voice=None):
+    def synthesize(self, text, language, voice=None, pace=1.0):
         yield AudioChunk(pcm=FAKE_TTS_PCM, sample_rate=22050, is_final=False)
         yield AudioChunk(pcm=b"", sample_rate=22050, is_final=True)
 
@@ -123,7 +123,8 @@ def _drain_until(ws, msg_type, limit=50):
 
 
 def _speak_utterance(ws):
-    silence_frames = 700 // FRAME_MS + 2
+    # longer than the most patient wait (A1, ADR-030), so it ends at any level
+    silence_frames = max(AudioConfig().vad_silence_ms_by_level.values()) // FRAME_MS + 2
     ws.send_bytes((b"\x01\x00" * (FRAME_BYTES // 2)) * 15)   # ~450ms of "speech"
     ws.send_bytes(b"\x00" * FRAME_BYTES * silence_frames)     # trailing silence ends it
 
@@ -162,7 +163,7 @@ def test_full_audio_turn(server):
         assert kind == "json" and after == {"type": "state", "value": "listening"}
 
         # target language: both tools ride along
-        assert brain.calls[0]["tools"] == ["update_session_state", "annotate_errors"]
+        assert brain.calls[0]["tools"] == ["update_session_state", "annotate_errors", "note_teaching"]
 
         ws.send_json({"type": "abandon"})
         _, ended = _drain_until(ws, "session_ended")

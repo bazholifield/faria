@@ -42,14 +42,20 @@ class ServerDeps:
 
 
 def _default_deps(settings: Settings) -> ServerDeps:
-    from faria.speech.whisper_stt import FasterWhisperTranscriber
     from faria.tutor.brain import TutorBrain
 
-    stt = TranscriberRegistry(
-        FasterWhisperTranscriber(
-            settings.audio, download_root=str(settings.data_dir / "whisper")
+    if settings.audio.stt_default == "openai":
+        from faria.speech.openai_stt import OpenAITranscriber
+
+        stt = TranscriberRegistry(OpenAITranscriber(settings.audio))
+    else:
+        from faria.speech.whisper_stt import FasterWhisperTranscriber
+
+        stt = TranscriberRegistry(
+            FasterWhisperTranscriber(
+                settings.audio, download_root=str(settings.data_dir / "whisper")
+            )
         )
-    )
     # Per-language STT overrides (the Basque hook, ADR-010) get registered
     # here when an alternative backend exists; none configured yet.
 

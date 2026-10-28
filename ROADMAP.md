@@ -2,7 +2,7 @@
 
 **Goal:** a voice-first language tutor and companion that converses at your level, corrects judiciously, and keeps a persistent learner model per language (see the workshop scenario below).
 
-**Now:** audio works end to end but takes ~4.5 s to first reply on CPU; the developer console's replay tool is next, then the phone client, with portfolio work alongside.
+**Now:** building toward a full course over an hour of conversation a day: the syllabus (es/fr/de, A1–B2), spaced review, topic cards and placement are in; speech got acknowledgements, level-aware patience and pace, barge-in and stressed recasts. Next: your own recordings as a speech test set, then daily use to tune it.
 
 Phases are cumulative; each has concrete exit criteria ("I can do X"). Pedagogy gets debugged
 in text (Phase 0–1) before audio complicates anything (Phase 2+).
@@ -111,7 +111,7 @@ Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
 - A transcript reads mentor-like: the tutor introduced at least one topic/story unprompted,
   and the conversation is not question-answer ping-pong.
 
-## 4. Phase 2: audio · In progress · ~4.5 s to first audio vs the < 2 s target
+## 4. Phase 2: audio · In progress · ~4.5 s to first audio vs the < 2 s target (before Oct 2026 changes)
 
 - STT adapter (`speech/stt.py`): faster-whisper local implementation behind the interface;
   per-language override registry. **Basque caveat:** Whisper's `eu` support is weak — the
@@ -135,6 +135,17 @@ Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
   latency, with the same learner-model behavior as text.
 - Swapping STT or TTS backend is a config change, not a code change.
 
+**October 2026 speech work** (ADR-029..033), built and unit-tested, not yet heard by a human:
+- Instant acknowledgement ("mm", "ajá") the moment you stop *(done)*
+- Patience and speaking pace by level; "slower, please" as a spoken command *(done)*
+- Early transcription during the pause, plus a mid-thought / finished verdict on it *(done)*
+- Barge-in: talking over Faria stops its voice *(done)*
+- Stressed recasts: corrected words said after a pause, slower, and bold on screen *(done)*
+- Prompt-cache warm-up at session start (first word ~8 s → ~1.4 s measured) and a cached history *(done)*
+- OpenAI speech recognition and voice (one voice for every language), switched off until the key is in `.env` *(built, untested live)*
+- Your recordings as a test set (~50 short clips per language) to compare recognition options on numbers
+- Later, as we play with it: context hints for new words, checking whether recognition hides learner errors, mixed-language turns, pronunciation feedback
+
 **Status (built 2026-07-20):** the loop is live end-to-end (`faria serve` + browser at
 localhost:8765) with identical learner-model behavior — verified. Backend swap is a config
 change — met. Latency is the open item: **~4.5s** to first audio on pure CPU (measured:
@@ -142,7 +153,7 @@ STT ~2s + first Claude token ~2s + TTS ~0.5s) vs. the <2s budget; instrumentatio
 place and the closing paths (chiefly CUDA for whisper) are in ADR-022. The headset test
 itself needs a human with a microphone — that's you.
 
-## 5. Phase 2.5: developer console · In progress · ledger and prompt lab built; replay next
+## 5. Phase 2.5: developer console · In progress · ledger and prompt lab built; replay noted for later
 
 Tuning this thing is now the bottleneck: the persona still reads more teacher than mentor,
 endpointing still cuts me off, and voices still sound like different people per language.
@@ -163,7 +174,7 @@ localhost console (ADR-027) for working *on* the tutor rather than talking to it
   anything. Persona text is editable in the browser and reloads in place. Strictly
   read-only against the learner model: previewing an unstudied language does not create its
   profile, and viewing a prompt does not decay the focus list it is showing.
-- **Prompt lab — replay (next):** run recorded learner turns through two prompt variants
+- **Prompt lab — replay (noted for later):** run recorded learner turns through two prompt variants
   side by side, each turn against its real frozen context, with cost per variant. Plus
   cheap objective persona metrics (questions per reply, share of turns ending in a
   question, reply length) so "tries too hard to teach" becomes a number, not only a vibe.
@@ -189,7 +200,29 @@ localhost console (ADR-027) for working *on* the tutor rather than talking to it
   sessions.
 - A VAD setting can be chosen by replaying one recording, not by guessing between utterances.
 
-## 6. Phase 3: phone client · Next
+## 6. The course: syllabus, review and topics · In progress · 292 syllabus items + 25 topic cards drafted, 0 checked
+
+The vision: a mentor you could do an hour a day with and come out with a real course, without
+it ever feeling like a lesson plan. Suggestions, never an agenda; you decide length and
+direction (ADR-034).
+
+- Syllabus for Spanish, French and German, A1–B2: grammar, can-do functions, vocabulary themes, in teaching order (`curriculum/`) *(drafted)*
+- Syllabus tab in the Helm to correct it item by item *(done)*
+- Topic cards: stories, history, etymology and regional varieties with checked facts *(drafted)*
+- The mentor gets an "Ideas" section: words due, one or two new items, stories it could tell *(done)*
+- `note_teaching` tool: taught words enter Leitner review in conversation; structures and stories are tracked *(done)*
+- Coverage introduced → practised → solid from the end-of-session sweep *(done)*
+- Placement conversation for a language with no level yet *(done)*
+- Default variety per language, other regions as asides *(done; Spanish base still to confirm)*
+- Your pass over the syllabus and topic cards (draft → checked)
+- Level adaptation check: play above and below your level; measure whether Faria's own speech changes (sentence length, rarer words) between A2 and B2
+- A progress view: words learning/solid, structures covered, per language
+
+**Done when:**
+- An hour's conversation introduces new words at about one every ten minutes, brings back due ones, and nobody would call it a lesson.
+- After two weeks of daily use, coverage and review data show what you've learned per language, and it matches your sense of it.
+
+## 7. Phase 3: phone client · Next
 
 - Single mobile-friendly web page served by FastAPI: pick a language, hold-to-talk (or VAD),
   hear replies. MediaRecorder + WebSocket; no build toolchain unless it earns its keep.
@@ -202,15 +235,11 @@ localhost console (ADR-027) for working *on* the tutor rather than talking to it
   Phase 2 allowed at my desk.
 - Sessions started on the phone and at the desk land in the same learner model.
 
-## 7. Phase 4: polish and extras · Later
+## 8. Phase 4: polish and extras · Later
 
 - Custom tutor voice (XTTS or ElevenLabs adapter behind the existing TTS interface).
-- Mini-lesson library: structured prompts/content for culture, history, etymology,
-  philosophy segments, triggered by conversation context, tutor initiative, or explicit
-  request; lessons logged as topics so they're not repeated.
-- Spaced-repetition surfacing: vocabulary-exposure tracking gets its own table (deliberately
-  deferred until now — see DECISIONS ADR-007) and the tutor weaves due items and past
-  errors into conversation openers.
+- Longer mini-lessons on request ("tell me about X"), building on the topic cards.
+- Vocabulary from frequency lists by level, beyond the words the mentor teaches.
 - Maybe: Flutter native client, richer history/stats UI.
 
 **Done when:**
@@ -232,9 +261,9 @@ embedding index over summaries/utterances, not a vector-DB service) when any of 
    full utterance history.
 3. Mini-lessons should be grounded in "what has this learner already been taught".
 
-## 8. Portfolio track · Next
+## 9. Portfolio track · Later
 
-*Runs alongside phases 2.5–3.*
+*Public once the tutor is fully functional: converses, switches languages, adapts to level, teaches culture, and could carry a course.*
 
 FARIA is the project that best shows the linguist first: a correction policy grounded in how
 recasts work, a two-level error taxonomy, a CEFR model with an evidence trail, and 28 recorded

@@ -1,0 +1,824 @@
+language: fr
+name: French
+levels: [A1, A2, B1, B2]
+items:
+  # ---------------------------------------------------------------- A1
+  - id: fr.a1.gender-articles
+    level: A1
+    strand: grammar
+    title: "Gender, number and articles"
+    notes: "le/la/l'/les, un/une/des. In speech the plural is mostly heard on the article (le livre / les livres), so the article carries number."
+    example: "J'ai une sœur et des cousins à Lyon."
+    english: "I have a sister and some cousins in Lyon."
+    status: draft
+  - id: fr.a1.adjective-agreement
+    level: A1
+    strand: grammar
+    title: "Adjective agreement and position"
+    notes: "Most adjectives follow the noun; beauty, age, goodness and size ones come first (une petite maison). Feminine often adds a pronounced consonant (petit/petite)."
+    example: "Une petite maison bleue au bord de la mer."
+    english: "A little blue house by the sea."
+    status: draft
+  - id: fr.a1.present-er
+    level: A1
+    strand: grammar
+    title: "Present tense: -er verbs"
+    notes: "parle, parles, parle, parlent all sound the same, so the pronoun is never dropped. Good for listening practice."
+    example: "J'habite à Chicago et je travaille dans une école."
+    english: "I live in Chicago and I work in a school."
+    status: draft
+  - id: fr.a1.key-verbs
+    level: A1
+    strand: grammar
+    title: "être, avoir, aller, faire"
+    notes: "The four irregulars everything else is built on (passé composé, futur proche)."
+    example: "Je suis fatigué, j'ai faim et je vais au restaurant."
+    english: "I'm tired, I'm hungry and I'm going to the restaurant."
+    status: draft
+  - id: fr.a1.avoir-expressions
+    level: A1
+    strand: grammar
+    title: "avoir expressions"
+    notes: "Age, hunger, thirst, cold, fear use avoir where English uses be. *Je suis 20 ans is the classic error."
+    example: "J'ai vingt ans et j'ai froid."
+    english: "I'm twenty and I'm cold."
+    status: draft
+  - id: fr.a1.negation
+    level: A1
+    strand: grammar
+    title: "Negation: ne … pas"
+    notes: "Spoken French usually drops ne (je sais pas); the learner should recognise both and know which is formal."
+    example: "Je ne parle pas allemand. (Je parle pas allemand.)"
+    english: "I don't speak German."
+    status: draft
+  - id: fr.a1.partitive
+    level: A1
+    strand: grammar
+    title: "Partitive articles: du, de la, des"
+    notes: "Unspecified amounts need an article where English has none (I drink coffee → je bois du café); de after negation."
+    example: "Je bois du café, mais je ne mange pas de pain."
+    english: "I drink coffee, but I don't eat bread."
+    status: draft
+  - id: fr.a1.contractions
+    level: A1
+    strand: grammar
+    title: "à and de with articles: au, aux, du, des"
+    notes: "à + le = au, de + le = du; also aller au / à la / à l'."
+    example: "Je vais au marché et je reviens du travail."
+    english: "I'm going to the market and I'm coming back from work."
+    status: draft
+  - id: fr.a1.questions
+    level: A1
+    strand: grammar
+    title: "Asking questions"
+    notes: "Three registers: intonation (tu viens ?), est-ce que, inversion (viens-tu ?). Speech mostly uses the first two."
+    example: "Tu habites où ? Est-ce que tu as des frères ?"
+    english: "Where do you live? Do you have any brothers?"
+    status: draft
+  - id: fr.a1.cest-il-est
+    level: A1
+    strand: grammar
+    title: "c'est vs il est, and il y a"
+    notes: "c'est + determiner + noun (c'est un médecin), il est + bare profession or adjective (il est médecin)."
+    example: "Il y a un café ici. C'est un bon café; il est très calme."
+    english: "There's a café here. It's a good café; it's very quiet."
+    status: draft
+  - id: fr.a1.possessives
+    level: A1
+    strand: grammar
+    title: "Possessive adjectives"
+    notes: "Agree with the thing owned, not the owner: sa mère can be his mother. mon before a vowel (mon amie)."
+    example: "Mon amie et sa mère viennent ce soir."
+    english: "My friend and her mother are coming tonight."
+    status: draft
+  - id: fr.a1.futur-proche
+    level: A1
+    strand: grammar
+    title: "aller + infinitive for plans"
+    notes: "The everyday future in speech."
+    example: "Ce soir, je vais regarder un film."
+    english: "Tonight I'm going to watch a film."
+    status: draft
+  - id: fr.a1.liaison-elision
+    level: A1
+    strand: grammar
+    title: "Liaison and elision"
+    notes: "les‿amis, vous‿avez; je → j', le → l'. Matters for listening and for sounding natural, not for spelling."
+    example: "Vous avez des enfants ? J'en ai deux."
+    english: "Do you have children? I have two."
+    status: draft
+  - id: fr.a1.introduce-yourself
+    level: A1
+    strand: function
+    title: "Introduce yourself and others"
+    notes: "Name, origin, where you live, job; bonjour/salut, tu/vous at first contact."
+    example: "Je m'appelle Ana, je suis américaine et j'habite à Chicago."
+    english: "My name is Ana, I'm American and I live in Chicago."
+    status: draft
+  - id: fr.a1.personal-information
+    level: A1
+    strand: function
+    title: "Ask for and give personal information"
+    notes: "Age, family, contact details; asking someone to repeat (pardon ?, vous pouvez répéter ?)."
+    example: "Vous pouvez répéter, s'il vous plaît ?"
+    english: "Could you repeat that, please?"
+    status: draft
+  - id: fr.a1.order-food
+    level: A1
+    strand: function
+    title: "Order in a café or restaurant"
+    notes: "Je voudrais…, je vais prendre…, l'addition s'il vous plaît."
+    example: "Je vais prendre un croissant et un café crème."
+    english: "I'll have a croissant and a coffee with milk."
+    status: draft
+  - id: fr.a1.shopping-prices
+    level: A1
+    strand: function
+    title: "Buy things and ask prices"
+    notes: "Ça coûte combien ? / C'est combien ?; numbers including soixante-dix and quatre-vingts."
+    example: "C'est combien, les pommes ? — Deux euros le kilo."
+    english: "How much are the apples? — Two euros a kilo."
+    status: draft
+  - id: fr.a1.time-and-days
+    level: A1
+    strand: function
+    title: "Time, days and routines"
+    notes: "Quelle heure est-il ?, à huit heures, le lundi (every Monday) vs lundi (this Monday)."
+    example: "Le lundi, je commence à huit heures."
+    english: "On Mondays I start at eight."
+    status: draft
+  - id: fr.a1.likes-dislikes
+    level: A1
+    strand: function
+    title: "Say what you like and don't like"
+    notes: "aimer, adorer, détester + definite article (j'aime le café); moi aussi / moi non plus."
+    example: "Je n'aime pas le foot. — Moi non plus."
+    english: "I don't like football. — Me neither."
+    status: draft
+  - id: fr.a1.v-family
+    level: A1
+    strand: vocab
+    title: "Family"
+    words: [la famille, la mère, le père, le frère, la sœur, le fils, la fille, les grands-parents, le cousin, le copain]
+    status: draft
+  - id: fr.a1.v-food
+    level: A1
+    strand: vocab
+    title: "Food and drink"
+    words: [le pain, l'eau, le lait, le fromage, les fruits, la viande, le poisson, les légumes, le petit-déjeuner, le dîner]
+    status: draft
+  - id: fr.a1.v-home
+    level: A1
+    strand: vocab
+    title: "Home"
+    words: [la maison, l'appartement, la cuisine, la chambre, la salle de bains, la table, la chaise, le lit, la fenêtre, la porte]
+    status: draft
+  - id: fr.a1.v-city
+    level: A1
+    strand: vocab
+    title: "Places in town"
+    words: [la rue, le magasin, la boulangerie, la banque, la gare, le parc, le musée, la pharmacie, près de, loin de]
+    status: draft
+  - id: fr.a1.v-daily-routine
+    level: A1
+    strand: vocab
+    title: "Daily routine"
+    words: [se réveiller, se lever, se doucher, prendre le petit-déjeuner, travailler, déjeuner, se reposer, rentrer, dîner, se coucher]
+    status: draft
+  - id: fr.a1.v-clothes-colours
+    level: A1
+    strand: vocab
+    title: "Clothes and colours"
+    words: [la chemise, le pantalon, les chaussures, le manteau, la robe, rouge, bleu, vert, noir, blanc]
+    status: draft
+  - id: fr.a1.topic-la-bise
+    level: A1
+    strand: topic
+    title: "La bise"
+    notes: "Meeting people, travel to France."
+    facts:
+      - "Friends and family in France usually greet each other with kisses on the cheek, la bise."
+      - "The number of kisses depends on the region: often two, in some regions three or four."
+      - "In a professional setting people more often shake hands."
+    words: [faire la bise, la joue, serrer la main]
+    status: draft
+  # ---------------------------------------------------------------- A2
+  - id: fr.a2.passe-compose-avoir
+    level: A2
+    strand: grammar
+    title: "Passé composé with avoir"
+    notes: "The spoken past for completed events; irregular participles (fait, pris, eu, été, vu, dit)."
+    example: "Hier, j'ai mangé chez des amis et on a vu un film."
+    english: "Yesterday I ate at some friends' place and we watched a film."
+    status: draft
+  - id: fr.a2.passe-compose-etre
+    level: A2
+    strand: grammar
+    title: "Passé composé with être"
+    notes: "Motion and change-of-state verbs plus all reflexives; the participle agrees with the subject (elle est partie)."
+    example: "Elle est arrivée à midi et elle est repartie tout de suite."
+    english: "She arrived at noon and left again straight away."
+    status: draft
+  - id: fr.a2.imparfait
+    level: A2
+    strand: grammar
+    title: "Imparfait for habits and descriptions"
+    notes: "What used to happen and what things were like; built on the nous form (nous parlons → je parlais)."
+    example: "Quand j'étais petit, j'allais chez ma grand-mère tous les étés."
+    english: "When I was little, I went to my grandmother's every summer."
+    status: draft
+  - id: fr.a2.pc-imparfait-intro
+    level: A2
+    strand: grammar
+    title: "Passé composé vs imparfait: scene and event"
+    notes: "The imparfait sets the scene, the passé composé moves the story on."
+    example: "Il pleuvait quand je suis sorti."
+    english: "It was raining when I went out."
+    status: draft
+  - id: fr.a2.object-pronouns
+    level: A2
+    strand: grammar
+    title: "Object pronouns: le, la, lui, leur"
+    notes: "Placed before the verb (je le vois), before the infinitive (je vais le voir). English speakers put them after."
+    example: "Ce livre ? Je le lis en ce moment et je vais le prêter à Paul."
+    english: "This book? I'm reading it now and I'm going to lend it to Paul."
+    status: draft
+  - id: fr.a2.y-en
+    level: A2
+    strand: grammar
+    title: "The pronouns y and en"
+    notes: "y replaces à + place or thing (j'y vais), en replaces de + noun or a quantity (j'en ai deux). No English equivalent; often skipped."
+    example: "Tu vas à Paris ? — Oui, j'y vais demain. Des billets ? J'en ai deux."
+    english: "Are you going to Paris? — Yes, I'm going tomorrow. Tickets? I have two."
+    status: draft
+  - id: fr.a2.pronominal-verbs
+    level: A2
+    strand: grammar
+    title: "Reflexive (pronominal) verbs"
+    notes: "Routines, reciprocal (on se voit), and meaning shifts (s'ennuyer, se rendre compte)."
+    example: "On se voit demain ? Je me lève tôt."
+    english: "See you tomorrow? I'm getting up early."
+    status: draft
+  - id: fr.a2.comparatives
+    level: A2
+    strand: grammar
+    title: "Comparisons and superlatives"
+    notes: "plus/moins/aussi … que; meilleur (adjective) vs mieux (adverb), a frequent error."
+    example: "Ce restaurant est meilleur, et on y mange mieux."
+    english: "This restaurant is better, and you eat better there."
+    status: draft
+  - id: fr.a2.futur-simple
+    level: A2
+    strand: grammar
+    title: "Futur simple"
+    notes: "Plans less immediate than aller + infinitive; irregular stems (ser-, aur-, ir-, fer-, viendr-)."
+    example: "L'année prochaine, j'irai au Québec."
+    english: "Next year I'll go to Quebec."
+    status: draft
+  - id: fr.a2.imperative
+    level: A2
+    strand: grammar
+    title: "The imperative"
+    notes: "tu/nous/vous forms; pronouns after the affirmative (dis-le-moi), before the negative (ne le dis pas)."
+    example: "Dis-le-moi, mais ne le dis à personne."
+    english: "Tell me, but don't tell anyone."
+    status: draft
+  - id: fr.a2.time-depuis
+    level: A2
+    strand: grammar
+    title: "depuis, il y a, pendant"
+    notes: "depuis + present for 'have been doing' (*j'ai habité ici depuis is an English-speaker error); il y a = ago."
+    example: "J'habite ici depuis trois ans; je suis arrivé il y a trois ans."
+    english: "I've lived here for three years; I arrived three years ago."
+    status: draft
+  - id: fr.a2.negation-more
+    level: A2
+    strand: grammar
+    title: "ne … jamais, rien, personne, plus"
+    notes: "Position around the verb and in the passé composé (je n'ai rien vu / je n'ai vu personne)."
+    example: "Je n'ai rien vu et je ne fume plus."
+    english: "I didn't see anything and I don't smoke any more."
+    status: draft
+  - id: fr.a2.relative-qui-que
+    level: A2
+    strand: grammar
+    title: "Relative pronouns qui and que"
+    notes: "qui = subject, que = object; English can omit 'that', French can't."
+    example: "C'est le film que j'ai vu hier, avec l'acteur qui joue dans Lupin."
+    english: "It's the film I saw yesterday, with the actor who's in Lupin."
+    status: draft
+  - id: fr.a2.past-weekend
+    level: A2
+    strand: function
+    title: "Talk about last weekend or a trip"
+    notes: "Sequencing with d'abord, ensuite, puis, enfin."
+    example: "Samedi, on est allés à la plage, puis on a dîné au port."
+    english: "On Saturday we went to the beach, then had dinner at the harbour."
+    status: draft
+  - id: fr.a2.childhood
+    level: A2
+    strand: function
+    title: "Describe your childhood and how things used to be"
+    notes: "Imparfait for habits; avant vs maintenant."
+    example: "Avant, j'habitais à la campagne; maintenant, j'habite en ville."
+    english: "I used to live in the country; now I live in the city."
+    status: draft
+  - id: fr.a2.invitations
+    level: A2
+    strand: function
+    title: "Make, accept and turn down invitations"
+    notes: "Ça te dit de… ?, Tu es libre ?; declining politely."
+    example: "Ça te dit d'aller au cinéma ? — Avec plaisir, mais pas ce soir."
+    english: "Fancy going to the cinema? — I'd love to, but not tonight."
+    status: draft
+  - id: fr.a2.describe-people-places
+    level: A2
+    strand: function
+    title: "Describe people and places"
+    notes: "Appearance and character; your neighbourhood."
+    example: "Mon quartier est calme et il y a beaucoup de petits commerces."
+    english: "My neighbourhood is quiet and there are lots of small shops."
+    status: draft
+  - id: fr.a2.simple-advice
+    level: A2
+    strand: function
+    title: "Give and ask for simple advice"
+    notes: "Il faut + infinitive, tu devrais, pourquoi tu ne… pas ?"
+    example: "Tu es fatigué ? Tu devrais te coucher plus tôt."
+    english: "You're tired? You should go to bed earlier."
+    status: draft
+  - id: fr.a2.plans
+    level: A2
+    strand: function
+    title: "Talk about plans"
+    notes: "aller + infinitive, futur simple, avoir l'intention de."
+    example: "Cet été, j'ai l'intention de visiter la Bretagne."
+    english: "This summer I'm planning to visit Brittany."
+    status: draft
+  - id: fr.a2.v-travel
+    level: A2
+    strand: vocab
+    title: "Travel and transport"
+    words: [le voyage, le billet, le vol, les bagages, la valise, le quai, rater le train, réserver, l'hébergement, la frontière]
+    status: draft
+  - id: fr.a2.v-health
+    level: A2
+    strand: vocab
+    title: "Health and the body"
+    words: [la tête, le dos, le ventre, j'ai mal à, la fièvre, le rhume, le médecin, l'ordonnance, le rendez-vous, se sentir mal]
+    status: draft
+  - id: fr.a2.v-work
+    level: A2
+    strand: vocab
+    title: "Work and jobs"
+    words: [le travail, l'entreprise, le patron, le collègue, le salaire, la réunion, les horaires, embaucher, licencier, prendre sa retraite]
+    status: draft
+  - id: fr.a2.v-free-time
+    level: A2
+    strand: vocab
+    title: "Free time and hobbies"
+    words: [les loisirs, sortir, faire une randonnée, la peinture, jouer de la guitare, le match, la série, s'ennuyer, bricoler, le week-end]
+    status: draft
+  - id: fr.a2.v-shopping
+    level: A2
+    strand: vocab
+    title: "Shopping and services"
+    words: [la taille, essayer, la cabine d'essayage, les soldes, rembourser, le ticket de caisse, la carte bancaire, en espèces, bon marché, cher]
+    status: draft
+  - id: fr.a2.v-weather
+    level: A2
+    strand: vocab
+    title: "Weather and seasons"
+    words: [il fait beau, il fait froid, il pleut, il neige, l'orage, le vent, nuageux, le printemps, l'été, l'hiver]
+    status: draft
+  - id: fr.a2.topic-baguette
+    level: A2
+    strand: topic
+    title: "The baguette"
+    notes: "Food, shopping, daily routines."
+    facts:
+      - "In 2022 UNESCO added the artisanal know-how and culture of the baguette to its list of Intangible Cultural Heritage."
+      - "Many people buy fresh bread every day at the boulangerie."
+      - "A 'tradition' baguette is made with only flour, water, salt and yeast."
+    words: [la boulangerie, la baguette, le boulanger, croustillant]
+    status: draft
+  - id: fr.a2.topic-quebec
+    level: A2
+    strand: topic
+    title: "French in Quebec"
+    notes: "Regional varieties, travel to Canada, or when a Quebec word comes up."
+    facts:
+      - "French is the official language of the Canadian province of Quebec."
+      - "Quebec French has its own everyday words: char (car), magasiner (to go shopping), blonde (girlfriend)."
+      - "The word courriel (email) was promoted in Quebec and is now used in France too."
+    words: [le char, magasiner, le courriel, le Québec]
+    status: draft
+  # ---------------------------------------------------------------- B1
+  - id: fr.b1.pc-imparfait-full
+    level: B1
+    strand: grammar
+    title: "Passé composé vs imparfait in narration"
+    notes: "Whole stories: background, interruption, sequence; meaning shifts (je savais / j'ai su = I found out)."
+    example: "Je lisais tranquillement quand quelqu'un a frappé à la porte."
+    english: "I was reading quietly when someone knocked at the door."
+    status: draft
+  - id: fr.b1.plus-que-parfait
+    level: B1
+    strand: grammar
+    title: "Plus-que-parfait"
+    notes: "The past before the past, often with déjà."
+    example: "Quand je suis arrivé, le film avait déjà commencé."
+    english: "When I arrived, the film had already started."
+    status: draft
+  - id: fr.b1.conditionnel
+    level: B1
+    strand: grammar
+    title: "Conditionnel présent"
+    notes: "Politeness (je voudrais, vous pourriez), wishes, advice (tu devrais), unconfirmed news (le président serait malade)."
+    example: "J'aimerais bien partir en Italie. Vous pourriez m'aider ?"
+    english: "I'd really like to go to Italy. Could you help me?"
+    status: draft
+  - id: fr.b1.si-imparfait
+    level: B1
+    strand: grammar
+    title: "si + imparfait → conditionnel"
+    notes: "Hypotheses about the present; never conditionnel after si."
+    example: "Si j'avais le temps, j'apprendrais le piano."
+    english: "If I had time, I'd learn the piano."
+    status: draft
+  - id: fr.b1.subjonctif-necessity
+    level: B1
+    strand: grammar
+    title: "Subjonctif: necessity and wishes"
+    notes: "il faut que, vouloir que, préférer que; same subject keeps the infinitive (je veux partir / je veux que tu partes)."
+    example: "Il faut que tu viennes, je veux que tu rencontres ma famille."
+    english: "You have to come, I want you to meet my family."
+    status: draft
+  - id: fr.b1.subjonctif-emotion-doubt
+    level: B1
+    strand: grammar
+    title: "Subjonctif: emotion and doubt"
+    notes: "content que, avoir peur que, douter que; je pense que takes the indicative, je ne pense pas que the subjonctif."
+    example: "Je suis contente que tu sois là, mais je ne pense pas qu'il vienne."
+    english: "I'm happy you're here, but I don't think he'll come."
+    status: draft
+  - id: fr.b1.relatives-dont-ou
+    level: B1
+    strand: grammar
+    title: "Relatives: dont, où, ce qui, ce que"
+    notes: "dont for de + noun (le livre dont je parle); où also for time (le jour où…); ce que for 'what'."
+    example: "C'est le livre dont je t'ai parlé. Ce que j'aime, c'est la fin."
+    english: "It's the book I told you about. What I like is the ending."
+    status: draft
+  - id: fr.b1.double-pronouns
+    level: B1
+    strand: grammar
+    title: "Two pronouns together"
+    notes: "Order me/te/se/nous/vous > le/la/les > lui/leur > y > en: je le lui donne, il y en a."
+    example: "Les clés ? Je les lui ai données. Du pain ? Il y en a."
+    english: "The keys? I gave them to him. Bread? There's some."
+    status: draft
+  - id: fr.b1.reported-speech
+    level: B1
+    strand: grammar
+    title: "Reported speech"
+    notes: "Tense shifts after a past verb: je viendrai → il a dit qu'il viendrait."
+    example: "Elle m'a dit qu'elle viendrait, mais elle n'est pas venue."
+    english: "She told me she'd come, but she didn't."
+    status: draft
+  - id: fr.b1.gerondif
+    level: B1
+    strand: grammar
+    title: "Gérondif: en + -ant"
+    notes: "Simultaneity and manner (en marchant, en travaillant)."
+    example: "J'écoute des podcasts en cuisinant."
+    english: "I listen to podcasts while cooking."
+    status: draft
+  - id: fr.b1.passive
+    level: B1
+    strand: grammar
+    title: "Passive voice and its alternatives"
+    notes: "être + participle with agreement; speech prefers on (on m'a volé mon vélo) or se faire."
+    example: "Mon vélo a été volé. (On m'a volé mon vélo.)"
+    english: "My bike was stolen."
+    status: draft
+  - id: fr.b1.emphasis
+    level: B1
+    strand: grammar
+    title: "Stress pronouns and emphasis"
+    notes: "moi, toi, lui; c'est moi qui…; dislocation typical of speech (moi, je pense que…; le café, je l'adore)."
+    example: "Moi, je trouve ça génial. C'est lui qui a tout organisé."
+    english: "Personally, I think it's great. He's the one who organised everything."
+    status: draft
+  - id: fr.b1.tell-a-story
+    level: B1
+    strand: function
+    title: "Tell a story with background and events"
+    notes: "PC/imparfait together, connectors (tout à coup, alors, finalement)."
+    example: "On dînait quand tout à coup il y a eu une coupure de courant."
+    english: "We were having dinner when suddenly there was a power cut."
+    status: draft
+  - id: fr.b1.opinions
+    level: B1
+    strand: function
+    title: "Give opinions, agree and disagree"
+    notes: "à mon avis, je trouve que, je suis d'accord / pas d'accord, ça dépend."
+    example: "À mon avis, ce n'est pas si simple. Je ne suis pas d'accord."
+    english: "In my opinion it's not that simple. I don't agree."
+    status: draft
+  - id: fr.b1.feelings-wishes
+    level: B1
+    strand: function
+    title: "Express feelings, hopes and wishes"
+    notes: "Emotion + subjonctif, j'espère que + indicative (a classic trap)."
+    example: "J'espère que tu vas bien. Je suis triste que tu partes."
+    english: "I hope you're well. I'm sad you're leaving."
+    status: draft
+  - id: fr.b1.recommendations
+    level: B1
+    strand: function
+    title: "Recommend and advise"
+    notes: "je te conseille de, à ta place + conditionnel, il vaudrait mieux."
+    example: "À ta place, je prendrais le train."
+    english: "If I were you, I'd take the train."
+    status: draft
+  - id: fr.b1.travel-problems
+    level: B1
+    strand: function
+    title: "Sort out problems while travelling"
+    notes: "Complaining politely, explaining, asking for a solution (vous pourriez…)."
+    example: "Excusez-moi, j'avais réservé une chambre double, pas une simple."
+    english: "Excuse me, I'd booked a double room, not a single."
+    status: draft
+  - id: fr.b1.summarise
+    level: B1
+    strand: function
+    title: "Summarise a film, book or news story"
+    notes: "ça parle de, il s'agit de, au début, à la fin."
+    example: "Le film parle d'une famille qui perd sa maison."
+    english: "The film is about a family that loses its home."
+    status: draft
+  - id: fr.b1.v-feelings
+    level: B1
+    strand: vocab
+    title: "Feelings and personality"
+    words: [fier, gêné, débordé, déçu, jaloux, timide, têtu, sensible, la honte, avoir hâte]
+    status: draft
+  - id: fr.b1.v-media-tech
+    level: B1
+    strand: vocab
+    title: "Media and technology"
+    words: [les infos, le journal, les réseaux sociaux, télécharger, le mot de passe, l'écran, le lien, poster une photo, le portable, l'appli]
+    status: draft
+  - id: fr.b1.v-environment
+    level: B1
+    strand: vocab
+    title: "The environment"
+    words: [l'environnement, la pollution, recycler, les déchets, le réchauffement climatique, la sécheresse, économiser l'énergie, l'espèce, protéger, durable]
+    status: draft
+  - id: fr.b1.v-education
+    level: B1
+    strand: vocab
+    title: "Education"
+    words: [la matière, réussir un examen, rater, la note, la bourse, la licence, le master, s'inscrire, le lycée, la fac]
+    status: draft
+  - id: fr.b1.v-relationships
+    level: B1
+    strand: vocab
+    title: "Relationships"
+    words: [s'entendre bien, tomber amoureux, se marier, se séparer, se disputer, se réconcilier, la confiance, le voisin, une connaissance, manquer à quelqu'un]
+    status: draft
+  - id: fr.b1.v-housing
+    level: B1
+    strand: vocab
+    title: "Housing"
+    words: [louer, le loyer, le propriétaire, la caution, le bail, meublé, le déménagement, déménager, le quartier, le crédit immobilier]
+    status: draft
+  - id: fr.b1.topic-numbers-belgium-switzerland
+    level: B1
+    strand: topic
+    title: "Septante and nonante"
+    notes: "When numbers or prices come up, especially after soixante-dix trips someone up."
+    facts:
+      - "In Belgium and Switzerland people say septante (70) and nonante (90) instead of soixante-dix and quatre-vingt-dix."
+      - "In parts of Switzerland people also say huitante (80)."
+      - "In France, soixante-dix literally means 'sixty-ten'."
+    words: [septante, nonante, huitante]
+    status: draft
+  - id: fr.b1.topic-norman-conquest
+    level: B1
+    strand: topic
+    title: "Why English has so many French words"
+    notes: "Etymology, false friends, or when an English word looks French."
+    facts:
+      - "After the Norman Conquest of 1066, French was the language of England's ruling class for about three centuries."
+      - "English kept Germanic names for farm animals but took French names for their meat: cow and beef (bœuf), pig and pork (porc), sheep and mutton (mouton)."
+      - "Thousands of English words come from French, such as government, justice and beauty."
+    words: [la conquête, le bœuf, le porc, le mouton]
+    status: draft
+  - id: fr.b1.topic-academie
+    level: B1
+    strand: topic
+    title: "L'Académie française"
+    notes: "Language rules, new words, or debates about English loanwords."
+    facts:
+      - "The Académie française was founded in 1635 under Cardinal Richelieu."
+      - "It has forty members, nicknamed les Immortels."
+      - "It writes the official dictionary of the French language and recommends French alternatives to English loanwords."
+    words: [l'Académie, le dictionnaire, l'anglicisme]
+    status: draft
+  # ---------------------------------------------------------------- B2
+  - id: fr.b2.conditionnel-passe
+    level: B2
+    strand: grammar
+    title: "Conditionnel passé and counterfactuals"
+    notes: "si + plus-que-parfait → conditionnel passé; regrets (j'aurais dû)."
+    example: "Si j'avais su, je serais venu plus tôt. J'aurais dû t'appeler."
+    english: "If I'd known, I would have come earlier. I should have called you."
+    status: draft
+  - id: fr.b2.subjonctif-conjunctions
+    level: B2
+    strand: grammar
+    title: "Subjonctif after conjunctions"
+    notes: "bien que, pour que, avant que, à moins que, sans que; après que takes the indicative in the norm."
+    example: "Bien qu'il pleuve, on sortira. Je te le dis pour que tu le saches."
+    english: "Although it's raining, we'll go out. I'm telling you so you know."
+    status: draft
+  - id: fr.b2.subjonctif-passe
+    level: B2
+    strand: grammar
+    title: "Subjonctif passé"
+    notes: "Completed actions after subjonctif triggers: je suis content que tu sois venu."
+    example: "Je suis ravie que vous soyez venus."
+    english: "I'm delighted you came."
+    status: draft
+  - id: fr.b2.lequel
+    level: B2
+    strand: grammar
+    title: "Relatives with prepositions: lequel, auquel, duquel"
+    notes: "After prepositions (la raison pour laquelle, le projet auquel je pense)."
+    example: "C'est la raison pour laquelle je suis parti."
+    english: "That's the reason why I left."
+    status: draft
+  - id: fr.b2.futur-anterieur
+    level: B2
+    strand: grammar
+    title: "Futur antérieur"
+    notes: "Completed by a future point (quand tu auras fini) and guesses about the past (il aura oublié)."
+    example: "Appelle-moi quand tu auras fini. Il aura oublié, sans doute."
+    english: "Call me when you've finished. He must have forgotten."
+    status: draft
+  - id: fr.b2.mise-en-relief
+    level: B2
+    strand: grammar
+    title: "Highlighting: c'est … que, ce qui … c'est"
+    notes: "French marks focus with structure where English uses stress: c'est demain qu'il part."
+    example: "Ce qui me plaît, c'est l'ambiance. C'est demain qu'il part."
+    english: "What I like is the atmosphere. He's leaving TOMORROW."
+    status: draft
+  - id: fr.b2.participe-gerondif
+    level: B2
+    strand: grammar
+    title: "Participe présent, gérondif, adjectif verbal"
+    notes: "Written participe présent (les personnes souhaitant…), gérondif, and spelling-changing adjectives (fatigant/fatiguant)."
+    example: "Les personnes souhaitant participer doivent s'inscrire."
+    english: "Anyone wishing to take part must register."
+    status: draft
+  - id: fr.b2.connectors
+    level: B2
+    strand: grammar
+    title: "Logical connectors"
+    notes: "cependant, pourtant, donc, alors que, en revanche, d'ailleurs; spoken vs written choices."
+    example: "Il est riche; pourtant, il vit très simplement."
+    english: "He's rich; yet he lives very simply."
+    status: draft
+  - id: fr.b2.passe-simple
+    level: B2
+    strand: grammar
+    title: "Passé simple (recognition)"
+    notes: "Written narrative tense: fairy tales, novels, history. Recognise, don't produce; useful for the tutor's stories."
+    example: "Il était une fois un roi qui eut trois filles."
+    english: "Once upon a time there was a king who had three daughters."
+    status: draft
+  - id: fr.b2.concordance
+    level: B2
+    strand: grammar
+    title: "Sequence of tenses in reported speech"
+    notes: "Full sequence: present → imparfait, passé composé → plus-que-parfait, futur → conditionnel; reporting verbs."
+    example: "Il a affirmé qu'il n'avait rien vu et qu'il témoignerait."
+    english: "He stated that he hadn't seen anything and that he would testify."
+    status: draft
+  - id: fr.b2.nominalisation
+    level: B2
+    strand: grammar
+    title: "Nominalisation"
+    notes: "Formal French turns verbs into nouns (la hausse des prix, après la construction du pont)."
+    example: "La hausse des prix a provoqué des manifestations."
+    english: "The rise in prices sparked protests."
+    status: draft
+  - id: fr.b2.argue
+    level: B2
+    strand: function
+    title: "Argue a case and answer objections"
+    notes: "Pros and cons, conceding (certes…, mais), concluding (en somme)."
+    example: "Certes, c'est cher; en revanche, ça dure longtemps."
+    english: "Admittedly it's expensive; on the other hand, it lasts a long time."
+    status: draft
+  - id: fr.b2.speculate
+    level: B2
+    strand: function
+    title: "Speculate and hypothesise"
+    notes: "Counterfactuals, il se peut que + subjonctif, futur antérieur of probability."
+    example: "Il se peut qu'il soit perdu. S'il était parti plus tôt, il serait déjà là."
+    english: "He may be lost. If he'd left earlier, he'd be here by now."
+    status: draft
+  - id: fr.b2.report
+    level: B2
+    strand: function
+    title: "Report what others said"
+    notes: "Reporting verbs: affirmer, prétendre, nier, reconnaître, insister sur le fait que."
+    example: "Il a nié l'avoir vu et a insisté sur le fait qu'il ne savait rien."
+    english: "He denied seeing him and insisted he knew nothing."
+    status: draft
+  - id: fr.b2.abstract-topics
+    level: B2
+    strand: function
+    title: "Discuss abstract and social topics"
+    notes: "Generalising with on, les gens, la société; avoiding Anglicisms in formal speech."
+    example: "On s'habitue à tout, mais la technologie évolue très vite."
+    english: "You get used to everything, but technology moves very fast."
+    status: draft
+  - id: fr.b2.register
+    level: B2
+    strand: function
+    title: "Adjust register: tu, vous, spoken vs written"
+    notes: "When to switch from vous to tu (on peut se tutoyer ?); on vs nous; dropped ne and ça in speech."
+    example: "On peut se tutoyer ? — Oui, bien sûr."
+    english: "Shall we use tu? — Yes, of course."
+    status: draft
+  - id: fr.b2.anecdotes
+    level: B2
+    strand: function
+    title: "Tell anecdotes with emphasis and humour"
+    notes: "Colloquial reactions (c'est pas vrai !, j'hallucine), intensifiers (vachement, trop)."
+    example: "C'est pas vrai ! Et tu as fait quoi ? — Rien, j'étais sidéré."
+    english: "No way! And what did you do? — Nothing, I was stunned."
+    status: draft
+  - id: fr.b2.v-society
+    level: B2
+    strand: vocab
+    title: "Politics and society"
+    words: [le gouvernement, les élections, voter, la loi, les inégalités, la manifestation, le citoyen, le droit, la grève, l'impôt]
+    status: draft
+  - id: fr.b2.v-economy
+    level: B2
+    strand: vocab
+    title: "Economy and working life"
+    words: [la crise, le chômage, le CDD, le CDI, l'inflation, l'épargne, la dette, investir, le bénéfice, la concurrence]
+    status: draft
+  - id: fr.b2.v-science
+    level: B2
+    strand: vocab
+    title: "Science and research"
+    words: [la recherche, l'expérience, la découverte, démontrer, l'hypothèse, les données, le progrès, le vaccin, l'étude, l'intelligence artificielle]
+    status: draft
+  - id: fr.b2.v-arts
+    level: B2
+    strand: vocab
+    title: "Arts and culture"
+    words: [l'œuvre, l'écrivain, le tableau, l'exposition, la sortie d'un film, le personnage, l'intrigue, le scénario, la critique, la mise en scène]
+    status: draft
+  - id: fr.b2.v-argument
+    level: B2
+    strand: vocab
+    title: "Words for arguing"
+    words: [l'avantage, l'inconvénient, la conséquence, le point de vue, pour, contre, soulever une question, défendre, rejeter, en somme]
+    status: draft
+  - id: fr.b2.v-colloquial
+    level: B2
+    strand: vocab
+    title: "Colloquial French"
+    words: [bosser, le boulot, le fric, kiffer, vachement, c'est nul, crevé, ouf, grave, bref]
+    status: draft
+  - id: fr.b2.topic-14-juillet
+    level: B2
+    strand: topic
+    title: "Le 14 juillet"
+    notes: "Holidays, history, or around mid-July."
+    facts:
+      - "France's national day is 14 July."
+      - "It commemorates the storming of the Bastille prison in Paris on 14 July 1789, a symbol of the start of the Revolution."
+      - "It is celebrated with a military parade in Paris and fireworks across the country."
+    words: [la fête nationale, le défilé, le feu d'artifice, la Révolution]
+    status: draft
+  - id: fr.b2.topic-verlan
+    level: B2
+    strand: topic
+    title: "Verlan"
+    notes: "Slang, young people's speech, or colloquial French."
+    facts:
+      - "Verlan is slang that swaps the syllables of words; the name itself is l'envers ('the reverse') reversed."
+      - "Common examples: meuf (femme), relou (lourd, annoying), chelou (louche, shady)."
+      - "Some verlan words, like meuf, are now ordinary informal French."
+    words: [le verlan, la meuf, relou, chelou]
+    status: draft

@@ -27,7 +27,8 @@ SESSION_CONTROL_TOOL: dict = {
     "description": (
         "Change how this session runs. Call this whenever the learner asks to "
         "switch which language you're speaking, change how much you correct "
-        "them, change how you correct them (recasts vs. explicit), or give you "
+        "them, change how you correct them (recasts vs. explicit), ask you to "
+        "talk slower or faster, or give you "
         "standing permission to surprise-pivot them into another language to "
         "test them. Also call this yourself, unprompted, when you decide to "
         "pivot the learner into a different language as a surprise "
@@ -47,6 +48,7 @@ SESSION_CONTROL_TOOL: dict = {
                     "set_correction_frequency",
                     "set_correction_style",
                     "set_pivot_frequency",
+                    "set_speech_pace",
                 ],
                 "description": "Which setting to change.",
             },
@@ -92,6 +94,17 @@ SESSION_CONTROL_TOOL: dict = {
                     "action is set_pivot_frequency, else null."
                 ),
             },
+            "speech_pace": {
+                "anyOf": [
+                    {"type": "string", "enum": ["slower", "normal", "faster"]},
+                    {"type": "null"},
+                ],
+                "description": (
+                    "How fast you speak in the current language, relative to the "
+                    "pace already chosen for the learner's level. Required (non-null) "
+                    "when action is set_speech_pace, else null."
+                ),
+            },
             "reason": {
                 "type": "string",
                 "enum": ["learner_request", "tutor_pivot"],
@@ -108,6 +121,7 @@ SESSION_CONTROL_TOOL: dict = {
             "correction_frequency",
             "correction_style",
             "pivot_frequency",
+            "speech_pace",
             "reason",
         ],
         "additionalProperties": False,
@@ -123,6 +137,7 @@ class SessionStateChange:
     correction_style: str | None
     pivot_frequency: str | None
     reason: str
+    speech_pace: str | None = None
 
 
 def parse_control_call(tool_input: dict) -> SessionStateChange:
@@ -133,4 +148,5 @@ def parse_control_call(tool_input: dict) -> SessionStateChange:
         correction_style=tool_input.get("correction_style"),
         pivot_frequency=tool_input.get("pivot_frequency"),
         reason=tool_input.get("reason", "learner_request"),
+        speech_pace=tool_input.get("speech_pace"),
     )

@@ -65,7 +65,8 @@ class AudioConfig(BaseModel):
     native rate — the browser resamples on playback via WebAudio.
     """
 
-    stt_default: str = "faster-whisper"
+    stt_default: str = "faster-whisper"  # faster-whisper | openai (needs OPENAI_API_KEY)
+    openai_stt_model: str = "gpt-4o-mini-transcribe"
     tts_default: str = "piper"  # piper | openai
     sample_rate: int = 16000
 
@@ -103,6 +104,54 @@ class AudioConfig(BaseModel):
     vad_min_speech_ms: int = 250  # shorter blips are discarded as noise
     vad_max_utterance_s: int = 45 # hard cap; emit even if the learner keeps going
 
+    # Patience by level (ADR-030): learners pause mid-sentence to find a word, so
+    # the trailing silence that ends a turn grows as the level drops. Home base
+    # uses vad_silence_ms; a target language with no estimate yet counts as A2.
+    vad_silence_ms_by_level: dict[str, int] = {
+        "A1": 1100, "A2": 950, "B1": 800, "B2": 700, "C1": 650, "C2": 600,
+    }
+    # Early transcription (ADR-030): once a pause reaches endpoint_probe_ms the
+    # audio so far is transcribed speculatively, so recognition overlaps the
+    # wait instead of starting after it. If that transcript arrives while you're
+    # still silent, it also decides the ending: a turn that trails off mid-thought
+    # ("y…", "and…", "äh") waits endpoint_hold_ms longer; a clearly finished
+    # sentence ends at endpoint_early_ratio of the usual wait. 0 turns it off.
+    endpoint_probe_ms: int = 300
+    endpoint_hold_ms: int = 700
+    endpoint_early_ratio: float = 0.6
+
+    # Instant acknowledgement (ADR-029): a short neutral backchannel in the
+    # tutor's own voice the moment you stop, so the wait for recognition and
+    # Claude sounds like listening. Not on every turn (that sounds robotic),
+    # never twice in a row, never for a blip. Edit the phrases after listening.
+    ack_enabled: bool = True
+    ack_probability: float = 0.7
+    ack_min_speech_s: float = 0.8
+    ack_phrases: dict[str, list[str]] = {
+        "en": ["Mm-hm.", "Mm.", "I see."],
+        "es": ["Ajá.", "Mm.", "Ya veo."],
+        "fr": ["Mm.", "Je vois.", "Mm-hm."],
+        "de": ["Aha.", "Mm.", "Verstehe."],
+    }
+
+    # Barge-in (ADR-031): start talking while Faria speaks and its voice stops.
+    # The speech has to last barge_in_min_ms so a cough or the tutor's own echo
+    # doesn't cut it off. A headset is the reliable setup.
+    barge_in: bool = True
+    barge_in_min_ms: int = 400
+
+    # Speaking pace (ADR-030): a length multiplier (>1 = slower) by level, times
+    # the learner's own "slower / faster, please" (speech_pace preference).
+    pace_by_level: dict[str, float] = {
+        "A1": 1.25, "A2": 1.15, "B1": 1.05, "B2": 1.0, "C1": 1.0, "C2": 1.0,
+    }
+    # Stressed recasts (ADR-032): words the tutor marks *like this* when it
+    # recasts an error are said after a short pause and a little slower, the
+    # way a teacher leans on the corrected form. emphasis = false turns it off.
+    emphasis: bool = True
+    emphasis_pause_ms: int = 90
+    emphasis_slowdown: float = 1.2
+
     # Piper: voices auto-download to voices_dir on first use.
     voices_dir: Path = Path("data/voices")
     # Per-language Piper voice IDs. The en default is a first-guess "older
@@ -124,6 +173,32 @@ class AudioConfig(BaseModel):
     # OpenAI TTS (tts_default = "openai"); needs OPENAI_API_KEY in .env.
     openai_tts_model: str = "gpt-4o-mini-tts"
     openai_tts_voice: str = "alloy"
+    openai_tts_instructions: str = (
+        "Warm, unhurried and attentive, like an experienced mentor talking with a friend."
+    )
+
+
+class CourseConfig(BaseModel):
+    """The course layer (ADR-034): syllabus, spaced review, topics, placement.
+
+    The mentor gets suggestions, never an agenda: what's due for review, one or
+    two syllabus items worth introducing, a couple of stories it could tell. The
+    learner decides what to talk about and for how long."""
+
+    enabled: bool = True
+    curriculum_dir: Path = Path("curriculum")   # <lang>.yaml files (curriculum/README.md)
+    max_due_words: int = 6                      # words offered for review per session
+    new_items_offered: int = 2                  # syllabus items suggested per session
+    topics_offered: int = 2
+    review_intervals_days: list[int] = [1, 3, 7, 14, 30]  # Leitner boxes 1..5
+    solid_after_sessions: int = 3               # correct use in this many sessions = solid
+    # The variety the mentor speaks by default; other regions come up as asides.
+    varieties: dict[str, str] = {
+        "es": ("neutral Latin American Spanish (Mexico-centred, ustedes for 'you all'); Spain's "
+               "vosotros and Argentina's vos are taught too, as variants to understand and enjoy"),
+        "fr": "standard French of France",
+        "de": "standard German of Germany",
+    }
 
 
 class ServerConfig(BaseModel):
@@ -139,6 +214,7 @@ class Settings(BaseModel):
     memory: MemoryConfig = MemoryConfig()
     audio: AudioConfig = AudioConfig()
     server: ServerConfig = ServerConfig()
+    course: CourseConfig = CourseConfig()
     data_dir: Path = DEFAULT_DATA_DIR
 
     @property

@@ -1,0 +1,865 @@
+language: es
+name: Spanish
+levels: [A1, A2, B1, B2]
+items:
+  # ---------------------------------------------------------------- A1
+  - id: es.a1.gender-articles
+    level: A1
+    strand: grammar
+    title: "Gender, number and articles"
+    notes: "el/la/los/las, un/una/unos/unas. -o/-a tendencies and the common exceptions (el día, el problema, la mano, la foto)."
+    example: "La casa es grande y los libros son nuevos."
+    english: "The house is big and the books are new."
+    status: draft
+  - id: es.a1.adjective-agreement
+    level: A1
+    strand: grammar
+    title: "Adjective agreement and position"
+    notes: "Adjectives agree in gender and number and usually follow the noun. English speakers put them first and forget the plural."
+    example: "Tengo un coche rojo y dos gatas blancas."
+    english: "I have a red car and two white cats."
+    status: draft
+  - id: es.a1.present-regular
+    level: A1
+    strand: grammar
+    title: "Present tense: regular -ar, -er, -ir verbs"
+    notes: "Person endings carry the subject, which is why the pronoun can drop."
+    example: "Hablo inglés y vivo en Chicago."
+    english: "I speak English and I live in Chicago."
+    status: draft
+  - id: es.a1.pro-drop
+    level: A1
+    strand: grammar
+    title: "Dropping subject pronouns"
+    notes: "Pronouns are left out unless they contrast or emphasise. English speakers overuse yo, which sounds insistent."
+    example: "Vivo en Madrid. Yo trabajo allí, pero ella no."
+    english: "I live in Madrid. I work there, but she doesn't."
+    status: draft
+  - id: es.a1.ser-estar-basic
+    level: A1
+    strand: grammar
+    title: "ser and estar: the basics"
+    notes: "ser for identity, origin, profession and time; estar for location and temporary states."
+    example: "Soy profesora y estoy cansada."
+    english: "I'm a teacher and I'm tired."
+    status: draft
+  - id: es.a1.hay
+    level: A1
+    strand: grammar
+    title: "hay vs estar for existence and location"
+    notes: "hay introduces something new (un/una); estar locates something known (el/la)."
+    example: "Hay un banco en la esquina. El banco está al lado del café."
+    english: "There's a bank on the corner. The bank is next to the café."
+    status: draft
+  - id: es.a1.present-irregular
+    level: A1
+    strand: grammar
+    title: "Present tense: stem-changing and yo-irregular verbs"
+    notes: "e>ie (quiero), o>ue (puedo), e>i (pido); tengo, hago, salgo, pongo, conozco."
+    example: "Quiero un café, pero no puedo quedarme mucho."
+    english: "I want a coffee, but I can't stay long."
+    status: draft
+  - id: es.a1.tener-expressions
+    level: A1
+    strand: grammar
+    title: "tener expressions"
+    notes: "Age, hunger, thirst, cold, fear and being in a hurry use tener where English uses be."
+    example: "Tengo veinte años y tengo mucha hambre."
+    english: "I'm twenty and I'm very hungry."
+    status: draft
+  - id: es.a1.gustar
+    level: A1
+    strand: grammar
+    title: "gustar and similar verbs"
+    notes: "The thing liked is the subject: me gusta + singular, me gustan + plural. Also encantar, interesar."
+    example: "Me gusta el café, pero me encantan los churros."
+    english: "I like coffee, but I love churros."
+    status: draft
+  - id: es.a1.questions
+    level: A1
+    strand: grammar
+    title: "Questions and question words"
+    notes: "Intonation questions; qué, cuál, dónde, cuándo, cómo, por qué. ¿Cuál es tu número? not ¿Qué es…?"
+    example: "¿Dónde vives? ¿Cuál es tu número de teléfono?"
+    english: "Where do you live? What's your phone number?"
+    status: draft
+  - id: es.a1.negation
+    level: A1
+    strand: grammar
+    title: "Negation and double negatives"
+    notes: "no before the verb; nada, nadie, nunca after the verb need no as well."
+    example: "No tengo nada y no conozco a nadie aquí."
+    english: "I don't have anything and I don't know anyone here."
+    status: draft
+  - id: es.a1.possessives
+    level: A1
+    strand: grammar
+    title: "Possessive adjectives"
+    notes: "mi, tu, su, nuestro; su can mean his, her, its, their or your (usted), resolved by context."
+    example: "Mi hermano y su novia viven con nosotros."
+    english: "My brother and his girlfriend live with us."
+    status: draft
+  - id: es.a1.ir-a
+    level: A1
+    strand: grammar
+    title: "ir a + infinitive for plans"
+    notes: "The everyday future in speech."
+    example: "Esta noche voy a cocinar para mis amigos."
+    english: "Tonight I'm going to cook for my friends."
+    status: draft
+  - id: es.a1.introduce-yourself
+    level: A1
+    strand: function
+    title: "Introduce yourself and others"
+    notes: "Name, origin, where you live, what you do; greetings and goodbyes."
+    example: "Me llamo Ana, soy de Chicago y trabajo en una escuela."
+    english: "My name is Ana, I'm from Chicago and I work at a school."
+    status: draft
+  - id: es.a1.personal-information
+    level: A1
+    strand: function
+    title: "Ask for and give personal information"
+    notes: "Age, family, phone, email; asking someone to repeat or spell."
+    example: "¿Cuántos hermanos tienes? ¿Puedes repetir, por favor?"
+    english: "How many siblings do you have? Can you repeat that, please?"
+    status: draft
+  - id: es.a1.order-food
+    level: A1
+    strand: function
+    title: "Order food and drinks"
+    notes: "Para mí…, quiero…, ¿me trae…? (Latin America), ¿me pone…? (Spain), la cuenta."
+    example: "Para mí, un café con leche y un pan dulce, por favor."
+    english: "For me, a coffee with milk and a sweet roll, please."
+    status: draft
+  - id: es.a1.shopping-prices
+    level: A1
+    strand: function
+    title: "Buy things and ask prices"
+    notes: "¿Cuánto cuesta / cuestan?; numbers to 1,000; quantities."
+    example: "¿Cuánto cuestan estas naranjas?"
+    english: "How much are these oranges?"
+    status: draft
+  - id: es.a1.time-and-days
+    level: A1
+    strand: function
+    title: "Talk about time, days and routines"
+    notes: "¿Qué hora es?, a las…, los lunes; frequency (siempre, a veces, nunca)."
+    example: "Los lunes empiezo a trabajar a las ocho."
+    english: "On Mondays I start work at eight."
+    status: draft
+  - id: es.a1.likes-dislikes
+    level: A1
+    strand: function
+    title: "Say what you like and don't like"
+    notes: "Uses gustar; reacting with a mí también / a mí tampoco."
+    example: "No me gusta el fútbol. —A mí tampoco."
+    english: "I don't like football. —Me neither."
+    status: draft
+  - id: es.a1.v-family
+    level: A1
+    strand: vocab
+    title: "Family"
+    words: [la familia, la madre, el padre, el hermano, la hermana, el hijo, la hija, los abuelos, el primo, la pareja]
+    status: draft
+  - id: es.a1.v-food
+    level: A1
+    strand: vocab
+    title: "Food and drink"
+    words: [el pan, el agua, la leche, el café, la fruta, la carne, el pescado, las verduras, el desayuno, la cena]
+    status: draft
+  - id: es.a1.v-home
+    level: A1
+    strand: vocab
+    title: "Home"
+    words: [la casa, el departamento, la cocina, el dormitorio, el baño, la mesa, la silla, la cama, la ventana, la puerta]
+    status: draft
+  - id: es.a1.v-city
+    level: A1
+    strand: vocab
+    title: "Places in town"
+    words: [la calle, la tienda, el supermercado, el banco, la estación, el parque, el museo, la farmacia, cerca, lejos]
+    status: draft
+  - id: es.a1.v-daily-routine
+    level: A1
+    strand: vocab
+    title: "Daily routine"
+    words: [despertarse, levantarse, ducharse, desayunar, trabajar, comer, descansar, volver, cenar, acostarse]
+    status: draft
+  - id: es.a1.v-clothes-colours
+    level: A1
+    strand: vocab
+    title: "Clothes and colours"
+    words: [la camisa, los pantalones, los zapatos, el abrigo, la falda, rojo, azul, verde, negro, blanco]
+    status: draft
+  - id: es.a1.topic-greetings
+    level: A1
+    strand: topic
+    title: "How people greet each other"
+    notes: "Good when talking about meeting people or travel; contrast with the learner's own habits."
+    facts:
+      - "In Spain friends and family usually greet with two kisses on the cheek (dos besos)."
+      - "In much of Latin America the usual greeting among friends is one kiss on the cheek."
+      - "Men greeting other men more often shake hands or hug."
+    words: [saludar, el beso, la mejilla, dar la mano, el abrazo]
+    status: draft
+  # ---------------------------------------------------------------- A2
+  - id: es.a2.preterite-regular
+    level: A2
+    strand: grammar
+    title: "Preterite: regular verbs"
+    notes: "Completed events with a time frame (ayer, el año pasado). Stress matters in speech: hablo vs habló."
+    example: "Ayer comí paella con mis amigos."
+    english: "Yesterday I ate paella with my friends."
+    status: draft
+  - id: es.a2.preterite-irregular
+    level: A2
+    strand: grammar
+    title: "Preterite: common irregulars"
+    notes: "fui (ser and ir share it), tuve, estuve, hice, dije, pude, puse, vine, quise."
+    example: "Fui a la playa, pero tuve que volver pronto."
+    english: "I went to the beach, but I had to come back early."
+    status: draft
+  - id: es.a2.imperfect
+    level: A2
+    strand: grammar
+    title: "Imperfect for habits and descriptions"
+    notes: "What used to happen and what things were like. Only ser, ir and ver are irregular."
+    example: "De niño, jugaba al fútbol todas las tardes."
+    english: "As a kid, I played football every afternoon."
+    status: draft
+  - id: es.a2.preterite-imperfect-intro
+    level: A2
+    strand: grammar
+    title: "Preterite vs imperfect: scene and event"
+    notes: "The imperfect sets the scene, the preterite moves the story. English 'was -ing' maps to the imperfect, simple past to either."
+    example: "Llovía cuando salí de casa."
+    english: "It was raining when I left the house."
+    status: draft
+  - id: es.a2.present-perfect
+    level: A2
+    strand: grammar
+    title: "Present perfect (he comido)"
+    notes: "Latin America mostly uses the preterite for recent events (hoy trabajé mucho); Spain uses he trabajado for today and this week. Use the preterite by default; recognise the Spanish habit."
+    example: "Todavía no he comido. (Hoy trabajé mucho.)"
+    english: "I haven't eaten yet. (I worked a lot today.)"
+    status: draft
+  - id: es.a2.vosotros
+    level: A2
+    strand: grammar
+    title: "vosotros: Spain's 'you all'"
+    notes: "Latin America uses ustedes for every 'you all'; Spain uses vosotros among friends, with its own forms (habláis, tenéis, sois) and commands (¡venid!). Recognise it from early on; use it with Spaniards if you like."
+    example: "¿Vosotros venís esta noche? (¿Ustedes vienen esta noche?)"
+    english: "Are you all coming tonight?"
+    status: draft
+  - id: es.a2.object-pronouns
+    level: A2
+    strand: grammar
+    title: "Direct and indirect object pronouns"
+    notes: "lo/la/los/las vs le/les; before a conjugated verb, attached to infinitives and gerunds."
+    example: "El libro lo compré ayer y se lo voy a dar a Juan."
+    english: "I bought the book yesterday and I'm going to give it to Juan."
+    status: draft
+  - id: es.a2.double-pronouns
+    level: A2
+    strand: grammar
+    title: "Two pronouns together: se lo"
+    notes: "le/les becomes se before lo/la (*le lo is impossible)."
+    example: "¿El regalo? Se lo di a María."
+    english: "The present? I gave it to María."
+    status: draft
+  - id: es.a2.reflexives
+    level: A2
+    strand: grammar
+    title: "Reflexive verbs"
+    notes: "Routines (levantarse), reciprocal (nos vemos), and meaning shifts (ir/irse, dormir/dormirse)."
+    example: "Me levanto a las siete y me voy a las ocho."
+    english: "I get up at seven and leave at eight."
+    status: draft
+  - id: es.a2.comparatives
+    level: A2
+    strand: grammar
+    title: "Comparisons and superlatives"
+    notes: "más/menos … que, tan … como, tanto como; mejor, peor, mayor, menor; el más alto de."
+    example: "Mi hermana es más alta que yo, pero yo soy mayor."
+    english: "My sister is taller than me, but I'm older."
+    status: draft
+  - id: es.a2.progressive
+    level: A2
+    strand: grammar
+    title: "estar + gerund"
+    notes: "For actions in progress, not for future plans (English 'I'm leaving tomorrow' is mañana salgo)."
+    example: "Ahora estoy leyendo; mañana salgo para Lima."
+    english: "I'm reading right now; tomorrow I'm leaving for Lima."
+    status: draft
+  - id: es.a2.por-para-intro
+    level: A2
+    strand: grammar
+    title: "por and para: first uses"
+    notes: "para for purpose, recipient and deadline; por for cause, exchange and through."
+    example: "Gracias por el regalo. Este es para ti."
+    english: "Thanks for the present. This one is for you."
+    status: draft
+  - id: es.a2.imperative-tu
+    level: A2
+    strand: grammar
+    title: "tú commands"
+    notes: "Affirmative (habla, ven, dime) vs negative, which uses the subjunctive (no hables). Pronouns attach to the affirmative."
+    example: "¡Ven aquí! Dímelo, pero no se lo digas a nadie."
+    english: "Come here! Tell me, but don't tell anyone."
+    status: draft
+  - id: es.a2.muy-mucho
+    level: A2
+    strand: grammar
+    title: "muy, mucho, demasiado"
+    notes: "muy before adjectives and adverbs; mucho with nouns (agrees) and after verbs. *muy calor is a classic error."
+    example: "Hace mucho calor y el hotel es muy caro."
+    english: "It's very hot and the hotel is very expensive."
+    status: draft
+  - id: es.a2.past-weekend
+    level: A2
+    strand: function
+    title: "Talk about last weekend or a trip"
+    notes: "Sequencing with primero, luego, después, al final."
+    example: "El sábado fuimos a la sierra y luego cenamos en un pueblo."
+    english: "On Saturday we went to the mountains and then had dinner in a village."
+    status: draft
+  - id: es.a2.childhood
+    level: A2
+    strand: function
+    title: "Describe your childhood and how things used to be"
+    notes: "Imperfect for habits; antes vs ahora."
+    example: "Antes vivía en el campo; ahora vivo en la ciudad."
+    english: "I used to live in the country; now I live in the city."
+    status: draft
+  - id: es.a2.invitations
+    level: A2
+    strand: function
+    title: "Make, accept and turn down invitations"
+    notes: "¿Quieres…?, ¿Te gustaría…?, ¿Nos vemos…? (Spain: ¿Te apetece…?, ¿Quedamos…?); declining politely with an excuse."
+    example: "¿Quieres ir al cine? —Me encantaría, pero hoy no puedo."
+    english: "Do you want to go to the movies? —I'd love to, but I can't today."
+    status: draft
+  - id: es.a2.describe-people-places
+    level: A2
+    strand: function
+    title: "Describe people and places"
+    notes: "Appearance and personality (ser/estar/tener), describing your neighbourhood."
+    example: "Mi barrio es tranquilo y tiene muchas tiendas pequeñas."
+    english: "My neighbourhood is quiet and has lots of small shops."
+    status: draft
+  - id: es.a2.simple-advice
+    level: A2
+    strand: function
+    title: "Give and ask for simple advice"
+    notes: "tienes que, deberías, ¿por qué no…?; tú commands."
+    example: "Si estás cansado, ¿por qué no te acuestas temprano?"
+    english: "If you're tired, why don't you go to bed early?"
+    status: draft
+  - id: es.a2.plans
+    level: A2
+    strand: function
+    title: "Talk about plans and arrangements"
+    notes: "ir a, pensar + infinitive, quedar con alguien."
+    example: "Este verano pienso visitar a mis primos en México."
+    english: "This summer I'm planning to visit my cousins in Mexico."
+    status: draft
+  - id: es.a2.v-travel
+    level: A2
+    strand: vocab
+    title: "Travel and transport"
+    words: [el viaje, el boleto, el vuelo, el equipaje, la maleta, el andén, perder el tren, reservar, el alojamiento, la frontera]
+    status: draft
+  - id: es.a2.v-health
+    level: A2
+    strand: vocab
+    title: "Health and the body"
+    words: [la cabeza, la espalda, el estómago, me duele, la fiebre, el resfriado, el médico, la receta, la cita, encontrarse mal]
+    status: draft
+  - id: es.a2.v-work
+    level: A2
+    strand: vocab
+    title: "Work and jobs"
+    words: [el trabajo, la empresa, el jefe, el compañero, el sueldo, la reunión, el horario, contratar, despedir, jubilarse]
+    status: draft
+  - id: es.a2.v-free-time
+    level: A2
+    strand: vocab
+    title: "Free time and hobbies"
+    words: [el ocio, la afición, quedar de verse, salir a tomar algo, ir de excursión, pintar, tocar la guitarra, el partido, la serie, aburrirse]
+    status: draft
+  - id: es.a2.v-shopping
+    level: A2
+    strand: vocab
+    title: "Shopping and services"
+    words: [la talla, probarse, el probador, las ofertas, devolver, el recibo, la tarjeta, en efectivo, barato, caro]
+    status: draft
+  - id: es.a2.v-weather
+    level: A2
+    strand: vocab
+    title: "Weather and seasons"
+    words: [hace sol, hace frío, llueve, nieva, la tormenta, el viento, nublado, la primavera, el verano, el invierno]
+    status: draft
+  - id: es.a2.topic-tianguis
+    level: A2
+    strand: topic
+    title: "Tianguis: Mexico's street markets"
+    notes: "Fits shopping, food or weekend conversations."
+    facts:
+      - "A tianguis is an open-air market that sets up on a given day of the week in the same street."
+      - "The word comes from Nahuatl, the language of the Aztecs (tianquiztli, 'market')."
+      - "Other everyday Mexican words from Nahuatl include chocolate, tomate, aguacate and chile."
+    words: [el puesto, regatear, el aguacate, el náhuatl]
+    status: draft
+  - id: es.a2.topic-dia-de-muertos
+    level: A2
+    strand: topic
+    title: "Día de Muertos"
+    notes: "Around late October and early November, or when family, food or traditions come up."
+    facts:
+      - "Día de Muertos is celebrated in Mexico on 1 and 2 November."
+      - "Families build an ofrenda, a home altar with photos of the dead, their favourite food, candles and orange cempasúchil (marigold) flowers."
+      - "UNESCO lists the festivity as Intangible Cultural Heritage of Humanity."
+    words: [la ofrenda, la vela, el pan de muerto, recordar, los difuntos]
+    status: draft
+  - id: es.a2.topic-meal-times
+    level: A2
+    strand: topic
+    title: "Meal times in Spain"
+    notes: "Daily routines, food, travel to Spain."
+    facts:
+      - "In Spain lunch (la comida) is the main meal of the day, often eaten around two or three in the afternoon."
+      - "Dinner is late by US standards, often after nine in the evening."
+      - "Many people have a merienda, a small snack, in the late afternoon."
+    words: [la comida, la cena, la merienda, picar algo]
+    status: draft
+  # ---------------------------------------------------------------- B1
+  - id: es.b1.preterite-imperfect-full
+    level: B1
+    strand: grammar
+    title: "Preterite vs imperfect: meaning changes"
+    notes: "conocí (met) vs conocía (knew), supe (found out) vs sabía, quise (tried) vs no quise (refused), pude (managed)."
+    example: "Conocí a Lucía en 2019, pero no supe su apellido hasta mucho después."
+    english: "I met Lucía in 2019, but I didn't find out her surname until much later."
+    status: draft
+  - id: es.b1.pluperfect
+    level: B1
+    strand: grammar
+    title: "Pluperfect (había comido)"
+    notes: "The past before the past, often with ya and todavía no."
+    example: "Cuando llegué, la fiesta ya había terminado."
+    english: "When I arrived, the party had already ended."
+    status: draft
+  - id: es.b1.future-conditional
+    level: B1
+    strand: grammar
+    title: "Future and conditional, including guesses"
+    notes: "Future and conditional of probability: serán las tres (it must be three), estaría cansado (he was probably tired)."
+    example: "¿Dónde está Marta? —No sé, estará en el trabajo."
+    english: "Where's Marta? —I don't know, she's probably at work."
+    status: draft
+  - id: es.b1.subjunctive-wishes
+    level: B1
+    strand: grammar
+    title: "Present subjunctive: wishes and influence"
+    notes: "querer que, esperar que, ojalá, pedir que. Same subject keeps the infinitive (quiero ir vs quiero que vayas)."
+    example: "Espero que vengas a la boda. ¡Ojalá haga buen tiempo!"
+    english: "I hope you come to the wedding. I hope the weather's good!"
+    status: draft
+  - id: es.b1.subjunctive-emotion-doubt
+    level: B1
+    strand: grammar
+    title: "Present subjunctive: emotion, doubt and denial"
+    notes: "me alegra que, no creo que, es posible que. creo que takes the indicative, no creo que the subjunctive."
+    example: "Me alegra que estés aquí, aunque no creo que te quedes mucho."
+    english: "I'm glad you're here, though I don't think you'll stay long."
+    status: draft
+  - id: es.b1.subjunctive-cuando
+    level: B1
+    strand: grammar
+    title: "cuando + subjunctive for the future"
+    notes: "Future time clauses take the subjunctive; *cuando llegarás is a typical English-speaker error."
+    example: "Cuando llegues, llámame."
+    english: "When you arrive, call me."
+    status: draft
+  - id: es.b1.relative-clauses
+    level: B1
+    strand: grammar
+    title: "Relative clauses: que, quien, lo que, donde"
+    notes: "lo que for 'what' as a noun clause; prepositions stay in front (la chica con la que hablé)."
+    example: "Lo que más me gusta es el barrio donde vivo."
+    english: "What I like most is the neighbourhood where I live."
+    status: draft
+  - id: es.b1.se-impersonal
+    level: B1
+    strand: grammar
+    title: "Impersonal and passive se"
+    notes: "se vende(n), se dice que, aquí se come bien: Spanish's everyday way of avoiding a subject."
+    example: "Se venden pisos. En este pueblo se vive muy bien."
+    english: "Flats for sale. People live very well in this town."
+    status: draft
+  - id: es.b1.se-accidental
+    level: B1
+    strand: grammar
+    title: "Accidental se (se me olvidó)"
+    notes: "Things happen to you rather than being done by you. No English equivalent, so learners avoid it."
+    example: "Se me olvidaron las llaves y se me cayó el celular."
+    english: "I forgot my keys and dropped my phone."
+    status: draft
+  - id: es.b1.por-para-full
+    level: B1
+    strand: grammar
+    title: "por and para: the full picture"
+    notes: "por for route, duration, means and agent; para for destination, opinion (para mí) and comparison (para ser niño)."
+    example: "Pasamos por el parque. Para mí, es el mejor de la ciudad."
+    english: "We went through the park. For me, it's the best in the city."
+    status: draft
+  - id: es.b1.formal-commands
+    level: B1
+    strand: grammar
+    title: "usted and ustedes commands"
+    notes: "Subjunctive forms; pronouns attached (siéntese) or in front when negative (no se preocupe)."
+    example: "Siéntese, por favor, y no se preocupe."
+    english: "Please sit down and don't worry."
+    status: draft
+  - id: es.b1.reported-speech
+    level: B1
+    strand: grammar
+    title: "Reported speech"
+    notes: "Tense shift after a past reporting verb: vendré → dijo que vendría."
+    example: "Me dijo que vendría a las seis, pero no vino."
+    english: "He told me he'd come at six, but he didn't."
+    status: draft
+  - id: es.b1.periphrases
+    level: B1
+    strand: grammar
+    title: "Verb phrases: acabar de, volver a, seguir, llevar"
+    notes: "llevar + time + gerund for 'have been doing'; English speakers say *he estado estudiando por dos años."
+    example: "Llevo dos años estudiando español y sigo aprendiendo."
+    english: "I've been studying Spanish for two years and I'm still learning."
+    status: draft
+  - id: es.b1.tell-a-story
+    level: B1
+    strand: function
+    title: "Tell a story with background and events"
+    notes: "Preterite/imperfect together, connectors (de repente, entonces, al final)."
+    example: "Estábamos cenando cuando de repente se fue la luz."
+    english: "We were having dinner when suddenly the power went out."
+    status: draft
+  - id: es.b1.opinions
+    level: B1
+    strand: function
+    title: "Give opinions, agree and disagree"
+    notes: "creo que / no creo que, estoy de acuerdo, tienes razón, depende."
+    example: "No estoy de acuerdo: no creo que sea tan fácil."
+    english: "I don't agree: I don't think it's that easy."
+    status: draft
+  - id: es.b1.feelings-wishes
+    level: B1
+    strand: function
+    title: "Express feelings, hopes and wishes"
+    notes: "Emotion + subjunctive, ojalá, me da pena que."
+    example: "Me da pena que te vayas tan pronto."
+    english: "I'm sad that you're leaving so soon."
+    status: draft
+  - id: es.b1.recommendations
+    level: B1
+    strand: function
+    title: "Recommend and advise"
+    notes: "te recomiendo que, es mejor que, yo que tú + conditional."
+    example: "Yo que tú, iría en tren. Te recomiendo que reserves pronto."
+    english: "If I were you, I'd go by train. I'd book early."
+    status: draft
+  - id: es.b1.travel-problems
+    level: B1
+    strand: function
+    title: "Sort out problems while travelling"
+    notes: "Complaining politely, explaining what happened, asking for a solution."
+    example: "Disculpe, reservé una habitación doble y me dieron una sencilla."
+    english: "Excuse me, I booked a double room and you've given me a single."
+    status: draft
+  - id: es.b1.summarise
+    level: B1
+    strand: function
+    title: "Summarise a film, book or news story"
+    notes: "trata de, se trata de, al principio, resulta que."
+    example: "La película trata de una familia que pierde su casa."
+    english: "The film is about a family that loses its home."
+    status: draft
+  - id: es.b1.v-feelings
+    level: B1
+    strand: vocab
+    title: "Feelings and personality"
+    words: [orgulloso, avergonzado, agobiado, ilusionado, decepcionado, celoso, tímido, terco, sensible, la vergüenza]
+    status: draft
+  - id: es.b1.v-media-tech
+    level: B1
+    strand: vocab
+    title: "Media and technology"
+    words: [la noticia, el periódico, las redes sociales, descargar, la contraseña, la pantalla, el enlace, subir una foto, el celular, la aplicación]
+    status: draft
+  - id: es.b1.v-environment
+    level: B1
+    strand: vocab
+    title: "The environment"
+    words: [el medio ambiente, la contaminación, reciclar, la basura, el cambio climático, la sequía, ahorrar energía, el residuo, la especie, proteger]
+    status: draft
+  - id: es.b1.v-education
+    level: B1
+    strand: vocab
+    title: "Education"
+    words: [la asignatura, aprobar, reprobar, la nota, la beca, la carrera, el máster, matricularse, el examen, la licenciatura]
+    status: draft
+  - id: es.b1.v-relationships
+    level: B1
+    strand: vocab
+    title: "Relationships"
+    words: [llevarse bien, enamorarse, casarse, separarse, discutir, hacer las paces, la confianza, el vecino, el conocido, echar de menos]
+    status: draft
+  - id: es.b1.v-housing
+    level: B1
+    strand: vocab
+    title: "Housing"
+    words: [alquilar, el alquiler, el dueño, el depósito, el contrato, amueblado, la mudanza, mudarse, el barrio, la hipoteca]
+    status: draft
+  - id: es.b1.topic-arabic-words
+    level: B1
+    strand: topic
+    title: "Spanish words from Arabic"
+    notes: "Good when ojalá or the subjunctive comes up, or for any etymology chat."
+    facts:
+      - "Much of the Iberian Peninsula was under Muslim rule from 711 until 1492."
+      - "Thousands of Spanish words come from Arabic, many beginning with al-, from the Arabic article: almohada, alfombra, aceite, azúcar."
+      - "Ojalá comes from an Arabic phrase meaning 'if God wills'."
+    words: [la almohada, la alfombra, el aceite, ojalá]
+    status: draft
+  - id: es.b1.topic-voseo
+    level: B1
+    strand: topic
+    title: "Vos in Argentina and Uruguay"
+    notes: "When regional varieties come up; a good aside after practising tú forms."
+    facts:
+      - "In Argentina and Uruguay people say vos instead of tú, with its own verb forms: vos tenés, vos sos, vos podés."
+      - "Vos is also common in parts of Central America."
+      - "Speakers who use vos still understand tú perfectly."
+    words: [vos, tenés, sos, che]
+    status: draft
+  - id: es.b1.topic-same-thing-different-word
+    level: B1
+    strand: topic
+    title: "Same thing, different word"
+    notes: "Whenever a word the learner uses differs between Spain and Latin America."
+    facts:
+      - "Spain says coche, ordenador, móvil and zumo; Mexico says carro, computadora, celular and jugo."
+      - "Spain uses vosotros for 'you all' among friends; Latin America uses ustedes for everyone."
+      - "Neither is more correct: they are different standards, like British and American English."
+    words: ["el coche / el carro", "el ordenador / la computadora", "el móvil / el celular"]
+    status: draft
+  # ---------------------------------------------------------------- B2
+  - id: es.b2.imperfect-subjunctive
+    level: B2
+    strand: grammar
+    title: "Imperfect subjunctive"
+    notes: "Forms from the preterite stem (tuvieron → tuviera). After past wishes and emotions; -ra and -se forms."
+    example: "Mis padres querían que estudiara medicina."
+    english: "My parents wanted me to study medicine."
+    status: draft
+  - id: es.b2.si-clauses
+    level: B2
+    strand: grammar
+    title: "Hypothetical and counterfactual conditions"
+    notes: "si + imperfect subjunctive → conditional; si + pluperfect subjunctive → conditional perfect. Never conditional after si."
+    example: "Si tuviera tiempo, viajaría más. Si lo hubiera sabido, habría venido."
+    english: "If I had time, I'd travel more. If I'd known, I would have come."
+    status: draft
+  - id: es.b2.subjunctive-relative
+    level: B2
+    strand: grammar
+    title: "Subjunctive in relative clauses"
+    notes: "Unknown or non-existent antecedents: busco un piso que tenga… vs tengo un piso que tiene…"
+    example: "Busco un piso que tenga terraza y que no sea muy caro."
+    english: "I'm looking for a flat that has a terrace and isn't too expensive."
+    status: draft
+  - id: es.b2.subjunctive-conjunctions
+    level: B2
+    strand: grammar
+    title: "Subjunctive after conjunctions"
+    notes: "para que, antes de que, a menos que, sin que; aunque + indicative (fact) vs subjunctive (concession or unknown)."
+    example: "Aunque llueva, saldremos. Te lo digo para que lo sepas."
+    english: "Even if it rains, we'll go out. I'm telling you so you know."
+    status: draft
+  - id: es.b2.perfect-subjunctive
+    level: B2
+    strand: grammar
+    title: "Perfect and pluperfect subjunctive"
+    notes: "no creo que haya llegado; me sorprendió que no hubiera llamado."
+    example: "No creo que haya llegado todavía."
+    english: "I don't think she's arrived yet."
+    status: draft
+  - id: es.b2.ser-estar-meaning
+    level: B2
+    strand: grammar
+    title: "Adjectives that change meaning with ser and estar"
+    notes: "ser listo/estar listo, ser rico/estar rico, ser aburrido/estar aburrido, ser malo/estar malo."
+    example: "La sopa está riquísima. Su familia es rica."
+    english: "The soup is delicious. His family is rich."
+    status: draft
+  - id: es.b2.verbs-of-change
+    level: B2
+    strand: grammar
+    title: "Verbs of change: 'become'"
+    notes: "ponerse (moods), volverse (character), hacerse (effort, profession), quedarse (result), convertirse en."
+    example: "Se puso rojo, se hizo médico y se quedó sin amigos."
+    english: "He went red, became a doctor and ended up without friends."
+    status: draft
+  - id: es.b2.passive-ser
+    level: B2
+    strand: grammar
+    title: "ser passive and its register"
+    notes: "ser + participle is formal or written; speech prefers se or active with a third-person plural."
+    example: "El puente fue construido en 1890. (Lo construyeron en 1890.)"
+    english: "The bridge was built in 1890."
+    status: draft
+  - id: es.b2.reported-requests
+    level: B2
+    strand: grammar
+    title: "Reporting requests and commands"
+    notes: "pedir, decir, aconsejar + que + subjunctive, shifted to the imperfect subjunctive in the past."
+    example: "Me pidió que la llamara cuando llegara."
+    english: "She asked me to call her when I arrived."
+    status: draft
+  - id: es.b2.lo-neuter
+    level: B2
+    strand: grammar
+    title: "Neuter lo"
+    notes: "lo + adjective (lo bueno, lo difícil), lo + adverb + que (lo bien que canta)."
+    example: "Lo bueno es que nadie se dio cuenta de lo tarde que era."
+    english: "The good thing is that nobody noticed how late it was."
+    status: draft
+  - id: es.b2.clitic-doubling
+    level: B2
+    strand: grammar
+    title: "Clitic doubling and leísmo"
+    notes: "A mi madre le encanta…: the pronoun is required with gustar-type verbs. Recognise Spain's leísmo (le vi)."
+    example: "A mi madre le encanta este pueblo."
+    english: "My mother loves this town."
+    status: draft
+  - id: es.b2.discourse-markers
+    level: B2
+    strand: grammar
+    title: "Discourse markers"
+    notes: "sin embargo, en cambio, por lo tanto, de hecho, es decir, o sea, pues; spoken vs written choices."
+    example: "No es caro; de hecho, es más barato que el otro."
+    english: "It isn't expensive; in fact, it's cheaper than the other one."
+    status: draft
+  - id: es.b2.argue
+    level: B2
+    strand: function
+    title: "Argue a case and answer objections"
+    notes: "Pros and cons, conceding (es cierto que…, pero), concluding."
+    example: "Es cierto que es caro; sin embargo, a largo plazo ahorras dinero."
+    english: "It's true that it's expensive; however, in the long run you save money."
+    status: draft
+  - id: es.b2.speculate
+    level: B2
+    strand: function
+    title: "Speculate and hypothesise"
+    notes: "What would have happened if…; probability (puede que, a lo mejor + indicative)."
+    example: "A lo mejor se ha perdido. Si hubiera salido antes, ya estaría aquí."
+    english: "Maybe he's lost. If he'd left earlier, he'd be here by now."
+    status: draft
+  - id: es.b2.report
+    level: B2
+    strand: function
+    title: "Report what others said and asked"
+    notes: "Reporting verbs beyond decir: comentar, contar, explicar, insistir en, negar."
+    example: "Insistió en que no lo sabía y negó haberlo visto."
+    english: "He insisted he didn't know and denied having seen it."
+    status: draft
+  - id: es.b2.abstract-topics
+    level: B2
+    strand: function
+    title: "Discuss abstract and social topics"
+    notes: "Education, technology, work; generalising (la gente, uno, se)."
+    example: "Uno se acostumbra a todo, pero la tecnología cambia muy rápido."
+    english: "You get used to everything, but technology changes very fast."
+    status: draft
+  - id: es.b2.register
+    level: B2
+    strand: function
+    title: "Adjust register: tú, usted, vos"
+    notes: "When to use usted; vosotros (Spain) vs ustedes (Latin America); recognising voseo (vos tenés)."
+    example: "¿Usted es el señor García? Encantada. —Tuteame, por favor."
+    english: "Are you Mr García? Pleased to meet you. —Please, call me tú."
+    status: draft
+  - id: es.b2.anecdotes
+    level: B2
+    strand: function
+    title: "Tell anecdotes with emphasis and humour"
+    notes: "Intensifiers (súper, -ísimo; re- in Argentina), reactions (¡no me digas!, ¡no manches! in Mexico, ¡qué fuerte! in Spain)."
+    example: "¡No me digas! ¿Y qué hiciste? —Nada, me quedé de piedra."
+    english: "No way! And what did you do? —Nothing, I was stunned."
+    status: draft
+  - id: es.b2.v-society
+    level: B2
+    strand: vocab
+    title: "Politics and society"
+    words: [el gobierno, las elecciones, votar, la ley, la desigualdad, la manifestación, el ciudadano, el derecho, la corrupción, el impuesto]
+    status: draft
+  - id: es.b2.v-economy
+    level: B2
+    strand: vocab
+    title: "Economy and working life"
+    words: [la crisis, el desempleo, el contrato temporal, trabajar por cuenta propia, la inflación, el ahorro, la deuda, invertir, el beneficio, la competencia]
+    status: draft
+  - id: es.b2.v-science
+    level: B2
+    strand: vocab
+    title: "Science and research"
+    words: [la investigación, el experimento, el hallazgo, demostrar, la hipótesis, los datos, el avance, la vacuna, el estudio, la inteligencia artificial]
+    status: draft
+  - id: es.b2.v-arts
+    level: B2
+    strand: vocab
+    title: "Arts and culture"
+    words: [la obra, el escritor, el cuadro, la exposición, el estreno, el personaje, la trama, el guion, la crítica, la puesta en escena]
+    status: draft
+  - id: es.b2.v-argument
+    level: B2
+    strand: vocab
+    title: "Words for arguing"
+    words: [la ventaja, el inconveniente, la consecuencia, el punto de vista, a favor, en contra, plantear, defender, rechazar, en resumen]
+    status: draft
+  - id: es.b2.v-colloquial
+    level: B2
+    strand: vocab
+    title: "Colloquial Latin American Spanish"
+    words: [chido, ¡qué padre!, la chamba, la lana, ¡no manches!, órale, ahorita, estar hecho polvo, ni de broma, chévere]
+    status: draft
+  - id: es.b2.v-colloquial-spain
+    level: B2
+    strand: vocab
+    title: "Colloquial Spain"
+    words: [vale, guay, currar, la pasta, flipar, molar, ¡qué fuerte!, tío, el móvil, el ordenador]
+    status: draft
+  - id: es.b2.topic-quijote
+    level: B2
+    strand: topic
+    title: "Don Quijote"
+    notes: "Books, reading, or when someone 'tilts at windmills'."
+    facts:
+      - "Miguel de Cervantes published the first part of Don Quijote in 1605 and the second in 1615."
+      - "It is often called the first modern novel."
+      - "Spanish is sometimes called 'la lengua de Cervantes'."
+    words: [el caballero, el molino, la novela, luchar contra molinos de viento]
+    status: draft
+  - id: es.b2.topic-frida-kahlo
+    level: B2
+    strand: topic
+    title: "Frida Kahlo"
+    notes: "Art, Mexico City, or overcoming hardship."
+    facts:
+      - "Frida Kahlo (1907-1954) was a Mexican painter known above all for her self-portraits."
+      - "She lived in the Casa Azul in Coyoacán, Mexico City, which is now a museum."
+      - "She was married to the muralist Diego Rivera."
+    words: [el autorretrato, el muralista, pintar, la exposición]
+    status: draft

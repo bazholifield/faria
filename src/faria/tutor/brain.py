@@ -70,7 +70,25 @@ class TutorBrain:
                     "cache_control": {"type": "ephemeral"},
                 }
             ],
-            messages=messages,
+            messages=_cache_latest(messages),
+            **kwargs,
+        )
+
+    def warm(self, system: str, tools: list[dict] | None = None):
+        """Write the prompt cache before the first turn (ADR-033).
+
+        Measured: the first conversation call of a session took ~8s to its first
+        word with a cold cache and ~1.4s once cached. One max_tokens=1 call with
+        the same tools + system prefix, sent while the learner is still saying
+        hello, moves that cost off the first turn. The cache write is paid either
+        way, so the extra cost is one cache read and one output token."""
+        kwargs: dict = {"tools": tools} if tools else {}
+        return self._client.messages.create(
+            model=self._models.conversation,
+            max_tokens=1,
+            thinking=self._thinking_param(),
+            system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
+            messages=[{"role": "user", "content": "(the learner is about to speak)"}],
             **kwargs,
         )
 
@@ -78,3 +96,18 @@ class TutorBrain:
         if self._models.thinking == "adaptive":
             return {"type": "adaptive"}
         return {"type": "disabled"}
+
+
+def _cache_latest(messages: list[dict]) -> list[dict]:
+    """A second cache breakpoint on the newest message, so each turn re-reads the
+    conversation so far from cache instead of reprocessing it: over an hour-long
+    session that's most of the input, and the main thing slowing the first word.
+    The history list itself is never modified."""
+    if not messages:
+        return messages
+    last = messages[-1]
+    content = last["content"]
+    if isinstance(content, str):
+        content = [{"type": "text", "text": content}]
+    content = [*content[:-1], {**content[-1], "cache_control": {"type": "ephemeral"}}]
+    return [*messages[:-1], {**last, "content": content}]

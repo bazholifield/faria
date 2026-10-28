@@ -29,8 +29,12 @@ class Synthesizer(ABC):
     handles_code_switching: bool = False
 
     @abstractmethod
-    def synthesize(self, text: str, language: str, voice: str | None = None) -> Iterator[AudioChunk]:
-        """Yield audio for one sentence/fragment as chunks become available."""
+    def synthesize(
+        self, text: str, language: str, voice: str | None = None, pace: float = 1.0
+    ) -> Iterator[AudioChunk]:
+        """Yield audio for one sentence/fragment as chunks become available.
+        ``pace`` is a length multiplier: >1 slower (beginners, "slower, please",
+        stressed recasts), <1 faster (ADR-030/032)."""
 
     @abstractmethod
     def voices(self, language: str) -> list[str]:

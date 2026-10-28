@@ -67,6 +67,7 @@ def test_0002_upgrade_preserves_existing_profiles(tmp_path):
         "0003_model_action.sql",
         "0004_learner_scoped_sessions.sql",
         "0005_run_metadata.sql",
+        "0006_course.sql",
     ]
 
     row = conn.execute("SELECT * FROM language_profiles WHERE language = 'es'").fetchone()
@@ -112,6 +113,7 @@ def test_0003_upgrade_preserves_existing_error_events(tmp_path):
         "0003_model_action.sql",
         "0004_learner_scoped_sessions.sql",
         "0005_run_metadata.sql",
+        "0006_course.sql",
     ]
 
     row = conn.execute("SELECT * FROM error_events").fetchone()
@@ -155,7 +157,7 @@ def test_0004_upgrade_backfills_language_and_rescopes_sessions(tmp_path):
     conn.commit()
 
     applied = apply_migrations(conn)
-    assert applied == ["0004_learner_scoped_sessions.sql", "0005_run_metadata.sql"]
+    assert applied == ["0004_learner_scoped_sessions.sql", "0005_run_metadata.sql", "0006_course.sql"]
 
     sessions = {r["id"]: dict(r) for r in conn.execute("SELECT * FROM sessions")}
     assert sessions[1]["learner_id"] == 1

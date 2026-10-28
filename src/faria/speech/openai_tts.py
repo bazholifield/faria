@@ -28,6 +28,16 @@ _OPENAI_TTS_URL = "https://api.openai.com/v1/audio/speech"
 _PCM_SAMPLE_RATE = 24000  # response_format="pcm" is 24 kHz mono s16le per the docs
 
 
+def _delivery(base: str, pace: float) -> str:
+    if pace >= 1.15:
+        return f"{base} Speak slowly and very clearly: the listener is a language learner."
+    if pace > 1.02:
+        return f"{base} Speak a little slower than usual, clearly."
+    if pace < 0.95:
+        return f"{base} Speak at a natural, brisk conversational speed."
+    return base
+
+
 class OpenAISynthesizer(Synthesizer):
     # A single OpenAI voice pronounces foreign phrases natively, so the server
     # skips per-run splitting for this backend (ADR-026).
@@ -49,18 +59,19 @@ class OpenAISynthesizer(Synthesizer):
         return ["alloy", "ash", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer"]
 
     def synthesize(
-        self, text: str, language: str, voice: str | None = None
+        self, text: str, language: str, voice: str | None = None, pace: float = 1.0
     ) -> Iterator[AudioChunk]:
-        with self._client.stream(
-            "POST",
-            _OPENAI_TTS_URL,
-            json={
-                "model": self._config.openai_tts_model,
-                "voice": voice or self._config.openai_tts_voice,
-                "input": text,
-                "response_format": "pcm",
-            },
-        ) as response:
+        body = {
+            "model": self._config.openai_tts_model,
+            "voice": voice or self._config.openai_tts_voice,
+            "input": text,
+            "response_format": "pcm",
+            # gpt-4o-mini-tts takes free-text delivery instructions; the persona's
+            # unhurried warmth, plus slower delivery for beginners and stressed
+            # recasts (ADR-030/032).
+            "instructions": _delivery(self._config.openai_tts_instructions, pace),
+        }
+        with self._client.stream("POST", _OPENAI_TTS_URL, json=body) as response:
             response.raise_for_status()
             for raw in response.iter_bytes(chunk_size=8192):
                 if raw:

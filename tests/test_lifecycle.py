@@ -104,7 +104,7 @@ def test_explicit_language_start_includes_annotation_tool(repo):
 
     brain.queue("Ah, ¿fuiste a la playa?")
     list(runner.turn("Yo voy a la playa ayer"))
-    assert _tool_names(brain.calls[0]) == {"update_session_state", "annotate_errors"}
+    assert _tool_names(brain.calls[0]) == {"update_session_state", "annotate_errors", "note_teaching"}
 
 
 def test_learner_requested_switch_takes_effect(repo):

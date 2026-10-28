@@ -11,23 +11,31 @@ Server -> client:
   JSON  {"type": "session_started", "language", "home", "level"}
   JSON  {"type": "state", "value": "listening"|"transcribing"|"thinking"|"speaking"}
   JSON  {"type": "you_said", "text", "language"}          (language = STT-detected)
-  JSON  {"type": "delta", "text"}                          (tutor text, streamed)
-  JSON  {"type": "audio_format", "sample_rate"}            (before each reply's audio)
-  binary: TTS Int16 PCM at that rate
-  JSON  {"type": "reply_done", "text", "language", "switched", "timings"}
+  JSON  {"type": "delta", "text"}                          (tutor text, streamed; *word* = stressed recast)
+  JSON  {"type": "audio_format", "sample_rate"}            (before audio at a new rate)
+  binary: TTS Int16 PCM at that rate                       (an acknowledgement, then the reply)
+  JSON  {"type": "stop_audio"}                             (barge-in: drop everything queued)
+  JSON  {"type": "reply_done", "text", "language", "switched", "interrupted", "timings"}
   JSON  {"type": "session_ended", "summary", "next_focus", "recap"}
   JSON  {"type": "error", "message"}
 
-Concurrency model: a receiver task drains the socket continuously — mic
-frames feed the VAD segmenter only while state is "listening" and are DROPPED
-otherwise (half-duplex v1: the tutor doesn't listen while thinking/speaking,
-so stale audio can't pile up in the socket and replay into the next turn;
-barge-in is future work). The main task consumes an event queue and does all
-the sending, so there is exactly one writer.
+Concurrency model: a receiver task drains the socket continuously. Mic frames feed
+the VAD segmenter while state is "listening", and also while "speaking" when barge-in
+is on (ADR-031); otherwise they are DROPPED, so stale audio can't pile up and replay
+into the next turn. The main task consumes an event queue and does all the sending,
+so there is exactly one writer.
 
-Latency budget (<2s utterance-end to first audio): per-stage timings are
-logged per turn and sent to the client in reply_done — tune stt_model /
-vad_silence_ms against real numbers, not vibes.
+Speech improvements layered on the basic loop:
+  - patience and speaking pace by level, re-read after every reply (ADR-030);
+  - early transcription: a pause of endpoint_probe_ms starts recognition on the audio
+    so far; if the learner stays silent the result is reused, and if it arrives in
+    time it decides whether to wait longer or end the turn early (ADR-030);
+  - an instant acknowledgement ("mm", "ajá") while recognition runs (ADR-029);
+  - barge-in: talking over the tutor stops its voice (ADR-031);
+  - stressed recasts: *marked* words said after a pause and a little slower (ADR-032).
+
+Latency budget (<2s utterance-end to first audio): per-stage timings are logged per
+turn and sent to the client in reply_done; tune against real numbers, not vibes.
 """
 
 from __future__ import annotations
@@ -37,6 +45,7 @@ import json
 import logging
 import threading
 import time
+from dataclasses import dataclass, field
 from typing import Any
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
@@ -46,15 +55,42 @@ from faria.db.repository import Repository
 from faria.domain.levels import band
 from faria.server.app import ServerDeps
 from faria.session.lifecycle import SessionRunner
+from faria.speech import pacing
+from faria.speech.ack import AckBank
+from faria.speech.emphasis import split_emphasis, strip_marks
+from faria.speech.endpoint import verdict
 from faria.speech.sentences import SentenceAssembler
 from faria.speech.stt import TranscriptionResult, is_probable_speech
-from faria.speech.vad import UtteranceSegmenter, Utterance
+from faria.speech.vad import Probe, SpeechStart, UtteranceSegmenter, Utterance
 
 log = logging.getLogger("faria.ws")
 
 _END = "__end__"
 _ABANDON = "__abandon__"
 _DISCONNECT = "__disconnect__"
+_BARGE = "__barge__"
+
+
+@dataclass
+class _Voice:
+    """Per-session speaking state shared by the receiver and the main task."""
+
+    pace: float = 1.0
+    silence_ms: int = 700
+    playback_until: float = 0.0          # when the client will finish playing what we sent
+    interrupt: asyncio.Event = field(default_factory=asyncio.Event)
+    spec: tuple[int, int, asyncio.Task] | None = None  # early transcription: (seq, last_voiced, task)
+
+    def played(self, seconds: float) -> None:
+        now = time.monotonic()
+        self.playback_until = max(self.playback_until, now + 0.05) + seconds
+
+    def take_spec(self, utt: Utterance) -> asyncio.Task | None:
+        """The early transcription, if it saw all of this utterance's speech."""
+        spec, self.spec = self.spec, None
+        if spec and spec[0] == utt.seq and spec[1] == utt.last_voiced:
+            return spec[2]
+        return None
 
 
 def build_ws_router(deps: ServerDeps) -> APIRouter:
@@ -100,9 +136,43 @@ async def _run_session(ws: WebSocket, deps: ServerDeps, conn) -> None:
     for lang in {runner.active_language, ctx.learner.native_language}:
         await asyncio.to_thread(deps.tts.preload, lang)
 
-    segmenter = UtteranceSegmenter(deps.settings.audio, deps.detector_factory())
+    audio = deps.settings.audio
+    segmenter = UtteranceSegmenter(
+        audio, deps.detector_factory(), probe_ms=audio.endpoint_probe_ms, report_start=audio.barge_in
+    )
+    acks = AckBank(deps.tts, audio)
+    voice = _Voice()
     events: asyncio.Queue[Any] = asyncio.Queue()
     state = {"value": "listening"}
+
+    def retune() -> None:
+        """Patience and pace follow the active language's level and the learner's
+        own "slower, please" (ADR-030); acknowledgement clips follow the pace."""
+        c = runner.context
+        is_home = runner.active_language == c.learner.native_language
+        level = c.profile.level_overall
+        voice.silence_ms = pacing.silence_ms(audio, level, is_home)
+        voice.pace = pacing.pace(audio, level, is_home, c.profile.preferences.get("speech_pace"))
+        segmenter.set_silence_ms(voice.silence_ms)
+        asyncio.get_running_loop().run_in_executor(None, acks.warm, runner.active_language, voice.pace)
+
+    retune()
+
+    def on_early_transcript(probe: Probe, task: asyncio.Task) -> None:
+        """Runs when an early transcription finishes. If the learner is still in
+        that same pause, its text decides: mid-thought -> wait longer; a finished
+        sentence -> end the turn now (or at the early threshold)."""
+        if task.cancelled() or task.exception() is not None or state["value"] != "listening":
+            return
+        if segmenter.current_seq != probe.seq or segmenter.current_last_voiced != probe.last_voiced:
+            return  # they kept talking (or the turn already ended): no opinion
+        decision = verdict(task.result().text, runner.active_language)
+        if decision == "hold":
+            segmenter.hold(audio.endpoint_hold_ms)
+        elif decision == "end":
+            utt = segmenter.shorten_to(int(voice.silence_ms * audio.endpoint_early_ratio))
+            if utt is not None:
+                events.put_nowait(utt)
 
     async def receiver() -> None:
         try:
@@ -112,9 +182,23 @@ async def _run_session(ws: WebSocket, deps: ServerDeps, conn) -> None:
                     await events.put(_DISCONNECT)
                     return
                 if (data := message.get("bytes")) is not None:
-                    if state["value"] == "listening":
-                        for utt in segmenter.feed(data):
-                            await events.put(utt)
+                    current = state["value"]
+                    barging = audio.barge_in and current == "speaking"
+                    if current == "listening" or barging:
+                        for ev in segmenter.feed(data):
+                            if isinstance(ev, SpeechStart):
+                                continue
+                            if barging and isinstance(ev, Probe):
+                                continue  # no early transcription over the tutor's voice
+                            if barging and isinstance(ev, Utterance) and not voice.interrupt.is_set():
+                                continue  # heard while Faria spoke, never confirmed as you: likely echo
+                            await events.put(ev)
+                        if (audio.barge_in and not voice.interrupt.is_set()
+                                and segmenter.active_speech_ms >= audio.barge_in_min_ms
+                                and (barging or time.monotonic() < voice.playback_until)):
+                            voice.interrupt.set()
+                            if not barging:
+                                await events.put(_BARGE)  # main task is idle: let it stop the audio
                     continue
                 if (text := message.get("text")) is not None:
                     msg = json.loads(text)
@@ -127,6 +211,9 @@ async def _run_session(ws: WebSocket, deps: ServerDeps, conn) -> None:
 
     recv_task = asyncio.create_task(receiver())
     await ws.send_json({"type": "state", "value": "listening"})
+    # Warm Claude's prompt cache while the learner says hello (ADR-033). The first
+    # turn waits for it rather than racing it on the shared DB connection.
+    warming = asyncio.ensure_future(asyncio.to_thread(runner.warm_cache))
 
     try:
         while True:
@@ -142,8 +229,27 @@ async def _run_session(ws: WebSocket, deps: ServerDeps, conn) -> None:
             if event is _END:
                 await _end_session(ws, runner, state)
                 return
+            if event is _BARGE:
+                await ws.send_json({"type": "stop_audio"})
+                voice.playback_until = 0.0
+                runner.note_interrupted()
+                continue
+            if isinstance(event, Probe):
+                if voice.spec is None or voice.spec[2].done():  # one at a time: CPU is shared
+                    transcriber = deps.stt.for_language(runner.active_language)
+                    task = asyncio.ensure_future(asyncio.to_thread(
+                        transcriber.transcribe, event.pcm, audio.sample_rate, None))
+                    voice.spec = (event.seq, event.last_voiced, task)
+                    task.add_done_callback(lambda t, p=event: on_early_transcript(p, t))
+                continue
             assert isinstance(event, Utterance)
-            await _run_turn(ws, deps, runner, segmenter, state, event)
+            if not warming.done():
+                await warming
+            language_before = runner.active_language
+            await _run_turn(ws, deps, runner, segmenter, state, event, voice, acks)
+            retune()
+            if runner.active_language != language_before:  # new prompt: warm it too
+                warming = asyncio.ensure_future(asyncio.to_thread(runner.warm_cache))
     finally:
         recv_task.cancel()
 
@@ -155,18 +261,49 @@ async def _run_turn(
     segmenter: UtteranceSegmenter,
     state: dict,
     utt: Utterance,
+    voice: _Voice,
+    acks: AckBank,
 ) -> None:
     t_utt_end = time.monotonic()
+    audio = deps.settings.audio
+    voice.interrupt.clear()
     await _set_state(ws, state, "transcribing")
+    audio_format_sent = {"rate": None}
 
-    transcriber = deps.stt.for_language(runner.active_language)
-    stt: TranscriptionResult = await asyncio.to_thread(
-        transcriber.transcribe, utt.pcm, deps.settings.audio.sample_rate, None
-    )
+    async def send_audio(chunks, pause_ms: int = 0) -> None:
+        for i, chunk in enumerate(chunks):
+            if not chunk.pcm:
+                continue
+            pcm = chunk.pcm
+            if i == 0 and pause_ms:
+                pcm = b"\x00\x00" * int(chunk.sample_rate * pause_ms / 1000) + pcm
+            if audio_format_sent["rate"] != chunk.sample_rate:
+                await ws.send_json({"type": "audio_format", "sample_rate": chunk.sample_rate})
+                audio_format_sent["rate"] = chunk.sample_rate
+            await ws.send_bytes(pcm)
+            voice.played(len(pcm) / 2 / chunk.sample_rate)
+
+    # Instant acknowledgement (ADR-029): plays while recognition and Claude work.
+    timings = {"stt_s": None, "first_delta_s": None, "first_audio_s": None,
+               "ack_s": None, "early_stt": False}
+    if (clip := acks.pick(runner.active_language, voice.pace, utt.speech_s)) is not None:
+        await send_audio(clip)
+        timings["ack_s"] = round(time.monotonic() - t_utt_end, 2)
+
+    early = voice.take_spec(utt)
+    if early is not None:
+        stt: TranscriptionResult = await early
+        timings["early_stt"] = True
+    else:
+        transcriber = deps.stt.for_language(runner.active_language)
+        stt = await asyncio.to_thread(
+            transcriber.transcribe, utt.pcm, audio.sample_rate, None
+        )
     t_transcript = time.monotonic()
+    timings["stt_s"] = round(t_transcript - t_utt_end, 2)
 
     text = stt.text.strip()
-    if not is_probable_speech(stt, deps.settings.audio):
+    if not is_probable_speech(stt, audio):
         # VAD fired on noise, or whisper hallucinated on silence (ADR-025) —
         # drop it silently and keep listening. This is the "only transcribe
         # sounds actually directed at it" behavior.
@@ -182,42 +319,50 @@ async def _run_turn(
     speak_language = runner.active_language  # a switch this turn applies to the NEXT reply
     assembler = SentenceAssembler()
     reply_parts: list[str] = []
-    timings = {"stt_s": round(t_transcript - t_utt_end, 2), "first_delta_s": None,
-               "first_audio_s": None}
-    audio_format_sent = {"rate": None}
 
     async def speak(sentence: str) -> None:
-        # Split each sentence into per-language runs and synthesize each in its
-        # own voice (ADR-026): in English mode a Spanish phrase gets the Spanish
-        # voice mid-sentence, not English phonemes mangling it. Runs default to
-        # the active language on any doubt, so worst case is the status quo. An
-        # API voice that code-switches natively skips the split.
-        if deps.lang_router is not None and not deps.tts.handles_code_switching:
-            runs = deps.lang_router.split_runs(sentence, default=speak_language)
-        else:
-            runs = [(sentence, speak_language)]
-        for run_text, run_language in runs:
-            if not run_text.strip():
-                continue
-            chunks = await asyncio.to_thread(
-                lambda t=run_text, l=run_language: list(deps.tts.synthesize(t, l))
-            )
-            for chunk in chunks:
-                if not chunk.pcm:
+        # Stressed recasts (ADR-032): *marked* words get a short pause and a slower
+        # pace. Then split each piece into per-language runs and synthesize each in
+        # its own voice (ADR-026): in English mode a Spanish phrase gets the Spanish
+        # voice mid-sentence, not English phonemes mangling it. Runs default to the
+        # active language on any doubt. An API voice that code-switches natively
+        # skips the split.
+        if voice.interrupt.is_set():
+            return  # barge-in: the learner is talking; say nothing more (ADR-031)
+        pieces = split_emphasis(sentence) if audio.emphasis else [(strip_marks(sentence), False)]
+        for piece, stressed in pieces:
+            if deps.lang_router is not None and not deps.tts.handles_code_switching:
+                runs = deps.lang_router.split_runs(piece, default=speak_language)
+            else:
+                runs = [(piece, speak_language)]
+            pace = voice.pace * (audio.emphasis_slowdown if stressed else 1.0)
+            for n, (run_text, run_language) in enumerate(runs):
+                if not run_text.strip() or voice.interrupt.is_set():
                     continue
-                if audio_format_sent["rate"] != chunk.sample_rate:
-                    await ws.send_json({"type": "audio_format", "sample_rate": chunk.sample_rate})
-                    audio_format_sent["rate"] = chunk.sample_rate
-                if timings["first_audio_s"] is None:
+                chunks = await asyncio.to_thread(
+                    lambda t=run_text, l=run_language, p=pace: list(deps.tts.synthesize(t, l, pace=p))
+                )
+                if timings["first_audio_s"] is None and any(c.pcm for c in chunks):
                     timings["first_audio_s"] = round(time.monotonic() - t_utt_end, 2)
                     await _set_state(ws, state, "speaking")
-                await ws.send_bytes(chunk.pcm)
+                await send_audio(chunks, audio.emphasis_pause_ms if stressed and n == 0 else 0)
+
+    stopped = {"sent": False}
+
+    async def stop_if_interrupted() -> None:
+        # The learner started talking over the reply: silence the audio already
+        # queued in the browser now, not when Claude finishes writing (ADR-031).
+        if voice.interrupt.is_set() and not stopped["sent"]:
+            await ws.send_json({"type": "stop_audio"})
+            voice.playback_until = 0.0
+            stopped["sent"] = True
 
     async for delta in _iter_turn(runner, text, stt):
         if timings["first_delta_s"] is None:
             timings["first_delta_s"] = round(time.monotonic() - t_utt_end, 2)
         reply_parts.append(delta)
         await ws.send_json({"type": "delta", "text": delta})
+        await stop_if_interrupted()
         for sentence in assembler.feed(delta):
             await speak(sentence)
     if (rest := assembler.flush()) is not None:
@@ -233,6 +378,11 @@ async def _run_turn(
         first_audio_s=timings["first_audio_s"],
     )
 
+    interrupted = voice.interrupt.is_set()
+    if interrupted:
+        await stop_if_interrupted()
+        runner.note_interrupted()
+
     switched = runner.active_language != speak_language
     await ws.send_json(
         {
@@ -240,15 +390,19 @@ async def _run_turn(
             "text": "".join(reply_parts),
             "language": runner.active_language,
             "switched": switched,
+            "interrupted": interrupted,
             "timings": timings,
         }
     )
     log.info(
-        "turn timings: stt=%ss first_delta=%ss first_audio=%ss (lang=%s%s)",
-        timings["stt_s"], timings["first_delta_s"], timings["first_audio_s"],
+        "turn timings: stt=%ss%s ack=%ss first_delta=%ss first_audio=%ss (lang=%s%s)%s",
+        timings["stt_s"], " (early)" if timings["early_stt"] else "", timings["ack_s"],
+        timings["first_delta_s"], timings["first_audio_s"],
         speak_language, f" -> {runner.active_language}" if switched else "",
+        " interrupted" if interrupted else "",
     )
-    segmenter.reset()
+    if not interrupted:
+        segmenter.reset()  # an interruption keeps the learner's words in progress
     await _set_state(ws, state, "listening")
 
 

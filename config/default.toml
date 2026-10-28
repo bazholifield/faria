@@ -40,8 +40,9 @@ recent_summaries_in_prompt = 3
 
 [audio]
 # The browser client sends 16 kHz mono Int16 PCM; VAD + whisper assume it.
-stt_default = "faster-whisper"
-tts_default = "piper"           # piper (local, free) | openai (needs OPENAI_API_KEY)
+stt_default = "faster-whisper"  # faster-whisper (local) | openai (needs OPENAI_API_KEY, ~$0.003/min)
+openai_stt_model = "gpt-4o-mini-transcribe"
+tts_default = "piper"           # piper (local, free) | openai (needs OPENAI_API_KEY, one voice for every language)
 sample_rate = 16000
 # faster-whisper: model size vs. latency is THE knob for the <2s budget.
 # Benchmarked here (WSL2 CPU, int8): "base" ~1.5s per 3s utterance, "small"
@@ -69,6 +70,53 @@ vad_silence_ms = 700            # trailing silence that ends your turn
 vad_min_speech_ms = 250
 vad_max_utterance_s = 45
 voices_dir = "data/voices"      # Piper voices auto-download here on first use
+# Early transcription (ADR-030): a pause this long starts recognition on the audio so
+# far. If that transcript lands while you're still quiet, a turn ending mid-thought
+# ("y…", "and…", "äh") waits endpoint_hold_ms longer, and a finished sentence ends at
+# endpoint_early_ratio of the usual wait. 0 turns early transcription off.
+endpoint_probe_ms = 300
+endpoint_hold_ms = 700
+endpoint_early_ratio = 0.6
+# Instant acknowledgement (ADR-029): "mm" / "ajá" the moment you stop. Phrases below.
+ack_enabled = true
+ack_probability = 0.7           # not every turn
+ack_min_speech_s = 0.8          # never for a blip
+# Barge-in (ADR-031): talking over Faria stops its voice. Best with a headset.
+barge_in = true
+barge_in_min_ms = 400
+# Stressed recasts (ADR-032): *marked* corrected words come after a short pause, slower.
+emphasis = true
+emphasis_pause_ms = 90
+emphasis_slowdown = 1.2
+# OpenAI voice (tts_default = "openai")
+openai_tts_model = "gpt-4o-mini-tts"
+openai_tts_voice = "alloy"
+
+[audio.vad_silence_ms_by_level]
+# Patience by level (ADR-030): the silence that ends your turn, longer for beginners.
+# Home base uses vad_silence_ms; a language with no estimate yet counts as A2.
+A1 = 1100
+A2 = 950
+B1 = 800
+B2 = 700
+C1 = 650
+C2 = 600
+
+[audio.pace_by_level]
+# Faria's speaking pace by level (>1 = slower), times "slower / faster, please".
+A1 = 1.25
+A2 = 1.15
+B1 = 1.05
+B2 = 1.0
+C1 = 1.0
+C2 = 1.0
+
+[audio.ack_phrases]
+# Neutral listening sounds only: never agreement ("vale", "right"), since the reply may disagree.
+en = ["Mm-hm.", "Mm.", "I see."]
+es = ["Ajá.", "Mm.", "Ya veo."]
+fr = ["Mm.", "Je vois.", "Mm-hm."]
+de = ["Aha.", "Mm.", "Verstehe."]
 
 [audio.piper_voices]
 # Piper voice per language. Audition candidates with:
@@ -80,6 +128,22 @@ es = "es_ES-sharvard-medium"
 fr = "fr_FR-siwis-medium"
 de = "de_DE-thorsten-medium"
 ar = "ar_JO-kareem-medium"
+
+[course]
+# The course layer (ADR-034): ideas for the mentor, never an agenda; you choose length and direction.
+enabled = true
+curriculum_dir = "curriculum"      # <lang>.yaml syllabus + topic cards (edit in the Helm's Syllabus tab)
+max_due_words = 6                  # words offered for review per session
+new_items_offered = 2              # syllabus items suggested per session
+topics_offered = 2                 # stories offered per session
+review_intervals_days = [1, 3, 7, 14, 30]  # Leitner boxes 1..5
+solid_after_sessions = 3           # correct use in this many separate sessions = solid
+
+[course.varieties]
+# The variety the mentor speaks by default; other regions come up as asides.
+es = "neutral Latin American Spanish (Mexico-centred, ustedes for 'you all'); Spain's vosotros and Argentina's vos are taught too, as variants to understand and enjoy"
+fr = "standard French of France"
+de = "standard German of Germany"
 
 [server]
 # 127.0.0.1 for the desk (Windows browser -> WSL2 localhost forwarding);

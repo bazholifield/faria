@@ -151,6 +151,19 @@ class SummaryRow:
 
 
 @dataclass
+class CourseNotes:
+    """What the mentor may draw on this session (course/planner.py). Suggestions only."""
+
+    variety: str | None = None
+    due_words: list[tuple[str, str | None]] = field(default_factory=list)   # (as taught, gloss)
+    new_items: list[dict] = field(default_factory=list)       # syllabus items worth introducing
+    revisit_items: list[dict] = field(default_factory=list)   # practised, due for another look
+    topics: list[dict] = field(default_factory=list)          # topic cards not yet told
+    placement: list[tuple[str, list[str]]] | None = None      # (level, probe titles) when level unknown
+    tracked_items: list[tuple[str, str]] = field(default_factory=list)  # (id, title) for the sweep
+
+
+@dataclass
 class SessionContext:
     """Everything prompt assembly needs at session start.
 
@@ -169,3 +182,5 @@ class SessionContext:
     # instead of minting a near-duplicate every time (see prompts.py).
     known_feature_keys: list[str] = field(default_factory=list)
     goal: str | None = None
+    # The course layer's suggestions for this language (ADR-034); None = off.
+    course: "CourseNotes | None" = None

@@ -412,9 +412,19 @@ def _preview_context(
         correction_style=correction_style or profile.correction_style,
     )
 
+    # The course section (ADR-034), built by the same read-only planner a session uses.
+    course = None
+    if settings.course.enabled:
+        from faria.course.tracker import CourseTracker
+
+        course = CourseTracker(repo, settings.course).notes(
+            profile, is_home=language == learner.native_language
+        )
+
     if profile.id == 0:
-        return SessionContext(learner=learner, profile=profile, goal=goal)
+        return SessionContext(learner=learner, profile=profile, goal=goal, course=course)
     return SessionContext(
+        course=course,
         learner=learner,
         profile=profile,
         dimensions=repo.get_dimensions(profile.id),

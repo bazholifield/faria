@@ -79,6 +79,12 @@ class SweepLevelObservation(BaseModel):
     rationale: str = Field(description="One sentence, grounded in something specific from the transcript")
 
 
+class SweepStructureUse(BaseModel):
+    item_id: str = Field(description="The structure's id, exactly as listed.")
+    correct_uses: int
+    incorrect_uses: int
+
+
 class SessionSweep(BaseModel):
     missed_errors: list[SweepErrorItem] = Field(
         description=(
@@ -89,6 +95,13 @@ class SessionSweep(BaseModel):
     )
     level_observations: list[SweepLevelObservation] = Field(
         description="Omit a dimension entirely if the transcript gives too little evidence to judge it."
+    )
+    structure_uses: list[SweepStructureUse] = Field(
+        default_factory=list,
+        description=(
+            "Only for the listed structures the learner actually attempted in their own "
+            "turns (ADR-034); empty if none were listed or attempted."
+        ),
     )
 
 
@@ -107,6 +120,7 @@ def generate_sweep(
     target_language: str,
     models: ModelsConfig,
     on_usage: Callable[[object], None] | None = None,
+    structures: list[tuple[str, str]] | None = None,
 ) -> SessionSweep:
     """One structured-output pass over the transcript, scoped to one target
     language; validated by pydantic. Call once per target language a
@@ -117,6 +131,15 @@ def generate_sweep(
     larger half of a session's bill."""
     client = anthropic.Anthropic()
     target = language_name(target_language)
+    # Syllabus coverage (ADR-034): which tracked structures did the learner use, and how well?
+    structure_job = ""
+    if structures:
+        listed = "; ".join(f"[{item_id}] {title}" for item_id, title in structures)
+        structure_job = (
+            " (3) For each of these structures that the learner attempted in their own "
+            f"{target} turns, count their correct and incorrect uses (skip any they didn't "
+            f"attempt; uses by the tutor don't count): {listed}."
+        )
     response = client.messages.parse(
         model=models.summarizer,
         max_tokens=models.max_summary_tokens,
@@ -132,6 +155,7 @@ def generate_sweep(
             "each dimension you have real evidence for, citing something "
             "specific from the transcript. Do not guess a dimension you can't "
             "ground in the transcript — omit it instead."
+            + structure_job
         ),
         messages=[
             {"role": "user", "content": _render_with_turn_indices(utterances)}

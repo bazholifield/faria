@@ -35,6 +35,7 @@
   .turn { padding: 0.6rem 0.9rem; border-radius: 10px; max-width: 92%; white-space: pre-wrap; }
   .you { align-self: flex-end; background: #2b3324; }
   .faria { align-self: flex-start; background: #221f1a; }
+  .faria strong { color: #f0c987; font-weight: normal; border-bottom: 1px solid #f0c98766; }
   .meta { font-size: 0.72rem; opacity: 0.45; align-self: center; }
   #summary { border: 1px solid #3a352c; border-radius: 10px; padding: 0.9rem; display: none; }
   #summary h2 { font-size: 0.95rem; margin: 0 0 0.5rem; opacity: 0.8; }
@@ -72,7 +73,8 @@
 const $ = (id) => document.getElementById(id);
 let ws, audioCtx, workletNode, mediaStream;
 let playhead = 0, playbackRate = 22050;
-let fariaBubble = null;
+let fariaBubble = null, fariaRaw = "";
+let playing = [];  // scheduled AudioBufferSourceNodes, so barge-in can stop them
 let resampleCarry = null;
 
 function addTurn(cls, text) {
@@ -113,6 +115,19 @@ function onMicBlock(block) {
   }
 }
 
+// The tutor marks a recast *like this* (ADR-032): bold on screen, stressed in the voice.
+function renderReply(el, raw) {
+  const esc = raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  el.innerHTML = esc.replace(/\*([^*\n]+)\*/g, "<strong>$1</strong>");
+}
+
+// Barge-in (ADR-031): the learner started talking, so drop everything still queued.
+function stopPlayback() {
+  for (const src of playing) { try { src.stop(); } catch (e) {} }
+  playing = [];
+  playhead = audioCtx ? audioCtx.currentTime : 0;
+}
+
 // ---- playback: Int16 @ server rate, scheduled back-to-back ----
 function playPcm(arrayBuffer) {
   const int16 = new Int16Array(arrayBuffer);
@@ -126,6 +141,8 @@ function playPcm(arrayBuffer) {
   playhead = Math.max(playhead, audioCtx.currentTime + 0.05);
   src.start(playhead);
   playhead += buf.duration;
+  playing.push(src);
+  src.onended = () => { playing = playing.filter((s) => s !== src); };
 }
 
 async function start() {
@@ -180,8 +197,12 @@ function handle(msg) {
       fariaBubble = null;
       break;
     case "delta":
-      if (!fariaBubble) fariaBubble = addTurn("faria", "");
-      fariaBubble.textContent += msg.text;
+      if (!fariaBubble) { fariaBubble = addTurn("faria", ""); fariaRaw = ""; }
+      fariaRaw += msg.text;
+      renderReply(fariaBubble, fariaRaw);
+      break;
+    case "stop_audio":
+      stopPlayback();
       break;
     case "audio_format":
       playbackRate = msg.sample_rate;
@@ -189,8 +210,10 @@ function handle(msg) {
     case "reply_done":
       fariaBubble = null;
       if (msg.switched) { $("lang").textContent = msg.language; addMeta("→ now speaking " + msg.language); }
+      if (msg.interrupted) addMeta("(you came in — Faria stopped talking)");
       if (msg.timings && msg.timings.first_audio_s != null)
-        addMeta(`voice in ${msg.timings.first_audio_s}s (stt ${msg.timings.stt_s}s)`);
+        addMeta(`voice in ${msg.timings.first_audio_s}s (stt ${msg.timings.stt_s}s${msg.timings.early_stt ? ", early" : ""}` +
+                (msg.timings.ack_s != null ? `, “mm” at ${msg.timings.ack_s}s` : "") + ")");
       break;
     case "session_ended": {
       const box = $("summary");

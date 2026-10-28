@@ -38,6 +38,7 @@ from typing import Iterator
 from anthropic.types import Message
 
 from faria.config import Settings
+from faria.course.tracker import CourseTracker
 from faria.db.repository import Repository
 from faria.domain.correction import (
     Aggressiveness,
@@ -63,6 +64,7 @@ from faria.tutor.prompts import assemble_system_prompt, prompt_template_version
 from faria.tutor.schema import ERROR_ANNOTATION_TOOL, parse_annotated_errors
 from faria.tutor.summarizer import SessionSummary, generate_summary, to_summary_row
 from faria.tutor.sweep import SessionSweep, SweepLevelObservation, generate_sweep
+from faria.tutor.teaching import TEACHING_TOOL
 
 
 class SessionRunner:
@@ -87,6 +89,14 @@ class SessionRunner:
         self._turn_state = TurnState()  # shared across languages: one correction budget per session
         self._last_pivot_turn: int = -(10**6)  # far in the past, so the first pivot is never blocked
         self._last_metric_id: int | None = None  # conversation row awaiting audio timings
+        self._interrupted: bool = False  # the learner talked over the last reply (ADR-031)
+        # The course layer (ADR-034): suggestions in, spaced review and coverage out.
+        self._course = (CourseTracker(repo, settings.course)
+                        if settings.course.enabled else None)
+
+    def note_interrupted(self) -> None:
+        """The learner started talking over the last reply; the next turn says so."""
+        self._interrupted = True
 
     @property
     def context(self) -> SessionContext:
@@ -168,16 +178,14 @@ class SessionRunner:
         if suspect_words:
             flagged = ", ".join(sorted(suspect_words))
             history_text = f"{user_text}\n[transcription note: uncertain words — {flagged}]"
+        if self._interrupted:
+            # barge-in (ADR-031): they may not have heard the end of the last reply
+            history_text += "\n[note: the learner started talking over you]"
+            self._interrupted = False
         self._history.append({"role": "user", "content": history_text})
 
-        # No point asking the model to grammar-check the learner's own native
-        # language — the annotation tool only rides along in a target language.
         detecting_errors = self._active_language != self._home_language
-        tools = [SESSION_CONTROL_TOOL]
-        if detecting_errors:
-            tools.append(ERROR_ANNOTATION_TOOL)
-
-        with self._brain.stream_reply(self._system, self._history, tools=tools) as stream:
+        with self._brain.stream_reply(self._system, self._history, tools=self._tools()) as stream:
             for delta in stream.text_stream:
                 yield delta
             final = stream.get_final_message()
@@ -202,7 +210,36 @@ class SessionRunner:
 
         if detecting_errors:
             self._process_annotations(final, learner_utt.id, suspect_words)
+            if self._course is not None:
+                spans = [e.get("span_text") or "" for b in final.content
+                         if b.type == "tool_use" and b.name == "annotate_errors"
+                         for e in b.input.get("errors", [])]
+                self._course.after_turn(self._ctx.profile.id, self._active_language, self._session_id,
+                                        learner_utt.id, user_text, reply_text, final, spans)
         self._process_control_calls(final)
+
+    def _tools(self) -> list[dict]:
+        # No point asking the model to grammar-check the learner's own native
+        # language — the annotation tool only rides along in a target language.
+        tools = [SESSION_CONTROL_TOOL]
+        if self._active_language != self._home_language:
+            tools.append(ERROR_ANNOTATION_TOOL)
+            if self._course is not None:
+                tools.append(TEACHING_TOOL)
+        return tools
+
+    def warm_cache(self) -> None:
+        """Pre-write the prompt cache for the active language (ADR-033), so the
+        first reply isn't the slow one. Best-effort: a brain without warm() (the
+        test fakes) or a failed call just means a cold first turn."""
+        warm = getattr(self._brain, "warm", None)
+        if warm is None or not self._system:
+            return
+        try:
+            final = warm(self._system, self._tools())
+        except Exception:  # noqa: BLE001 — never let a warm-up break a session
+            return
+        self._record_call_metrics(stage="warmup", final=final, language=self._active_language)
 
     def end(self) -> SessionSummary | None:
         """Close the session; returns the narrative summary (None if nothing was said)."""
@@ -258,6 +295,8 @@ class SessionRunner:
             ),
             known_feature_keys=self._repo.known_feature_keys(profile.id),
             goal=goal,
+            course=(self._course.notes(profile, is_home=language == self._home_language)
+                    if self._course is not None else None),
         )
 
     def _build_policy(self, profile: LanguageProfile) -> CorrectionPolicy:
@@ -528,6 +567,8 @@ class SessionRunner:
             self._refresh_active_context()
         elif change.action == "set_pivot_frequency" and change.pivot_frequency:
             self._set_pivot_preference(change.pivot_frequency)
+        elif change.action == "set_speech_pace" and change.speech_pace:
+            self._set_speech_pace(change.speech_pace)
 
     def _handle_switch_language(self, change: SessionStateChange) -> None:
         if not change.language or change.language == self._active_language:
@@ -577,6 +618,16 @@ class SessionRunner:
         self._contexts[self._home_language] = replace(home_ctx, profile=fresh_profile)
         self._rebuild_prompt()  # pivot section renders regardless of which language is active
 
+    def _set_speech_pace(self, speech_pace: str) -> None:
+        """Stored on the ACTIVE language's profile: "slower, please" in German
+        shouldn't slow down English (ADR-030). The voice loop reads it before
+        every reply, so it applies from the next one."""
+        assert self._ctx is not None
+        new_prefs = dict(self._ctx.profile.preferences)
+        new_prefs["speech_pace"] = speech_pace
+        self._repo.update_preferences(self._ctx.profile.id, new_prefs)
+        self._refresh_active_context()
+
     # -- end-of-session sweep + CEFR estimation --------------------------------
 
     def _run_sweeps(self, utterances: list[Utterance]) -> None:
@@ -594,6 +645,7 @@ class SessionRunner:
         for language in target_languages:
             if language not in self._contexts:
                 self._contexts[language] = self._load_language_context(language)
+            course = self._contexts[language].course
             sweep = generate_sweep(
                 utterances,
                 language,
@@ -601,8 +653,12 @@ class SessionRunner:
                 on_usage=lambda response, lang=language: self._record_call_metrics(
                     "sweep", response, language=lang
                 ),
+                structures=course.tracked_items if course else None,
             )
             self._apply_sweep(sweep, self._contexts[language].profile.id)
+            if self._course is not None and sweep.structure_uses:
+                self._course.apply_sweep(self._contexts[language].profile.id, self._session_id,
+                                         sweep.structure_uses)
 
     def _apply_sweep(self, sweep: SessionSweep, profile_id: int) -> None:
         assert self._session_id is not None

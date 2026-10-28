@@ -11,6 +11,8 @@ import hashlib
 import json
 import sqlite3
 
+from faria.course import review
+from faria.course.review import Card
 from faria.db.connection import transaction
 from faria.domain.models import (
     ErrorEvent,
@@ -621,3 +623,96 @@ class Repository:
             for r in rows
         ]
         return list(reversed(summaries))
+
+    # -- the course layer (ADR-034, migration 0006) ---------------------------
+
+    # -- words ---------------------------------------------------------------
+
+    def vocab_words(self, profile_id: int) -> list[sqlite3.Row]:
+        return self._conn.execute("SELECT * FROM vocab_items WHERE profile_id = ?", (profile_id,)).fetchall()
+
+    def due_vocab_words(self, profile_id: int, at: datetime, limit: int) -> list[sqlite3.Row]:
+        return self._conn.execute(
+            "SELECT * FROM vocab_items WHERE profile_id = ? AND due_at <= ? ORDER BY due_at LIMIT ?",
+            (profile_id, at.strftime(review.TIME_FORMAT), limit),
+        ).fetchall()
+
+    def add_vocab_word(self, profile_id: int, lemma: str, display: str, gloss: str | None, source: str,
+                 card: Card, session_id: int | None, utterance_id: int | None,
+                 syllabus_id: str | None = None) -> int | None:
+        """Add a new word (None if it's already being learned)."""
+        with transaction(self._conn) as conn:
+            cur = conn.execute(
+                "INSERT OR IGNORE INTO vocab_items (profile_id, lemma, display, gloss, source, syllabus_id,"
+                " box, due_at, last_seen_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (profile_id, lemma, display, gloss, source, syllabus_id, card.box,
+                 card.due_at.strftime(review.TIME_FORMAT), review.now().strftime(review.TIME_FORMAT)),
+            )
+            if not cur.rowcount:
+                return None
+            conn.execute(
+                "INSERT INTO vocab_events (vocab_item_id, session_id, utterance_id, kind, box_after)"
+                " VALUES (?, ?, ?, 'introduced', ?)",
+                (cur.lastrowid, session_id, utterance_id, card.box),
+            )
+            return cur.lastrowid
+
+    @staticmethod
+    def vocab_card(row: sqlite3.Row) -> Card:
+        return Card(box=row["box"], due_at=review.parse_time(row["due_at"]), times_used=row["times_used"],
+                    times_wrong=row["times_wrong"], times_heard=row["times_heard"])
+
+    def save_vocab_card(self, row: sqlite3.Row, card: Card, kind: str, session_id: int | None,
+                  utterance_id: int | None) -> None:
+        with transaction(self._conn) as conn:
+            conn.execute(
+                "UPDATE vocab_items SET box = ?, due_at = ?, times_used = ?, times_wrong = ?,"
+                " times_heard = ?, last_seen_at = ? WHERE id = ?",
+                (card.box, card.due_at.strftime(review.TIME_FORMAT), card.times_used, card.times_wrong,
+                 card.times_heard, review.now().strftime(review.TIME_FORMAT), row["id"]),
+            )
+            conn.execute(
+                "INSERT INTO vocab_events (vocab_item_id, session_id, utterance_id, kind, box_after)"
+                " VALUES (?, ?, ?, ?, ?)",
+                (row["id"], session_id, utterance_id, kind, card.box),
+            )
+
+    # -- syllabus coverage ----------------------------------------------------
+
+    def syllabus_coverage(self, profile_id: int) -> dict[str, sqlite3.Row]:
+        rows = self._conn.execute("SELECT * FROM syllabus_coverage WHERE profile_id = ?", (profile_id,))
+        return {r["item_id"]: r for r in rows}
+
+    def mark_syllabus_introduced(self, profile_id: int, item_id: str, session_id: int | None) -> None:
+        with transaction(self._conn) as conn:
+            conn.execute(
+                "INSERT OR IGNORE INTO syllabus_coverage (profile_id, item_id, state, last_session_id)"
+                " VALUES (?, ?, 'introduced', ?)",
+                (profile_id, item_id, session_id),
+            )
+
+    def set_syllabus_coverage(self, profile_id: int, item_id: str, state: str, sessions_correct: int,
+                     session_id: int | None, box: int, due_at: datetime | None) -> None:
+        with transaction(self._conn) as conn:
+            conn.execute(
+                "INSERT INTO syllabus_coverage (profile_id, item_id, state, sessions_correct,"
+                " last_session_id, box, due_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))"
+                " ON CONFLICT (profile_id, item_id) DO UPDATE SET state = excluded.state,"
+                " sessions_correct = excluded.sessions_correct, last_session_id = excluded.last_session_id,"
+                " box = excluded.box, due_at = excluded.due_at, updated_at = excluded.updated_at",
+                (profile_id, item_id, state, sessions_correct, session_id, box,
+                 due_at.strftime(review.TIME_FORMAT) if due_at else None),
+            )
+
+    # -- topics ---------------------------------------------------------------
+
+    def topics_told(self, profile_id: int) -> set[str]:
+        rows = self._conn.execute("SELECT topic_id FROM topics_told WHERE profile_id = ?", (profile_id,))
+        return {r["topic_id"] for r in rows}
+
+    def mark_topic_told(self, profile_id: int, topic_id: str, session_id: int | None) -> None:
+        with transaction(self._conn) as conn:
+            conn.execute(
+                "INSERT OR IGNORE INTO topics_told (profile_id, topic_id, session_id) VALUES (?, ?, ?)",
+                (profile_id, topic_id, session_id),
+            )

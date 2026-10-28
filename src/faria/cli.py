@@ -75,7 +75,7 @@ def main(argv: list[str] | None = None) -> int:
     settings = load_settings()
 
     conn = connect(settings.db_path)
-    applied = apply_migrations(conn)
+    applied = apply_migrations(conn, db_path=settings.db_path)
     if applied:
         print(f"[faria] applied migrations: {', '.join(applied)}")
 
