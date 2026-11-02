@@ -16,7 +16,7 @@ WHISPER_DIR = Path("data/whisper")
 
 pytestmark = pytest.mark.skipif(
     not (VOICE.exists() and WHISPER_DIR.exists()),
-    reason="speech models not downloaded (run `faria serve` once, or the download snippet in README)",
+    reason="speech models not downloaded (run `faria serve` once to download them)",
 )
 
 

@@ -2,7 +2,7 @@
 
 **Goal:** a voice-first language tutor and companion that converses at your level, corrects judiciously, and keeps a persistent learner model per language (see the workshop scenario below).
 
-**Now:** building toward a full course over an hour of conversation a day: the syllabus (es/fr/de, A1–B2), spaced review, topic cards and placement are in; speech got acknowledgements, level-aware patience and pace, barge-in and stressed recasts. Next: your own recordings as a speech test set, then daily use to tune it.
+**Now:** building toward a full course over an hour of conversation a day: the syllabus (es/fr/de, A1–B2), spaced review, topic cards and placement are in; speech got acknowledgements, level-aware patience and pace, barge-in and stressed recasts. Next: your own recordings as a speech test set, then daily use to tune it. The public README is drafted (milestone 9).
 
 Phases are cumulative; each has concrete exit criteria ("I can do X"). Pedagogy gets debugged
 in text (Phase 0–1) before audio complicates anything (Phase 2+).
@@ -261,7 +261,7 @@ embedding index over summaries/utterances, not a vector-DB service) when any of 
    full utterance history.
 3. Mini-lessons should be grounded in "what has this learner already been taught".
 
-## 9. Portfolio track · Later
+## 9. Portfolio track · In progress · public README drafted, release audit clean
 
 *Public once the tutor is fully functional: converses, switches languages, adapts to level, teaches culture, and could carry a course.*
 
@@ -270,7 +270,7 @@ recasts work, a two-level error taxonomy, a CEFR model with an evidence trail, a
 design decisions. What's missing for a public portfolio is an outsider's way in, evidence that
 the pedagogy works, and a demo people can watch.
 
-- Outsider-first README: a 30-second pitch, a demo video or GIF, "the linguistics" (recast default and why orthography is never corrected in speech, the error taxonomy, the CEFR evidence model), an architecture diagram, cost and latency from the run ledger; the developer quickstart moves lower
+- Outsider-first README: a 30-second pitch, a demo video or GIF, "the linguistics" (recast default and why orthography is never corrected in speech, the error taxonomy, the CEFR evidence model), an architecture diagram, cost and latency from the run ledger; the developer quickstart moves lower *(done Nov 2026, except the video: a placeholder comment marks where it goes; latency is July's measurement until re-measured)*
 - **Demo recording (priority):** a 2–3 minute screen recording of a voice session with a language pivot, a correction recap and the patterns view
 - Later: a text-mode Hugging Face Space where visitors bring their own API key (never a hosted key, which would bill you for strangers' sessions)
 - Error-detection evaluation: adjudicate a gold set in the annotation browser (Phase 2.5), then precision and recall per error category
@@ -279,7 +279,7 @@ the pedagogy works, and a demo people can watch.
 - Latency under the 2 s budget, or a clear account of the remaining gap (ADR-022: API STT or a GPU path)
 - GitHub Actions running the test suite (157 tests, fakes for the API; no key needed)
 - `DESIGN_NOTES.md`: a 2-page summary of the pedagogy decisions for teachers and linguists, linking the ADRs
-- Release checks: LICENSE: non-commercial (e.g. PolyForm Noncommercial), so others can read and run FARIA but not sell it; confirm test fixtures hold no real session transcripts; make the repo public. History is clean (no `.env` or `data/` ever committed); squashing the early "Phase X updates" commits is optional
+- Release checks *(Nov 2026: a fresh clone installs and passes the tests; no keys, personal details, real transcripts or `data/` in the files or history; LICENSE still to choose)*: LICENSE: non-commercial (e.g. PolyForm Noncommercial), so others can read and run FARIA but not sell it; confirm test fixtures hold no real session transcripts; make the repo public. History is clean (no `.env` or `data/` ever committed); squashing the early "Phase X updates" commits is optional
 
 **Done when:**
 - Someone who has never seen FARIA understands what it does and why in under two minutes, from the README and video alone.

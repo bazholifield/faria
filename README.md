@@ -1,163 +1,204 @@
-# Faria
+# FARIA
 
-A personal AI language tutor and conversation partner — JARVIS meets Abbé Faria. It converses
-with you in your target language at your level, corrects you judiciously, and maintains a
-persistent learner model per language: CEFR estimate, categorized error history, topics,
-preferences, and session summaries.
+**An AI language tutor you talk to out loud.** It holds a conversation with you in the language
+you're learning, at your level, corrects you the way a good teacher does (mostly without stopping
+the conversation), and remembers how you're doing from one session to the next.
 
-Backend-first design: all intelligence (Claude API, learner model, correction policy, STT/TTS
-orchestration) lives in the Python backend. Clients are thin — a CLI in Phase 0, a mobile web
-page later.
+<!-- DEMO VIDEO: a 2–3 minute screen recording of a voice session goes here (a language switch,
+a correction or two, and the summary at the end). Upload the .mp4 by dragging it into a GitHub
+issue or the README editor, and paste the link it gives you on its own line. -->
 
-See [ROADMAP.md](ROADMAP.md) for the phased plan and [DECISIONS.md](DECISIONS.md) for why
-things are the way they are.
+I teach English in Spain, and I've learned that what most learners need isn't another grammar
+exercise. They need someone patient to talk to who knows their level, notices their mistakes,
+and doesn't turn every mistake into a lesson. That's hard to find outside a classroom, so I
+started building it. The name comes from Abbé Faria, the prisoner in *The Count of Monte Cristo*
+who teaches Edmond Dantès languages, history and science from the cell next door.
 
-## Languages
+## What a session looks like
 
-Two tiers, because text and voice have different requirements. **Text mode** (`faria chat`)
-works for essentially any language Claude speaks — the learner model, error taxonomy, and
-CEFR estimation are all language-agnostic. **Voice mode** (`faria serve`) additionally needs
-a speech-to-text model (Whisper, broadly multilingual) and a text-to-speech voice (currently
-Piper, one configured voice per language).
+The picture I'm building toward: it's a weekend afternoon, I'm building furniture, and I turn
+FARIA on. It keeps me company in English, with tips for what I'm doing, stories, and questions
+(but never an interrogation). I say "switch to German" and it does, knowing my German level and
+staying on the topic. Later, unannounced, it switches to French to test me and I have to keep
+up. Eventually I ask for English back and some feedback on how I did.
 
-**Voice-ready now** (STT + a configured Piper voice): English, Spanish, French, German,
-Arabic. Basque is text-only for now — no Piper voice exists in the catalog yet (it will need
-an API voice or a community model).
+## What it does
 
-**Planned lineup** (text-capable today via `faria chat --language <code>`; voice support to
-follow as voices are added): English, Spanish, French, German, Chinese, Japanese, Korean,
-Italian, Portuguese, Hindi, Arabic, Swahili, Tagalog, Russian — and more over time.
+- **Talks with you** by voice in the browser, or by text in the terminal. Voice works today in
+  English, Spanish, French, German and Arabic; text works in any language Claude speaks.
+- **Takes instructions in conversation.** "Switch to German", "correct me less", "slower,
+  please" and "teach me about the Basque Country" are things you say, not settings you click,
+  and they're remembered.
+- **Corrects you by a policy you control**: how often, and in what style.
+- **Keeps a profile per language**: a level estimate, the mistakes you keep making, the words
+  you're reviewing, and what you've covered.
+- **Suggests what to learn next** from a syllabus (Spanish, French and German, A1 to B2: about 300
+  grammar points, everyday tasks and vocabulary themes) and tells short stories about the
+  culture and history, without turning the conversation into a lesson.
 
-**Dialects** are a longer-term goal: choosing, say, Rioplatense vs. Castilian Spanish, or
-Egyptian vs. Modern Standard Arabic, both in how the tutor speaks and how it assesses you.
-The learner model is already per-language and could extend to per-dialect; the gating factor
-is dialect-specific voices and STT.
+## The linguistics
 
-The dream end state for voice is a single voice that speaks every language consistently and
-correctly, switching seamlessly mid-sentence — see the note in DECISIONS ADR-026; today's
-per-language Piper voices are a stepping stone, not the destination.
+Most of the interesting decisions in FARIA are about language teaching, not code. Each one is
+written up in [DECISIONS.md](DECISIONS.md) with what I tried, what went wrong and why I chose what
+I did. The main ones:
 
-## Quickstart
+**Correcting without interrupting.** By default FARIA corrects with a *recast*: it repeats what
+you meant, correctly, as part of its reply, the way a teacher or parent does. If you say *"Yo voy
+a la playa ayer"*, it answers *"Ah, ¿fuiste a la playa ayer? ¿Qué tal?"* and the conversation keeps
+going. How often it corrects (never, minimal, balanced, a lot) and how (recast, recast plus a short
+note, or explicit) are two separate settings. Early on I noticed the model was good at *phrasing*
+a correction but inconsistent about *deciding* when to correct, so that decision lives in code
+(`domain/correction.py`): budgets per turn, which errors are serious enough to mention, and when
+a repeated mistake earns more attention. Each rule has its own test.
+
+**Making a recast noticeable.** The weakness of recasts is that learners often don't notice them:
+*"¿Fuiste a la playa?"* just sounds like a friendly question. Teachers handle this by leaning on
+the corrected word, so in voice sessions FARIA does too: a short pause, then the corrected word
+said a little slower (and shown in bold).
+
+**Spelling never counts in conversation.** FARIA is meant to be spoken, so spelling, accents and
+punctuation are never corrected, even when you type. The exception is an accent that changes the
+grammar: *"ayer hablo con ella"* (for *habló*) is a tense mistake that happens to show up as a
+missing accent, so it's treated as one.
+
+**Not correcting what the speech recognizer misheard.** In early voice sessions, the speech-to-text
+model would mishear me and FARIA would confidently "correct" something I never said. Now every
+word comes with the recognizer's confidence, and any error involving a word it wasn't sure about
+is logged but never corrected or counted against you. If something sounds absurd, FARIA asks what
+you meant instead of correcting it.
+
+**Mistakes that can be counted.** Errors are labeled with a fixed set of 6 categories and their
+subcategories, plus a 1–4 severity scale with a written description for each level (slip, minor,
+disruptive, breakdown). A fixed set matters: free-text labels like "wrong verb" and "verb error"
+can't be counted across sessions, the same reason human annotators work from a shared guideline.
+When the same specific mistake keeps coming back (say, adjective gender agreement), it becomes a
+*pattern*, and patterns that persist get more attention.
+
+**Level as evidence, not a single number.** Learners are rarely one level across the board (you
+might understand at B1 but speak at A2), so FARIA estimates a CEFR level for vocabulary range,
+grammatical accuracy, sentence complexity and comprehension separately. Every observation is
+kept, so the estimate can be recalculated if I change how it's computed.
+
+**A course that doesn't feel like one.** The syllabus is a list of ideas, never an agenda. Each
+session, FARIA gets a few suggestions: words due for review, one or two new points at your level,
+and a couple of stories it hasn't told you yet. It decides whether they fit the conversation, and
+you decide where the conversation goes. Review is spaced (a word you use correctly comes back after
+longer and longer gaps, from 1 to 30 days), but it happens in conversation, not with flashcards. A
+new language starts with a placement conversation that gets gradually harder, without ever
+announcing a test.
+
+**One variety, with the others as color.** For Spanish, FARIA speaks neutral Latin American Spanish
+by default, and teaches Spain's *vosotros* and Argentina's *vos* as variants to recognize and
+enjoy.
+
+**Speaking at the learner's pace.** Beginners need longer to finish a thought, so FARIA waits longer
+before deciding you're done (1.1 seconds of silence at A1, 0.6 at C2) and speaks a little slower to
+lower levels. It says a quick "Mm-hm" while it thinks, and you can interrupt it mid-sentence.
+
+## How it works
+
+```mermaid
+flowchart LR
+    mic["🎙️ Browser<br/>microphone"] --> vad["Detects when<br/>you stop talking"]
+    vad --> stt["Speech to text<br/>(Whisper, with a<br/>confidence per word)"]
+    stt --> tutor["Tutor<br/>(Claude)"]
+    tutor --> tts["Text to speech<br/>(Piper, the right voice<br/>for each language)"]
+    tts --> spk["🔊 Browser<br/>speakers"]
+
+    policy["Correction policy<br/>(rules in code)"] --> tutor
+    course["Course: review words,<br/>new points, stories"] --> tutor
+    tutor -- "errors it noticed,<br/>what it taught" --> profile[("Learner profile<br/>per language")]
+    profile --> policy
+    profile --> course
+    sweep["End-of-session review<br/>(level, patterns, coverage)"] --> profile
+```
+
+The browser only handles the microphone and speakers; everything else runs in a Python backend.
+Claude writes the replies, and alongside each reply it reports the errors it noticed and what it
+taught, through structured tool calls rather than free text, so they can be stored and counted.
+After each session, a second, cheaper model reads the whole transcript again to catch errors the
+live conversation missed and to update the level estimate. Speech recognition (Whisper) and the
+voices (Piper) run locally for free; there's an optional OpenAI path for both.
+
+## Where it stands
+
+FARIA works end to end, and I've used it for about 20 sessions in text and voice. The newest
+parts (the course layer, and the October changes to speech: acknowledgements, patience by level,
+interruptions, stressed recasts) are built and tested but haven't had much real use yet.
+
+- **Speed:** in July, on my CPU-only laptop, it took about 4.5 seconds from the end of my sentence
+  to the first word of the reply (2.0 s speech recognition, 1.9 s for Claude to start, 0.5 s for
+  the voice). The goal is under 2 seconds. Since then I've added prompt caching, transcription
+  that starts before you finish, and an instant acknowledgement, and I haven't re-measured yet.
+- **Cost:** around half a cent to a cent per exchange with Claude, depending on prompt caching.
+  Local speech is free.
+- **Not yet measured:** how accurate the error detection is, and whether the level estimate tracks
+  a real level. Both are next on the [roadmap](ROADMAP.md), starting with a hand-labeled set of my
+  own sessions.
+
+## Try it
+
+You need Python 3.11+ and an [Anthropic API key](https://console.anthropic.com/).
 
 ```bash
+git clone https://github.com/bazholifield/faria.git && cd faria
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env          # then put your ANTHROPIC_API_KEY in .env
 
-faria chat                    # text companion mode (English home base; ask to switch)
-faria chat --language es      # text focused practice; /end for summary, /quit to abort
-faria serve                   # voice: open http://localhost:8765 in a browser w/ mic
-faria dev                     # developer console: http://localhost:8766 (run ledger)
-faria patterns --language es  # your recurring error patterns, with examples
-faria say --voice en_US-norman-medium --text "..."   # audition a TTS voice -> data/say/
-pytest                        # run the test suite
+faria chat --language es      # text practice in Spanish; /end for a summary, /quit to stop
+faria chat                    # text, with English as home base (ask it to switch)
+faria serve                   # voice: open http://localhost:8765 in a browser with a mic
+faria patterns --language es  # the mistakes you keep making, with examples
 ```
 
-## Tuning it
+The first `faria serve` downloads the speech models (about 500 MB for Whisper and 60 MB per voice)
+into `data/`. Optional: `pip install simplemma` lets spaced review recognize a word in any of its
+forms (*hablo*, *hablaste*, *habló* → *hablar*).
 
-`faria dev` is a separate, localhost-only console for working *on* the tutor rather than
-talking to it (ADR-027) — deliberately not part of `faria serve`, which is the learner
-surface and the one Phase 3 exposes to a phone. Two panels so far:
+## Working on it
 
-- **Run ledger** (`/`) — every session with the config and the exact system prompt that
-  produced it, plus per-turn latency and API spend (ADR-028). Click a run for its
-  transcript, token costs, which knobs have drifted since, and the prompt text verbatim.
-- **Prompt lab** (`/prompts`) — the assembled prompt for any language, broken into labeled
-  sections, rendered from real profile data with no API call. Change persona, correction
-  frequency/style, pivots, or audio mode and watch the prompt change; edit persona text on
-  the left and it reloads in place. Read-only against the learner model: previewing a
-  language you've never studied doesn't create its profile.
+`faria dev` opens a separate developer console at http://localhost:8766 (localhost only):
 
-Experiments belong in a scratch database so a hundred throwaway turns can't move your real
-CEFR estimate:
+- **Run ledger:** every session with the exact settings and system prompt that produced it, plus
+  per-turn speed and API cost.
+- **Prompt lab:** the assembled prompt for any language, built from real profile data without an
+  API call. Change the persona, correction settings or audio mode and watch the prompt change.
+
+Experiments go in a scratch database, so throwaway sessions can't move your real level estimate:
 
 ```bash
-FARIA_DATA_DIR=data/dev faria chat --language es   # writes to data/dev/faria.db
-faria dev --db data/dev/faria.db                   # ledger over the experiments
+FARIA_DATA_DIR=data/dev faria chat --language es
+faria dev --db data/dev/faria.db
 ```
 
-Persona text lives in `src/faria/tutor/prompt_text/personas/*.md`, not in Python — edit a
-file, start a session, and the ledger records which persona version produced it. Adding a
-persona is dropping in a file; its stem is the name used in the profile's `persona`
-preference.
+Other things worth knowing:
 
-Six US-male voice auditions are pre-generated in `data/say/` — listen (from Windows:
-`\\wsl$\...\faria\data\say`), pick, and set `[audio.piper_voices].en` in config.
-
-First `faria serve` run downloads the speech models (~500 MB whisper + ~60 MB per Piper
-voice) into `data/`. On WSL2, browse from Windows — the browser owns the microphone and
-speakers; the backend never touches audio hardware (ADR-021).
-
-## Repository structure
+- Settings live in `config/default.toml` (models, correction, speech, course), secrets in `.env`.
+- The tutor's personality is a Markdown file (`src/faria/tutor/prompt_text/personas/mentor.md`);
+  adding a persona is adding a file.
+- The syllabus is plain YAML (`curriculum/es.yaml`, `fr.yaml`, `de.yaml`) and is re-read when it
+  changes.
+- `faria say --voice en_US-norman-medium --text "..."` saves a voice sample to `data/say/` so you
+  can audition voices.
+- `pytest` runs the test suite. It uses fakes for the API, so it needs no key.
 
 ```
-faria/
-├── pyproject.toml              # Packaging (src-layout, hatchling), deps, `faria` entry point
-├── README.md                   # This file
-├── ROADMAP.md                  # Phased plan with exit criteria
-├── DECISIONS.md                # ADR-style records of technical/domain decisions
-├── .env.example                # Template for secrets (.env is gitignored)
-├── config/
-│   └── default.toml            # Tunables: models, correction/pattern budgets, pivots, audio
-├── data/                       # Runtime data — SQLite DB (gitignored, created on first run)
-├── src/faria/
-│   ├── __init__.py             # Package marker + version
-│   ├── cli.py                  # `faria chat`, `faria serve`, `faria dev`, `faria patterns`, ...
-│   ├── config.py               # Settings: code defaults <- TOML overrides <- env vars
-│   ├── db/
-│   │   ├── connection.py       # SQLite connection factory (WAL, foreign keys, Row factory)
-│   │   ├── migrate.py          # Forward-only migration runner over db/migrations/*.sql
-│   │   ├── migrations/         # 0001 schema, 0002 correction style, 0003 model_action,
-│   │   │                       # 0004 learner-scoped sessions + per-utterance language,
-│   │   │                       # 0005 run metadata (config/prompt/cost per session)
-│   │   └── repository.py       # Typed data access — the only module that writes SQL
-│   ├── domain/                 # Pedagogy lives here; no I/O, no LLM calls
-│   │   ├── models.py           # Dataclasses mirroring DB rows + SessionContext aggregate
-│   │   ├── taxonomy.py         # Error taxonomy (2-level), anchored severity scale
-│   │   ├── levels.py           # CEFR bands + estimation update rules, wired into session end
-│   │   └── correction.py       # Correction policy engine, wired into the live sidecar
-│   ├── tutor/                  # Everything that talks to the Claude API
-│   │   ├── brain.py            # Streaming client wrapper around the Messages API
-│   │   ├── prompts.py          # System-prompt assembly: persona, home base, pivots
-│   │   ├── prompt_text/        # Persona blocks as editable .md files (ADR-016/028)
-│   │   ├── pricing.py          # Per-model token prices -> cost estimates for the ledger
-│   │   ├── schema.py           # Tool schema + parser for the error-annotation sidecar
-│   │   ├── control.py          # Tool schema + parser for session control (switch/correct/pivot)
-│   │   ├── summarizer.py       # End-of-session narrative summary (messages.parse)
-│   │   └── sweep.py            # End-of-session error sweep + CEFR evidence, per target language
-│   ├── session/
-│   │   └── lifecycle.py        # SessionRunner: multi-language contexts, turns, sweep, end
-│   ├── speech/                 # The audio pipeline (Phase 2)
-│   │   ├── stt.py              # Transcriber ABC + per-language override registry
-│   │   ├── whisper_stt.py      # faster-whisper implementation (word confidences)
-│   │   ├── tts.py              # Synthesizer ABC
-│   │   ├── piper_tts.py        # Piper implementation (local, free; auto-downloads voices)
-│   │   ├── openai_tts.py       # API TTS option (opt-in; needs OPENAI_API_KEY)
-│   │   ├── vad.py              # Utterance segmentation over the mic stream (webrtcvad)
-│   │   ├── sentences.py        # Streams Claude deltas into per-sentence TTS handoffs
-│   │   └── lang_router.py      # Mid-sentence language ID (lingua) -> right voice per run (ADR-026)
-│   └── server/                 # FastAPI servers
-│       ├── app.py              # Learner app factory with injectable deps (tests use fakes)
-│       ├── ws.py               # The realtime loop: PCM in -> VAD -> STT -> tutor -> TTS out
-│       ├── rest.py             # Read-only views: /api/profiles, /api/patterns/{lang}
-│       ├── dev.py              # Developer console, separate + localhost-only (ADR-027)
-│       └── web/                # index.html + worklet.js (learner client);
-│                               # dev.html (ledger), prompts.html (prompt lab), dev.css
-└── tests/
-    ├── conftest.py             # tmp-DB fixture
-    ├── test_config.py          # Defaults + TOML override behavior
-    ├── test_migrations.py      # Migrations apply cleanly, idempotently, and upgrade in place
-    ├── test_repository.py      # Row round-trips, pattern lifecycle, language-scoped summaries
-    ├── test_taxonomy.py        # Category/subcategory consistency, prompt rendering
-    ├── test_correction.py      # Correction policy rules, one test per rule
-    ├── test_levels.py          # Level-estimator properties (inertia, decay, aggregation)
-    ├── test_schema.py          # Annotation-sidecar parsing
-    ├── test_control.py         # Session-control-tool parsing
-    ├── test_run_metadata.py    # Config snapshots, prompt trail, token/cost capture
-    └── test_dev_server.py      # Console endpoints over a real DB
+src/faria/
+├── domain/      the teaching logic: correction policy, error categories, level estimates (no API calls)
+├── tutor/       everything that talks to Claude: prompts, the tools it reports through, summaries
+├── course/      syllabus, spaced review (Leitner boxes), word matching by lemma
+├── session/     one conversation from start to end-of-session review
+├── speech/      voice detection, speech to text, text to speech, language routing, pacing
+├── server/      the voice app (WebSocket) and the developer console
+└── db/          SQLite and migrations; repository.py is the only module that writes SQL
+curriculum/      the syllabus and topic cards, one YAML file per language
+config/          default settings
+tests/           pytest suite
 ```
 
-The pedagogy modules (`correction.py`, `levels.py`, `prompts.py`) carry working
-implementations written to the specs in their docstrings — the modules most worth arguing
-with and reshaping against real sessions. Their behavior is pinned by tests
-(`test_correction.py`, `test_levels.py`) — when you change a rule, change its test.
+## Design decisions
+
+[DECISIONS.md](DECISIONS.md) has 34 short records of the decisions behind FARIA, including the
+ones that came from things going wrong in real sessions. [ROADMAP.md](ROADMAP.md) has what's done
+and what's next.

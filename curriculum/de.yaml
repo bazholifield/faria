@@ -10,7 +10,7 @@ items:
     notes: "der/die/das learned with every noun; a few reliable endings (-ung, -heit, -keit → die; -chen → das). Plurals come in several patterns."
     example: "Der Tisch, die Lampe und das Bett sind neu."
     english: "The table, the lamp and the bed are new."
-    status: draft
+    status: checked
   - id: de.a1.present-regular
     level: A1
     strand: grammar
@@ -18,7 +18,7 @@ items:
     notes: "Regular endings; sein and haben fully irregular. German present also covers English 'I'm doing' and near future."
     example: "Ich wohne in Chicago und arbeite an einer Schule."
     english: "I live in Chicago and work at a school."
-    status: draft
+    status: checked
   - id: de.a1.stem-change
     level: A1
     strand: grammar
@@ -26,7 +26,7 @@ items:
     notes: "Changes only in du and er/sie/es: fahren → fährt, sprechen → spricht, lesen → liest."
     example: "Er fährt jeden Tag mit dem Rad und spricht drei Sprachen."
     english: "He cycles every day and speaks three languages."
-    status: draft
+    status: checked
   - id: de.a1.v2-word-order
     level: A1
     strand: grammar
@@ -34,7 +34,7 @@ items:
     notes: "The verb is always the second element; anything can go first, the subject then follows the verb (Heute gehe ich…). English speakers put the subject second."
     example: "Heute gehe ich ins Kino. Kommst du mit?"
     english: "Today I'm going to the cinema. Are you coming?"
-    status: draft
+    status: checked
   - id: de.a1.accusative
     level: A1
     strand: grammar
@@ -42,7 +42,7 @@ items:
     notes: "Only masculine changes (der → den, ein → einen); accusative pronouns (mich, dich, ihn)."
     example: "Ich habe einen Bruder. Kennst du ihn?"
     english: "I have a brother. Do you know him?"
-    status: draft
+    status: checked
   - id: de.a1.nicht-kein
     level: A1
     strand: grammar
@@ -50,7 +50,7 @@ items:
     notes: "kein negates nouns with ein or no article; nicht negates everything else."
     example: "Ich habe keine Zeit und ich bin nicht müde."
     english: "I don't have time and I'm not tired."
-    status: draft
+    status: checked
   - id: de.a1.modal-verbs
     level: A1
     strand: grammar
@@ -58,7 +58,7 @@ items:
     notes: "können, müssen, wollen, möchten, dürfen, sollen; the infinitive goes to the end."
     example: "Ich möchte einen Kaffee, aber ich muss gleich gehen."
     english: "I'd like a coffee, but I have to go soon."
-    status: draft
+    status: checked
   - id: de.a1.separable-verbs
     level: A1
     strand: grammar
@@ -66,7 +66,7 @@ items:
     notes: "The prefix goes to the end of the clause: aufstehen → ich stehe um sieben auf."
     example: "Ich stehe um sieben Uhr auf und rufe meine Mutter an."
     english: "I get up at seven and call my mother."
-    status: draft
+    status: checked
   - id: de.a1.possessives
     level: A1
     strand: grammar
@@ -74,7 +74,7 @@ items:
     notes: "mein, dein, sein, ihr, unser, euer, Ihr; endings like ein. sein = his, ihr = her/their."
     example: "Das ist meine Schwester und ihr Freund."
     english: "That's my sister and her boyfriend."
-    status: draft
+    status: checked
   - id: de.a1.questions
     level: A1
     strand: grammar
@@ -82,7 +82,7 @@ items:
     notes: "wer, was, wo, woher, wohin, wann, wie; doch to contradict a negative question."
     example: "Kommst du nicht? — Doch, ich komme!"
     english: "Aren't you coming? — Yes, I am!"
-    status: draft
+    status: checked
   - id: de.a1.es-gibt
     level: A1
     strand: grammar
@@ -90,7 +90,7 @@ items:
     notes: "Existence takes the accusative: es gibt einen Park."
     example: "In meiner Straße gibt es einen Bäcker und einen Park."
     english: "There's a bakery and a park on my street."
-    status: draft
+    status: checked
   - id: de.a1.imperative
     level: A1
     strand: grammar
@@ -98,7 +98,7 @@ items:
     notes: "du (komm!), ihr (kommt!), Sie (kommen Sie!); bitte and mal soften it."
     example: "Komm doch mal vorbei! Setzen Sie sich bitte."
     english: "Do come by! Please sit down."
-    status: draft
+    status: checked
   - id: de.a1.introduce-yourself
     level: A1
     strand: function
@@ -106,7 +106,7 @@ items:
     notes: "Name, origin, where you live, job; du vs Sie at first contact."
     example: "Ich heiße Ana, ich komme aus den USA und wohne in Chicago."
     english: "My name is Ana, I'm from the US and I live in Chicago."
-    status: draft
+    status: checked
   - id: de.a1.personal-information
     level: A1
     strand: function
@@ -114,7 +114,7 @@ items:
     notes: "Age, family, contact details; asking someone to repeat (Wie bitte?, Noch einmal, bitte)."
     example: "Wie bitte? Können Sie das noch einmal sagen?"
     english: "Sorry? Could you say that again?"
-    status: draft
+    status: checked
   - id: de.a1.order-food
     level: A1
     strand: function
@@ -122,7 +122,7 @@ items:
     notes: "Ich hätte gern…, Ich nehme…, Zahlen, bitte; zusammen oder getrennt?"
     example: "Ich hätte gern ein Wasser und eine Brezel. — Zusammen oder getrennt?"
     english: "I'd like a water and a pretzel. — Together or separately?"
-    status: draft
+    status: checked
   - id: de.a1.shopping-prices
     level: A1
     strand: function
@@ -130,7 +130,7 @@ items:
     notes: "Was kostet…? / Wie viel kosten…?; numbers with units first (einundzwanzig)."
     example: "Was kosten die Äpfel? — Zwei Euro das Kilo."
     english: "How much are the apples? — Two euros a kilo."
-    status: draft
+    status: checked
   - id: de.a1.time-and-days
     level: A1
     strand: function
@@ -138,7 +138,7 @@ items:
     notes: "Wie spät ist es?, um acht Uhr, halb neun (= 8:30, a classic trap), montags."
     example: "Montags fange ich um halb neun an."
     english: "On Mondays I start at half past eight."
-    status: draft
+    status: checked
   - id: de.a1.likes-dislikes
     level: A1
     strand: function
@@ -146,43 +146,43 @@ items:
     notes: "gern + verb (ich koche gern), mögen + noun, lieber/am liebsten."
     example: "Ich koche gern, aber ich esse lieber im Restaurant."
     english: "I like cooking, but I prefer eating out."
-    status: draft
+    status: checked
   - id: de.a1.v-family
     level: A1
     strand: vocab
     title: "Family"
     words: [die Familie, die Mutter, der Vater, der Bruder, die Schwester, der Sohn, die Tochter, die Großeltern, der Cousin, der Partner]
-    status: draft
+    status: checked
   - id: de.a1.v-food
     level: A1
     strand: vocab
     title: "Food and drink"
     words: [das Brot, das Wasser, die Milch, der Käse, das Obst, das Fleisch, der Fisch, das Gemüse, das Frühstück, das Abendessen]
-    status: draft
+    status: checked
   - id: de.a1.v-home
     level: A1
     strand: vocab
     title: "Home"
     words: [das Haus, die Wohnung, die Küche, das Schlafzimmer, das Bad, der Tisch, der Stuhl, das Bett, das Fenster, die Tür]
-    status: draft
+    status: checked
   - id: de.a1.v-city
     level: A1
     strand: vocab
     title: "Places in town"
     words: [die Straße, der Laden, die Bäckerei, die Bank, der Bahnhof, der Park, das Museum, die Apotheke, in der Nähe, weit weg]
-    status: draft
+    status: checked
   - id: de.a1.v-daily-routine
     level: A1
     strand: vocab
     title: "Daily routine"
     words: [aufwachen, aufstehen, duschen, frühstücken, arbeiten, zu Mittag essen, sich ausruhen, nach Hause kommen, zu Abend essen, ins Bett gehen]
-    status: draft
+    status: checked
   - id: de.a1.v-clothes-colours
     level: A1
     strand: vocab
     title: "Clothes and colours"
     words: [das Hemd, die Hose, die Schuhe, der Mantel, das Kleid, rot, blau, grün, schwarz, weiß]
-    status: draft
+    status: checked
   - id: de.a1.topic-du-sie
     level: A1
     strand: topic
@@ -193,7 +193,7 @@ items:
       - "Switching to du is usually offered by the older or more senior person: 'Wollen wir uns duzen?'"
       - "Among students and young people du is normal from the start."
     words: [duzen, siezen, das Du anbieten]
-    status: draft
+    status: checked
   # ---------------------------------------------------------------- A2
   - id: de.a2.perfekt-haben
     level: A2
