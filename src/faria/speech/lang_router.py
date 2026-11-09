@@ -19,6 +19,9 @@ Safety bias (unchanged goal): a false switch (base text in the wrong voice) is
 a real glitch; a missed foreign phrase (read in the base voice) is just the
 status quo. So a detected foreign segment shorter than MIN_FOREIGN_CHARS of
 actual letters reverts to the base language, and any doubt falls back to base.
+lingua's segmenter also mislabels ordinary base-language runs ("me contaste" as
+English, "es grande" as French: 5% of real Spanish sentences), so a segment must
+also be far likelier in its detected language than in the base one (_clearly_foreign).
 Trade-off accepted (ADR-024): Piper voices are different speakers per language,
 so the speaker changes mid-sentence; a single code-switching cloned voice is
 the Phase 4 answer.
@@ -28,6 +31,12 @@ from __future__ import annotations
 
 MIN_CHARS = 12          # whole strings shorter than this: skip detection
 MIN_FOREIGN_CHARS = 5   # a foreign run needs at least this many letters to switch
+# How likely a run may be in the base language, as a share of its detected language, and still
+# switch voice. Tuned on 809 real sentences + 11 real code-switches: "bonjour mon ami" scores 0.14,
+# the false "Me registré" 0.13, so runs under SHORT_RUN_WORDS words need the stricter bar.
+MAX_BASE_SHARE = 0.15
+MAX_BASE_SHARE_SHORT = 0.05
+SHORT_RUN_WORDS = 3
 
 # Our language codes -> lingua Language enum names. Only codes lingua supports
 # and we might voice; unknowns are simply not routed.
@@ -87,14 +96,23 @@ class SentenceLanguageRouter:
                 runs.append((sentence[cursor:res.start_index], default))
             seg = sentence[res.start_index:res.end_index]
             lang = self._to_code.get(res.language, default)
-            if lang != default and _alpha_len(seg) < MIN_FOREIGN_CHARS:
-                lang = default  # too little foreign text to justify a voice switch
+            if lang != default and (_alpha_len(seg) < MIN_FOREIGN_CHARS
+                                    or not self._clearly_foreign(seg, res.language, default)):
+                lang = default  # too little evidence to justify a voice switch
             runs.append((seg, lang))
             cursor = res.end_index
         if cursor < len(sentence):
             runs.append((sentence[cursor:], default))
 
         return self._coalesce(runs)
+
+    def _clearly_foreign(self, segment: str, detected, default: str) -> bool:
+        base = next((lang for lang, code in self._to_code.items() if code == default), None)
+        if base is None:
+            return True
+        limit = MAX_BASE_SHARE_SHORT if len(segment.split()) < SHORT_RUN_WORDS else MAX_BASE_SHARE
+        d = self._detector
+        return d.compute_language_confidence(segment, base) <= limit * d.compute_language_confidence(segment, detected)
 
     @staticmethod
     def _coalesce(runs: list[tuple[str, str]]) -> list[tuple[str, str]]:

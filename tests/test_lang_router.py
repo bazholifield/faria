@@ -28,6 +28,21 @@ def test_no_false_switch_in_monolingual_base():
         assert all(lang == base for _, lang in runs), f"false switch in {text!r}: {runs}"
 
 
+def test_no_false_switch_on_runs_lingua_mislabels():
+    # Heard live: "me contaste" in the English voice. The rest came from measuring real sentences.
+    r = router()
+    for text, base in [
+        ("La última vez me contaste que tuviste un buen día con ellos.", "es"),
+        ("La casa es grande y los libros son nuevos.", "es"),
+        ("Tengo un coche rojo y dos gatas blancas.", "es"),
+        ("Me registré en el hotel esta mañana con mi hermana.", "es"),
+        ("Je bois du café, mais je ne mange pas de pain.", "fr"),
+    ]:
+        runs = r.split_runs(text, base)
+        assert reconstructs(runs, text), runs
+        assert all(lang == base for _, lang in runs), f"false switch in {text!r}: {runs}"
+
+
 # -- switching on genuine multi-word foreign phrases --------------------------
 
 def test_switches_on_multiword_foreign_phrase():
@@ -35,6 +50,8 @@ def test_switches_on_multiword_foreign_phrase():
     for text, base, want in [
         ("You could say bonjour mon ami to greet your friend.", "en", "fr"),
         ("In Spanish we say la sobremesa es sagrada, you know.", "en", "es"),
+        ("En inglés dirías good morning my friend, que suena más natural.", "es", "en"),
+        ("Se dice «good morning» por la mañana.", "es", "en"),
     ]:
         runs = r.split_runs(text, base)
         assert reconstructs(runs, text)

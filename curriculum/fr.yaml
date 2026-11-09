@@ -10,6 +10,7 @@ items:
     notes: "le/la/l'/les, un/une/des. In speech the plural is mostly heard on the article (le livre / les livres), so the article carries number."
     example: "J'ai une sœur et des cousins à Lyon."
     english: "I have a sister and some cousins in Lyon."
+    tidbit: "In 1647 the grammarian Vaugelas ruled that the masculine must win in agreement because it is \"the more noble\" gender. French schoolchildren still learn \"le masculin l'emporte\"."
     status: draft
   - id: fr.a1.adjective-agreement
     level: A1
@@ -18,6 +19,7 @@ items:
     notes: "Most adjectives follow the noun; beauty, age, goodness and size ones come first (une petite maison). Feminine often adds a pronounced consonant (petit/petite)."
     example: "Une petite maison bleue au bord de la mer."
     english: "A little blue house by the sea."
+    tidbit: "The French tricolour's blue and red are traditionally the colours of Paris, wrapped around the white of the monarchy: a flag that began as a compromise between the king and the city."
     status: draft
   - id: fr.a1.present-er
     level: A1
@@ -26,6 +28,7 @@ items:
     notes: "parle, parles, parle, parlent all sound the same, so the pronoun is never dropped. Good for listening practice."
     example: "J'habite à Chicago et je travaille dans une école."
     english: "I live in Chicago and I work in a school."
+    tidbit: "The oldest surviving text in anything like French is the Oaths of Strasbourg of 842, sworn between two grandsons of Charlemagne so that each other's armies could understand them."
     status: draft
   - id: fr.a1.key-verbs
     level: A1
@@ -34,6 +37,7 @@ items:
     notes: "The four irregulars everything else is built on (passé composé, futur proche)."
     example: "Je suis fatigué, j'ai faim et je vais au restaurant."
     english: "I'm tired, I'm hungry and I'm going to the restaurant."
+    tidbit: "\"Je pense, donc je suis\" appeared in 1637 in French, not Latin. Descartes chose the everyday language so that people with no schooling in the classics could follow him."
     status: draft
   - id: fr.a1.avoir-expressions
     level: A1
@@ -42,6 +46,7 @@ items:
     notes: "Age, hunger, thirst, cold, fear use avoir where English uses be. *Je suis 20 ans is the classic error."
     example: "J'ai vingt ans et j'ai froid."
     english: "I'm twenty and I'm cold."
+    tidbit: "Avoir le cafard, \"to have the cockroach\", means to feel down. Baudelaire was among the first to use cafard for that gloom."
     status: draft
   - id: fr.a1.negation
     level: A1
@@ -50,6 +55,7 @@ items:
     notes: "Spoken French usually drops ne (je sais pas); the learner should recognise both and know which is formal."
     example: "Je ne parle pas allemand. (Je parle pas allemand.)"
     english: "I don't speak German."
+    tidbit: "The pas in ne…pas literally means \"a step\": \"I don't walk a step.\" Other emphatic words once did the same job, point, mie (\"crumb\") and goutte (\"drop\"), and pas simply won."
     status: draft
   - id: fr.a1.partitive
     level: A1
@@ -58,6 +64,7 @@ items:
     notes: "Unspecified amounts need an article where English has none (I drink coffee → je bois du café); de after negation."
     example: "Je bois du café, mais je ne mange pas de pain."
     english: "I drink coffee, but I don't eat bread."
+    tidbit: "\"Qu'ils mangent de la brioche\" was never shown to be Marie Antoinette's. Rousseau attributed it to \"a great princess\" in his Confessions, when she was still a child in Austria."
     status: draft
   - id: fr.a1.contractions
     level: A1
@@ -66,6 +73,7 @@ items:
     notes: "à + le = au, de + le = du; also aller au / à la / à l'."
     example: "Je vais au marché et je reviens du travail."
     english: "I'm going to the market and I'm coming back from work."
+    tidbit: "\"Aux armes, citoyens!\" The Marseillaise was written in Strasbourg in 1792 by an army officer, Rouget de Lisle. It's named for the volunteers from Marseille who sang it as they marched on Paris."
     status: draft
   - id: fr.a1.questions
     level: A1
@@ -74,6 +82,7 @@ items:
     notes: "Three registers: intonation (tu viens ?), est-ce que, inversion (viens-tu ?). Speech mostly uses the first two."
     example: "Tu habites où ? Est-ce que tu as des frères ?"
     english: "Where do you live? Do you have any brothers?"
+    tidbit: "Montaigne's motto was a question, \"Que sais-je?\", what do I know? He spent years shut in a tower writing the Essais, more or less inventing the essay as a form."
     status: draft
   - id: fr.a1.cest-il-est
     level: A1
@@ -82,6 +91,7 @@ items:
     notes: "c'est + determiner + noun (c'est un médecin), il est + bare profession or adjective (il est médecin)."
     example: "Il y a un café ici. C'est un bon café; il est très calme."
     english: "There's a café here. It's a good café; it's very quiet."
+    tidbit: "\"L'État, c'est moi\" is the most famous sentence Louis XIV almost certainly never said."
     status: draft
   - id: fr.a1.possessives
     level: A1
@@ -90,6 +100,7 @@ items:
     notes: "Agree with the thing owned, not the owner: sa mère can be his mother. mon before a vowel (mon amie)."
     example: "Mon amie et sa mère viennent ce soir."
     english: "My friend and her mother are coming tonight."
+    tidbit: "Madame is ma dame, \"my lady\"; Monsieur is mon sieur, \"my lord\"; Mademoiselle is ma demoiselle. Every polite address in French started out as a possessive."
     status: draft
   - id: fr.a1.futur-proche
     level: A1
@@ -98,6 +109,7 @@ items:
     notes: "The everyday future in speech."
     example: "Ce soir, je vais regarder un film."
     english: "Tonight I'm going to watch a film."
+    tidbit: "In 1865 Jules Verne imagined a launch from Florida to the Moon, with a crew of three. A century later Apollo did just that."
     status: draft
   - id: fr.a1.liaison-elision
     level: A1
@@ -106,6 +118,7 @@ items:
     notes: "les‿amis, vous‿avez; je → j', le → l'. Matters for listening and for sounding natural, not for spelling."
     example: "Vous avez des enfants ? J'en ai deux."
     english: "Do you have children? I have two."
+    tidbit: "Some silent letters in French are mistakes. Renaissance scholars added a d to poids, \"weight\", believing it came from Latin pondus. It actually comes from pensum."
     status: draft
   - id: fr.a1.introduce-yourself
     level: A1
@@ -114,6 +127,7 @@ items:
     notes: "Name, origin, where you live, job; bonjour/salut, tu/vous at first contact."
     example: "Je m'appelle Ana, je suis américaine et j'habite à Chicago."
     english: "My name is Ana, I'm American and I live in Chicago."
+    tidbit: "French literature's great names are often stage names: Molière was born Jean-Baptiste Poquelin, and Voltaire was born François-Marie Arouet."
     status: draft
   - id: fr.a1.personal-information
     level: A1
@@ -122,6 +136,7 @@ items:
     notes: "Age, family, contact details; asking someone to repeat (pardon ?, vous pouvez répéter ?)."
     example: "Vous pouvez répéter, s'il vous plaît ?"
     english: "Could you repeat that, please?"
+    tidbit: "In 1539 the Ordinance of Villers-Cotterêts told parish priests to keep baptism records and made French the language of the law in place of Latin. Bureaucracy helped make the modern language."
     status: draft
   - id: fr.a1.order-food
     level: A1
@@ -130,6 +145,7 @@ items:
     notes: "Je voudrais…, je vais prendre…, l'addition s'il vous plaît."
     example: "Je vais prendre un croissant et un café crème."
     english: "I'll have a croissant and a coffee with milk."
+    tidbit: "A restaurant was originally a restorative broth. Paris shops selling it in the 1760s took the name, and the trade boomed after the Revolution left many noble households' cooks without employers."
     status: draft
   - id: fr.a1.shopping-prices
     level: A1
@@ -138,6 +154,7 @@ items:
     notes: "Ça coûte combien ? / C'est combien ?; numbers including soixante-dix and quatre-vingts."
     example: "C'est combien, les pommes ? — Deux euros le kilo."
     english: "How much are the apples? — Two euros a kilo."
+    tidbit: "The metre was invented during the French Revolution as one ten-millionth of the distance from pole to equator. Two astronomers spent years surveying France through a war to measure it."
     status: draft
   - id: fr.a1.time-and-days
     level: A1
@@ -146,6 +163,7 @@ items:
     notes: "Quelle heure est-il ?, à huit heures, le lundi (every Monday) vs lundi (this Monday)."
     example: "Le lundi, je commence à huit heures."
     english: "On Mondays I start at eight."
+    tidbit: "The Revolution replaced the calendar with ten-day weeks and months like Thermidor (\"heat\") and Brumaire (\"mist\"), and even tried decimal clocks. Napoleon abolished it at the end of 1805."
     status: draft
   - id: fr.a1.likes-dislikes
     level: A1
@@ -154,41 +172,48 @@ items:
     notes: "aimer, adorer, détester + definite article (j'aime le café); moi aussi / moi non plus."
     example: "Je n'aime pas le foot. — Moi non plus."
     english: "I don't like football. — Me neither."
+    tidbit: "Blaise Pascal, mathematician and believer, wrote the sentence French lovers quote most: \"Le cœur a ses raisons que la raison ne connaît point.\""
     status: draft
   - id: fr.a1.v-family
     level: A1
     strand: vocab
     title: "Family"
+    tidbit: "Émile Zola spent over twenty years on the Rougon-Macquart, twenty novels following one family's generations through the Second Empire, as if studying heredity like a scientist."
     words: [la famille, la mère, le père, le frère, la sœur, le fils, la fille, les grands-parents, le cousin, le copain]
     status: draft
   - id: fr.a1.v-food
     level: A1
     strand: vocab
     title: "Food and drink"
+    tidbit: "The most famous pastry in literature is Proust's madeleine, dipped in lime-blossom tea: one taste, and his whole childhood rises up and carries him through thousands of pages."
     words: [le pain, l'eau, le lait, le fromage, les fruits, la viande, le poisson, les légumes, le petit-déjeuner, le dîner]
     status: draft
   - id: fr.a1.v-home
     level: A1
     strand: vocab
     title: "Home"
+    tidbit: "Louis XIV moved his court to Versailles in 1682, partly to keep the nobility where he could watch them. A courtier's home could be a tiny room in the palace."
     words: [la maison, l'appartement, la cuisine, la chambre, la salle de bains, la table, la chaise, le lit, la fenêtre, la porte]
     status: draft
   - id: fr.a1.v-city
     level: A1
     strand: vocab
     title: "Places in town"
+    tidbit: "Much of the Paris tourists love is Baron Haussmann's work: under Napoleon III, from 1853, he tore down medieval neighbourhoods to cut wide boulevards through the city."
     words: [la rue, le magasin, la boulangerie, la banque, la gare, le parc, le musée, la pharmacie, près de, loin de]
     status: draft
   - id: fr.a1.v-daily-routine
     level: A1
     strand: vocab
     title: "Daily routine"
+    tidbit: "Louis XIV's getting up and going to bed were public ceremonies, the lever and the coucher, and nobles competed for the honour of handing him his shirt."
     words: [se réveiller, se lever, se doucher, prendre le petit-déjeuner, travailler, déjeuner, se reposer, rentrer, dîner, se coucher]
     status: draft
   - id: fr.a1.v-clothes-colours
     level: A1
     strand: vocab
     title: "Clothes and colours"
+    tidbit: "In 1926 American Vogue compared Coco Chanel's simple black dress to the Ford car: a design for everyone. Black went from the colour of mourning to the colour of chic."
     words: [la chemise, le pantalon, les chaussures, le manteau, la robe, rouge, bleu, vert, noir, blanc]
     status: draft
   - id: fr.a1.topic-la-bise
@@ -196,6 +221,7 @@ items:
     strand: topic
     title: "La bise"
     notes: "Meeting people, travel to France."
+    tidbit: "Careful with old books: the noun un baiser is an innocent kiss, but the verb baiser, respectable in Corneille's day, is now vulgar. French switched to embrasser for \"to kiss\"."
     facts:
       - "Friends and family in France usually greet each other with kisses on the cheek, la bise."
       - "The number of kisses depends on the region: often two, in some regions three or four."
@@ -210,6 +236,7 @@ items:
     notes: "The spoken past for completed events; irregular participles (fait, pris, eu, été, vu, dit)."
     example: "Hier, j'ai mangé chez des amis et on a vu un film."
     english: "Yesterday I ate at some friends' place and we watched a film."
+    tidbit: "Charles de Gaulle told a huge crowd in Algiers in 1958, \"Je vous ai compris!\" Everyone heard what they wanted, and it's still studied as a masterpiece of political ambiguity."
     status: draft
   - id: fr.a2.passe-compose-etre
     level: A2
@@ -218,6 +245,7 @@ items:
     notes: "Motion and change-of-state verbs plus all reflexives; the participle agrees with the subject (elle est partie)."
     example: "Elle est arrivée à midi et elle est repartie tout de suite."
     english: "She arrived at noon and left again straight away."
+    tidbit: "\"Aujourd'hui, maman est morte.\" Camus wrote L'Étranger in the passé composé rather than the literary passé simple, and that flat, spoken tense is a large part of its chill."
     status: draft
   - id: fr.a2.imparfait
     level: A2
@@ -226,6 +254,7 @@ items:
     notes: "What used to happen and what things were like; built on the nous form (nous parlons → je parlais)."
     example: "Quand j'étais petit, j'allais chez ma grand-mère tous les étés."
     english: "When I was little, I went to my grandmother's every summer."
+    tidbit: "Proust wrote an essay in praise of Flaubert's \"éternel imparfait\", arguing that this one tense changes how we see the world in a novel."
     status: draft
   - id: fr.a2.pc-imparfait-intro
     level: A2
@@ -234,6 +263,7 @@ items:
     notes: "The imparfait sets the scene, the passé composé moves the story on."
     example: "Il pleuvait quand je suis sorti."
     english: "It was raining when I went out."
+    tidbit: "\"Il était une fois…\" Charles Perrault's fairy tales of 1697 gave us the written Cinderella with her glass slipper, Sleeping Beauty and Puss in Boots, each ending with a moral in verse."
     status: draft
   - id: fr.a2.object-pronouns
     level: A2
@@ -242,6 +272,7 @@ items:
     notes: "Placed before the verb (je le vois), before the infinitive (je vais le voir). English speakers put them after."
     example: "Ce livre ? Je le lis en ce moment et je vais le prêter à Paul."
     english: "This book? I'm reading it now and I'm going to lend it to Paul."
+    tidbit: "Serge Gainsbourg's \"Je t'aime… moi non plus\", a song title built on pronouns, was banned from radio in several countries in 1969, and went to number one in Britain anyway."
     status: draft
   - id: fr.a2.y-en
     level: A2
@@ -250,6 +281,7 @@ items:
     notes: "y replaces à + place or thing (j'y vais), en replaces de + noun or a quantity (j'en ai deux). No English equivalent; often skipped."
     example: "Tu vas à Paris ? — Oui, j'y vais demain. Des billets ? J'en ai deux."
     english: "Are you going to Paris? — Yes, I'm going tomorrow. Tickets? I have two."
+    tidbit: "\"J'y suis, j'y reste\", \"here I am, here I stay\", is what General MacMahon reportedly replied in 1855 when told to withdraw from the fort of Malakoff."
     status: draft
   - id: fr.a2.pronominal-verbs
     level: A2
@@ -258,6 +290,7 @@ items:
     notes: "Routines, reciprocal (on se voit), and meaning shifts (s'ennuyer, se rendre compte)."
     example: "On se voit demain ? Je me lève tôt."
     english: "See you tomorrow? I'm getting up early."
+    tidbit: "Sartre put his philosophy in a pronominal verb: man is nothing else but what he makes of himself, \"ce qu'il se fait\". That's the core of his 1945 lecture Existentialism Is a Humanism."
     status: draft
   - id: fr.a2.comparatives
     level: A2
@@ -266,6 +299,7 @@ items:
     notes: "plus/moins/aussi … que; meilleur (adjective) vs mieux (adverb), a frequent error."
     example: "Ce restaurant est meilleur, et on y mange mieux."
     english: "This restaurant is better, and you eat better there."
+    tidbit: "When Paris built the Eiffel Tower for 1889, a group of leading artists protested in print against this \"useless and monstrous\" thing. It stayed the world's tallest structure for about forty years."
     status: draft
   - id: fr.a2.futur-simple
     level: A2
@@ -274,6 +308,7 @@ items:
     notes: "Plans less immediate than aller + infinitive; irregular stems (ser-, aur-, ir-, fer-, viendr-)."
     example: "L'année prochaine, j'irai au Québec."
     english: "Next year I'll go to Quebec."
+    tidbit: "In 1849 Victor Hugo told a peace congress in Paris, \"Un jour viendra…\": a day will come when France, Germany and all of Europe will be united. He was mocked for it."
     status: draft
   - id: fr.a2.imperative
     level: A2
@@ -282,6 +317,7 @@ items:
     notes: "tu/nous/vous forms; pronouns after the affirmative (dis-le-moi), before the negative (ne le dis pas)."
     example: "Dis-le-moi, mais ne le dis à personne."
     english: "Tell me, but don't tell anyone."
+    tidbit: "\"Indignez-vous!\" was a 32-page pamphlet of 2010 by the 93-year-old Stéphane Hessel, a Resistance fighter and concentration camp survivor. It sold millions of copies."
     status: draft
   - id: fr.a2.time-depuis
     level: A2
@@ -290,6 +326,7 @@ items:
     notes: "depuis + present for 'have been doing' (*j'ai habité ici depuis is an English-speaker error); il y a = ago."
     example: "J'habite ici depuis trois ans; je suis arrivé il y a trois ans."
     english: "I've lived here for three years; I arrived three years ago."
+    tidbit: "Four teenagers and a dog found the Lascaux cave in 1940. The bulls and horses inside have been there for around 17,000 years."
     status: draft
   - id: fr.a2.negation-more
     level: A2
@@ -298,6 +335,7 @@ items:
     notes: "Position around the verb and in the passé composé (je n'ai rien vu / je n'ai vu personne)."
     example: "Je n'ai rien vu et je ne fume plus."
     english: "I didn't see anything and I don't smoke any more."
+    tidbit: "Édith Piaf's \"Non, je ne regrette rien\" came out in 1960 and she dedicated it to the French Foreign Legion, then fighting in Algeria."
     status: draft
   - id: fr.a2.relative-qui-que
     level: A2
@@ -306,6 +344,7 @@ items:
     notes: "qui = subject, que = object; English can omit 'that', French can't."
     example: "C'est le film que j'ai vu hier, avec l'acteur qui joue dans Lupin."
     english: "It's the film I saw yesterday, with the actor who's in Lupin."
+    tidbit: "The poet and critic Boileau set the standard for French prose in 1674: \"Ce que l'on conçoit bien s'énonce clairement.\" What you understand well, you can say clearly."
     status: draft
   - id: fr.a2.past-weekend
     level: A2
@@ -314,6 +353,7 @@ items:
     notes: "Sequencing with d'abord, ensuite, puis, enfin."
     example: "Samedi, on est allés à la plage, puis on a dîné au port."
     english: "On Saturday we went to the beach, then had dinner at the harbour."
+    tidbit: "Renoir's Luncheon of the Boating Party of 1881 is a real day out: his friends on a restaurant terrace by the Seine. The young woman with the little dog later became his wife."
     status: draft
   - id: fr.a2.childhood
     level: A2
@@ -322,6 +362,7 @@ items:
     notes: "Imparfait for habits; avant vs maintenant."
     example: "Avant, j'habitais à la campagne; maintenant, j'habite en ville."
     english: "I used to live in the country; now I live in the city."
+    tidbit: "Saint-Exupéry dedicated The Little Prince to a grown friend, then corrected himself: \"to Léon Werth when he was a little boy\". Werth, a Jew, was in hiding in occupied France at the time."
     status: draft
   - id: fr.a2.invitations
     level: A2
@@ -330,6 +371,7 @@ items:
     notes: "Ça te dit de… ?, Tu es libre ?; declining politely."
     example: "Ça te dit d'aller au cinéma ? — Avec plaisir, mais pas ce soir."
     english: "Fancy going to the cinema? — I'd love to, but not tonight."
+    tidbit: "French Enlightenment culture happened at invitations: in salons run by women like Madame Geoffrin, writers and philosophers argued over dinner in the capital."
     status: draft
   - id: fr.a2.describe-people-places
     level: A2
@@ -338,6 +380,7 @@ items:
     notes: "Appearance and character; your neighbourhood."
     example: "Mon quartier est calme et il y a beaucoup de petits commerces."
     english: "My neighbourhood is quiet and there are lots of small shops."
+    tidbit: "Monet painted the front of Rouen Cathedral more than thirty times, in different lights, because to him the subject wasn't the building but the air and light around it."
     status: draft
   - id: fr.a2.simple-advice
     level: A2
@@ -346,6 +389,7 @@ items:
     notes: "Il faut + infinitive, tu devrais, pourquoi tu ne… pas ?"
     example: "Tu es fatigué ? Tu devrais te coucher plus tôt."
     english: "You're tired? You should go to bed earlier."
+    tidbit: "La Fontaine turned Aesop's animals into French verse from 1668 on. His grasshopper who sings all summer and his ant who won't lend her a thing are still recited in French schools."
     status: draft
   - id: fr.a2.plans
     level: A2
@@ -354,41 +398,48 @@ items:
     notes: "aller + infinitive, futur simple, avoir l'intention de."
     example: "Cet été, j'ai l'intention de visiter la Bretagne."
     english: "This summer I'm planning to visit Brittany."
+    tidbit: "Ferdinand de Lesseps built the Suez Canal, then tried the same plan in Panama in the 1880s without locks. Thousands of workers died, and the company's collapse became a national scandal."
     status: draft
   - id: fr.a2.v-travel
     level: A2
     strand: vocab
     title: "Travel and transport"
+    tidbit: "Jules Verne's Around the World in Eighty Days of 1873 inspired a real race: in 1889 the American reporter Nellie Bly did it in 72 days, and stopped in France to visit Verne on the way."
     words: [le voyage, le billet, le vol, les bagages, la valise, le quai, rater le train, réserver, l'hébergement, la frontière]
     status: draft
   - id: fr.a2.v-health
     level: A2
     strand: vocab
     title: "Health and the body"
+    tidbit: "In 1885 Louis Pasteur gave an experimental rabies vaccine to Joseph Meister, a nine-year-old who had been bitten. The boy lived, and as an adult he worked as caretaker at the Pasteur Institute."
     words: [la tête, le dos, le ventre, j'ai mal à, la fièvre, le rhume, le médecin, l'ordonnance, le rendez-vous, se sentir mal]
     status: draft
   - id: fr.a2.v-work
     level: A2
     strand: vocab
     title: "Work and jobs"
+    tidbit: "The Jacquard loom, perfected in Lyon around 1804, wove patterns from punched cards, an idea that later fed into early computing. In 1831 Lyon's silk workers, the canuts, rose up over their pay."
     words: [le travail, l'entreprise, le patron, le collègue, le salaire, la réunion, les horaires, embaucher, licencier, prendre sa retraite]
     status: draft
   - id: fr.a2.v-free-time
     level: A2
     strand: vocab
     title: "Free time and hobbies"
+    tidbit: "The Tour de France was invented in 1903 by a sports newspaper, L'Auto, to sell more copies. Its leader's yellow jersey matches the paper the newspaper was printed on."
     words: [les loisirs, sortir, faire une randonnée, la peinture, jouer de la guitare, le match, la série, s'ennuyer, bricoler, le week-end]
     status: draft
   - id: fr.a2.v-shopping
     level: A2
     strand: vocab
     title: "Shopping and services"
+    tidbit: "Le Bon Marché in Paris is often called the first modern department store. Zola studied it closely for his novel Au Bonheur des Dames, about a shop that seduces its customers."
     words: [la taille, essayer, la cabine d'essayage, les soldes, rembourser, le ticket de caisse, la carte bancaire, en espèces, bon marché, cher]
     status: draft
   - id: fr.a2.v-weather
     level: A2
     strand: vocab
     title: "Weather and seasons"
+    tidbit: "A critic in 1874 sneered at Monet's foggy harbour at Le Havre, Impression, soleil levant, saying it was only an impression. The insult named a movement."
     words: [il fait beau, il fait froid, il pleut, il neige, l'orage, le vent, nuageux, le printemps, l'été, l'hiver]
     status: draft
   - id: fr.a2.topic-baguette
@@ -396,6 +447,7 @@ items:
     strand: topic
     title: "The baguette"
     notes: "Food, shopping, daily routines."
+    tidbit: "The story that Napoleon ordered long loaves to fit soldiers' trousers has no evidence behind it. In 2022 UNESCO added the craft of baguette-making to its list of Intangible Cultural Heritage."
     facts:
       - "In 2022 UNESCO added the artisanal know-how and culture of the baguette to its list of Intangible Cultural Heritage."
       - "Many people buy fresh bread every day at the boulangerie."
@@ -407,6 +459,7 @@ items:
     strand: topic
     title: "French in Quebec"
     notes: "Regional varieties, travel to Canada, or when a Quebec word comes up."
+    tidbit: "Québec's motto is \"Je me souviens\", I remember. Since the Charter of the French Language of 1977, French has been the required language of work and of street signs in the province."
     facts:
       - "French is the official language of the Canadian province of Quebec."
       - "Quebec French has its own everyday words: char (car), magasiner (to go shopping), blonde (girlfriend)."
@@ -421,6 +474,7 @@ items:
     notes: "Whole stories: background, interruption, sequence; meaning shifts (je savais / j'ai su = I found out)."
     example: "Je lisais tranquillement quand quelqu'un a frappé à la porte."
     english: "I was reading quietly when someone knocked at the door."
+    tidbit: "In 1857 Flaubert was put on trial for Madame Bovary and acquitted. The same prosecutor went after Baudelaire's Les Fleurs du mal that year and won."
     status: draft
   - id: fr.b1.plus-que-parfait
     level: B1
@@ -429,6 +483,7 @@ items:
     notes: "The past before the past, often with déjà."
     example: "Quand je suis arrivé, le film avait déjà commencé."
     english: "When I arrived, the film had already started."
+    tidbit: "The priest who teaches Edmond Dantès in Dumas's The Count of Monte Cristo was based on a real man: José Custódio de Faria, a monk from Goa who pioneered the study of hypnosis."
     status: draft
   - id: fr.b1.conditionnel
     level: B1
@@ -437,6 +492,7 @@ items:
     notes: "Politeness (je voudrais, vous pourriez), wishes, advice (tu devrais), unconfirmed news (le président serait malade)."
     example: "J'aimerais bien partir en Italie. Vous pourriez m'aider ?"
     english: "I'd really like to go to Italy. Could you help me?"
+    tidbit: "Pascal's wager is the most famous conditional in French philosophy: if God exists and you've believed, you gain everything; if not, you've lost almost nothing."
     status: draft
   - id: fr.b1.si-imparfait
     level: B1
@@ -445,6 +501,7 @@ items:
     notes: "Hypotheses about the present; never conditionnel after si."
     example: "Si j'avais le temps, j'apprendrais le piano."
     english: "If I had time, I'd learn the piano."
+    tidbit: "In Candide, after watching an earthquake and an execution, Voltaire's hero asks: \"Si c'est ici le meilleur des mondes possibles, que sont donc les autres?\" He was mocking the optimism of Leibniz."
     status: draft
   - id: fr.b1.subjonctif-necessity
     level: B1
@@ -453,6 +510,7 @@ items:
     notes: "il faut que, vouloir que, préférer que; same subject keeps the infinitive (je veux partir / je veux que tu partes)."
     example: "Il faut que tu viennes, je veux que tu rencontres ma famille."
     english: "You have to come, I want you to meet my family."
+    tidbit: "Olympe de Gouges wrote a Declaration of the Rights of Woman in 1791, arguing that if women can mount the scaffold, they should also be able to mount the speaker's platform. She was guillotined in 1793."
     status: draft
   - id: fr.b1.subjonctif-emotion-doubt
     level: B1
@@ -461,6 +519,7 @@ items:
     notes: "content que, avoir peur que, douter que; je pense que takes the indicative, je ne pense pas que the subjonctif."
     example: "Je suis contente que tu sois là, mais je ne pense pas qu'il vienne."
     english: "I'm happy you're here, but I don't think he'll come."
+    tidbit: "In his Meditations of 1641, Descartes imagines an evil demon deceiving him about everything, so that he can find the one thing he can't doubt."
     status: draft
   - id: fr.b1.relatives-dont-ou
     level: B1
@@ -469,6 +528,7 @@ items:
     notes: "dont for de + noun (le livre dont je parle); où also for time (le jour où…); ce que for 'what'."
     example: "C'est le livre dont je t'ai parlé. Ce que j'aime, c'est la fin."
     english: "It's the book I told you about. What I like is the ending."
+    tidbit: "Père-Lachaise, the cemetery where Proust and Chopin lie, opened in 1804 and had no customers. To make it fashionable, the authorities moved the remains of Molière and La Fontaine there."
     status: draft
   - id: fr.b1.double-pronouns
     level: B1
@@ -477,6 +537,7 @@ items:
     notes: "Order me/te/se/nous/vous > le/la/les > lui/leur > y > en: je le lui donne, il y en a."
     example: "Les clés ? Je les lui ai données. Du pain ? Il y en a."
     english: "The keys? I gave them to him. Bread? There's some."
+    tidbit: "In Rostand's 1897 play, Cyrano writes a beautiful man's love letters for him and gives them to Roxane. He's based on a real seventeenth-century writer, Cyrano de Bergerac."
     status: draft
   - id: fr.b1.reported-speech
     level: B1
@@ -485,6 +546,7 @@ items:
     notes: "Tense shifts after a past verb: je viendrai → il a dit qu'il viendrait."
     example: "Elle m'a dit qu'elle viendrait, mais elle n'est pas venue."
     english: "She told me she'd come, but she didn't."
+    tidbit: "In 1898 Émile Zola published \"J'accuse…!\" on the front page of a newspaper, naming those who framed Captain Dreyfus. He was convicted of libel and fled to England."
     status: draft
   - id: fr.b1.gerondif
     level: B1
@@ -493,6 +555,7 @@ items:
     notes: "Simultaneity and manner (en marchant, en travaillant)."
     example: "J'écoute des podcasts en cuisinant."
     english: "I listen to podcasts while cooking."
+    tidbit: "\"C'est en forgeant qu'on devient forgeron.\" Diderot's Encyclopédie took that respect for craft seriously: its plates show exactly how pins, glass and clocks were made."
     status: draft
   - id: fr.b1.passive
     level: B1
@@ -501,6 +564,7 @@ items:
     notes: "être + participle with agreement; speech prefers on (on m'a volé mon vélo) or se faire."
     example: "Mon vélo a été volé. (On m'a volé mon vélo.)"
     english: "My bike was stolen."
+    tidbit: "Joan of Arc was burned at Rouen in 1431 after a Church trial. She was cleared by another in 1456, and made a saint in 1920."
     status: draft
   - id: fr.b1.emphasis
     level: B1
@@ -509,6 +573,7 @@ items:
     notes: "moi, toi, lui; c'est moi qui…; dislocation typical of speech (moi, je pense que…; le café, je l'adore)."
     example: "Moi, je trouve ça génial. C'est lui qui a tout organisé."
     english: "Personally, I think it's great. He's the one who organised everything."
+    tidbit: "In a 2012 debate, François Hollande began a long series of sentences with \"Moi, président de la République…\" The stress pronoun became one of the best-known rhetorical moves in modern French politics."
     status: draft
   - id: fr.b1.tell-a-story
     level: B1
@@ -517,6 +582,7 @@ items:
     notes: "PC/imparfait together, connectors (tout à coup, alors, finalement)."
     example: "On dînait quand tout à coup il y a eu une coupure de courant."
     english: "We were having dinner when suddenly there was a power cut."
+    tidbit: "The Song of Roland, the great French epic, turns a small defeat in 778, when Basques ambushed Charlemagne's rearguard at Roncesvalles, into a holy war against Saracens."
     status: draft
   - id: fr.b1.opinions
     level: B1
@@ -525,6 +591,7 @@ items:
     notes: "à mon avis, je trouve que, je suis d'accord / pas d'accord, ça dépend."
     example: "À mon avis, ce n'est pas si simple. Je ne suis pas d'accord."
     english: "In my opinion it's not that simple. I don't agree."
+    tidbit: "\"I disapprove of what you say, but I will defend to the death your right to say it\" isn't Voltaire's. It was written by Evelyn Beatrice Hall in 1906, to sum up his attitude."
     status: draft
   - id: fr.b1.feelings-wishes
     level: B1
@@ -533,6 +600,7 @@ items:
     notes: "Emotion + subjonctif, j'espère que + indicative (a classic trap)."
     example: "J'espère que tu vas bien. Je suis triste que tu partes."
     english: "I hope you're well. I'm sad you're leaving."
+    tidbit: "Stendhal wrote of being so overwhelmed by art in Florence in 1817 that his heart raced and he feared he might fall. The condition now bears his name."
     status: draft
   - id: fr.b1.recommendations
     level: B1
@@ -541,6 +609,7 @@ items:
     notes: "je te conseille de, à ta place + conditionnel, il vaudrait mieux."
     example: "À ta place, je prendrais le train."
     english: "If I were you, I'd take the train."
+    tidbit: "The Michelin Guide started in 1900 as a free handout from a tyre company, to encourage people to drive further and wear out their tyres."
     status: draft
   - id: fr.b1.travel-problems
     level: B1
@@ -549,6 +618,7 @@ items:
     notes: "Complaining politely, explaining, asking for a solution (vous pourriez…)."
     example: "Excusez-moi, j'avais réservé une chambre double, pas une simple."
     english: "Excuse me, I'd booked a double room, not a single."
+    tidbit: "In 1935 the pilot Antoine de Saint-Exupéry crashed in the Libyan desert and nearly died of thirst before a Bedouin rescued him. That desert is where the Little Prince appears."
     status: draft
   - id: fr.b1.summarise
     level: B1
@@ -557,41 +627,48 @@ items:
     notes: "ça parle de, il s'agit de, au début, à la fin."
     example: "Le film parle d'une famille qui perd sa maison."
     english: "The film is about a family that loses its home."
+    tidbit: "In Exercices de style of 1947, Raymond Queneau tells one trivial story about a man on a bus in 99 different ways. It's the ultimate lesson in retelling."
     status: draft
   - id: fr.b1.v-feelings
     level: B1
     strand: vocab
     title: "Feelings and personality"
+    tidbit: "French Romantics had a name for their generation's nameless sadness, le mal du siècle, and Baudelaire gave his own black mood an English word, le spleen."
     words: [fier, gêné, débordé, déçu, jaloux, timide, têtu, sensible, la honte, avoir hâte]
     status: draft
   - id: fr.b1.v-media-tech
     level: B1
     strand: vocab
     title: "Media and technology"
+    tidbit: "France went online long before the web: from 1982 millions of homes had a Minitel terminal for phone listings, shopping and chat. It was only shut down in 2012."
     words: [les infos, le journal, les réseaux sociaux, télécharger, le mot de passe, l'écran, le lien, poster une photo, le portable, l'appli]
     status: draft
   - id: fr.b1.v-environment
     level: B1
     strand: vocab
     title: "The environment"
+    tidbit: "Jean Giono's 1953 story The Man Who Planted Trees, about a shepherd who reforests a barren valley on his own, was fiction, but so many readers took it for true that foresters came looking for him."
     words: [l'environnement, la pollution, recycler, les déchets, le réchauffement climatique, la sécheresse, économiser l'énergie, l'espèce, protéger, durable]
     status: draft
   - id: fr.b1.v-education
     level: B1
     strand: vocab
     title: "Education"
+    tidbit: "Robert de Sorbon founded a college for poor theology students in Paris around 1257. In the 1880s Jules Ferry's laws made French primary school free, compulsory and secular."
     words: [la matière, réussir un examen, rater, la note, la bourse, la licence, le master, s'inscrire, le lycée, la fac]
     status: draft
   - id: fr.b1.v-relationships
     level: B1
     strand: vocab
     title: "Relationships"
+    tidbit: "Héloïse and Abélard, a brilliant student and her teacher in twelfth-century Paris, were separated by scandal and violence. Their later letters are among the great documents of medieval love."
     words: [s'entendre bien, tomber amoureux, se marier, se séparer, se disputer, se réconcilier, la confiance, le voisin, une connaissance, manquer à quelqu'un]
     status: draft
   - id: fr.b1.v-housing
     level: B1
     strand: vocab
     title: "Housing"
+    tidbit: "Le Corbusier called a house \"a machine for living in\". His Unité d'habitation in Marseille, finished in 1952, put a shopping street and a school inside one concrete building."
     words: [louer, le loyer, le propriétaire, la caution, le bail, meublé, le déménagement, déménager, le quartier, le crédit immobilier]
     status: draft
   - id: fr.b1.topic-numbers-belgium-switzerland
@@ -599,6 +676,7 @@ items:
     strand: topic
     title: "Septante and nonante"
     notes: "When numbers or prices come up, especially after soixante-dix trips someone up."
+    tidbit: "France's counting by twenties, quatre-vingts, is an old habit. In Paris the Quinze-Vingts hospital, founded by Louis IX for 300 blind people, is named \"fifteen twenties\"."
     facts:
       - "In Belgium and Switzerland people say septante (70) and nonante (90) instead of soixante-dix and quatre-vingt-dix."
       - "In parts of Switzerland people also say huitante (80)."
@@ -610,6 +688,7 @@ items:
     strand: topic
     title: "Why English has so many French words"
     notes: "Etymology, false friends, or when an English word looks French."
+    tidbit: "For around three centuries after 1066 the English court spoke French. That's why the animal in the field is an English cow, but the meat on a lord's table was French beef."
     facts:
       - "After the Norman Conquest of 1066, French was the language of England's ruling class for about three centuries."
       - "English kept Germanic names for farm animals but took French names for their meat: cow and beef (bœuf), pig and pork (porc), sheep and mutton (mouton)."
@@ -621,6 +700,7 @@ items:
     strand: topic
     title: "L'Académie française"
     notes: "Language rules, new words, or debates about English loanwords."
+    tidbit: "Richelieu founded the Académie française in 1635 and its members are called \"immortals\". The first woman among them, Marguerite Yourcenar, was elected only in 1980."
     facts:
       - "The Académie française was founded in 1635 under Cardinal Richelieu."
       - "It has forty members, nicknamed les Immortels."
@@ -635,6 +715,7 @@ items:
     notes: "si + plus-que-parfait → conditionnel passé; regrets (j'aurais dû)."
     example: "Si j'avais su, je serais venu plus tôt. J'aurais dû t'appeler."
     english: "If I'd known, I would have come earlier. I should have called you."
+    tidbit: "Pascal on how small things turn history: \"Le nez de Cléopâtre: s'il eût été plus court, toute la face de la terre aurait changé.\""
     status: draft
   - id: fr.b2.subjonctif-conjunctions
     level: B2
@@ -643,6 +724,7 @@ items:
     notes: "bien que, pour que, avant que, à moins que, sans que; après que takes the indicative in the norm."
     example: "Bien qu'il pleuve, on sortira. Je te le dis pour que tu le saches."
     english: "Although it's raining, we'll go out. I'm telling you so you know."
+    tidbit: "The Protestant Henri IV is said to have converted because \"Paris vaut bien une messe\". In 1598 his Edict of Nantes gave French Protestants rights; Louis XIV revoked it in 1685."
     status: draft
   - id: fr.b2.subjonctif-passe
     level: B2
@@ -651,6 +733,7 @@ items:
     notes: "Completed actions after subjonctif triggers: je suis content que tu sois venu."
     example: "Je suis ravie que vous soyez venus."
     english: "I'm delighted you came."
+    tidbit: "Camus ends The Myth of Sisyphus with a subjunctive-free command to hope: after showing a man condemned to roll a rock forever, he writes, \"Il faut imaginer Sisyphe heureux.\""
     status: draft
   - id: fr.b2.lequel
     level: B2
@@ -659,6 +742,7 @@ items:
     notes: "After prepositions (la raison pour laquelle, le projet auquel je pense)."
     example: "C'est la raison pour laquelle je suis parti."
     english: "That's the reason why I left."
+    tidbit: "Alexis de Tocqueville travelled to the United States in 1831, officially to study prisons. What he brought back was Democracy in America, still read to understand the country."
     status: draft
   - id: fr.b2.futur-anterieur
     level: B2
@@ -667,6 +751,7 @@ items:
     notes: "Completed by a future point (quand tu auras fini) and guesses about the past (il aura oublié)."
     example: "Appelle-moi quand tu auras fini. Il aura oublié, sans doute."
     english: "Call me when you've finished. He must have forgotten."
+    tidbit: "Victor Hugo spent nearly twenty years in exile from Napoleon III, most of them on Guernsey, and refused an amnesty: \"Quand la liberté rentrera, je rentrerai.\""
     status: draft
   - id: fr.b2.mise-en-relief
     level: B2
@@ -675,6 +760,7 @@ items:
     notes: "French marks focus with structure where English uses stress: c'est demain qu'il part."
     example: "Ce qui me plaît, c'est l'ambiance. C'est demain qu'il part."
     english: "What I like is the atmosphere. He's leaving TOMORROW."
+    tidbit: "\"L'enfer, c'est les autres\", from Sartre's play No Exit of 1944, is often misread. He said he meant that we're trapped when we can only see ourselves through other people's judgement."
     status: draft
   - id: fr.b2.participe-gerondif
     level: B2
@@ -683,6 +769,7 @@ items:
     notes: "Written participe présent (les personnes souhaitant…), gérondif, and spelling-changing adjectives (fatigant/fatiguant)."
     example: "Les personnes souhaitant participer doivent s'inscrire."
     english: "Anyone wishing to take part must register."
+    tidbit: "Arthur Rimbaud changed French poetry and gave it up by about twenty-one. He spent the rest of his short life as a trader in Yemen and Ethiopia."
     status: draft
   - id: fr.b2.connectors
     level: B2
@@ -691,6 +778,7 @@ items:
     notes: "cependant, pourtant, donc, alors que, en revanche, d'ailleurs; spoken vs written choices."
     example: "Il est riche; pourtant, il vit très simplement."
     english: "He's rich; yet he lives very simply."
+    tidbit: "French students learn to argue in three parts, thesis, antithesis, synthesis. A philosophy exam has been a feature of the baccalauréat, created by Napoleon in 1808, and each June its questions make the news."
     status: draft
   - id: fr.b2.passe-simple
     level: B2
@@ -699,6 +787,7 @@ items:
     notes: "Written narrative tense: fairy tales, novels, history. Recognise, don't produce; useful for the tutor's stories."
     example: "Il était une fois un roi qui eut trois filles."
     english: "Once upon a time there was a king who had three daughters."
+    tidbit: "Georges Perec wrote a 300-page novel, La Disparition, in 1969 without once using the letter e. It's been translated into English, also without an e, as A Void."
     status: draft
   - id: fr.b2.concordance
     level: B2
@@ -707,6 +796,7 @@ items:
     notes: "Full sequence: present → imparfait, passé composé → plus-que-parfait, futur → conditionnel; reporting verbs."
     example: "Il a affirmé qu'il n'avait rien vu et qu'il témoignerait."
     english: "He stated that he hadn't seen anything and that he would testify."
+    tidbit: "Madame de Sévigné wrote hundreds of letters to her daughter in the seventeenth century, reporting court gossip and what everyone said. They made her a classic of French prose."
     status: draft
   - id: fr.b2.nominalisation
     level: B2
@@ -715,6 +805,7 @@ items:
     notes: "Formal French turns verbs into nouns (la hausse des prix, après la construction du pont)."
     example: "La hausse des prix a provoqué des manifestations."
     english: "The rise in prices sparked protests."
+    tidbit: "Roland Barthes announced \"la mort de l'auteur\" in a 1967 essay: once a text is written, the meaning belongs to its readers."
     status: draft
   - id: fr.b2.argue
     level: B2
@@ -723,6 +814,7 @@ items:
     notes: "Pros and cons, conceding (certes…, mais), concluding (en somme)."
     example: "Certes, c'est cher; en revanche, ça dure longtemps."
     english: "Admittedly it's expensive; on the other hand, it lasts a long time."
+    tidbit: "\"On ne naît pas femme: on le devient.\" Simone de Beauvoir's The Second Sex of 1949 was put on the Vatican's Index of forbidden books."
     status: draft
   - id: fr.b2.speculate
     level: B2
@@ -731,6 +823,7 @@ items:
     notes: "Counterfactuals, il se peut que + subjonctif, futur antérieur of probability."
     example: "Il se peut qu'il soit perdu. S'il était parti plus tôt, il serait déjà là."
     english: "He may be lost. If he'd left earlier, he'd be here by now."
+    tidbit: "Pierre-Simon Laplace imagined in 1814 an intellect that could know the whole future from the present. Told by Napoleon that God was missing from his astronomy, he reportedly said he had no need of that hypothesis."
     status: draft
   - id: fr.b2.report
     level: B2
@@ -739,6 +832,7 @@ items:
     notes: "Reporting verbs: affirmer, prétendre, nier, reconnaître, insister sur le fait que."
     example: "Il a nié l'avoir vu et a insisté sur le fait qu'il ne savait rien."
     english: "He denied seeing him and insisted he knew nothing."
+    tidbit: "The journalist Albert Londres said his job was to put the pen in the wound. His reporting in the 1920s on the penal colony of French Guiana helped bring about its closure."
     status: draft
   - id: fr.b2.abstract-topics
     level: B2
@@ -747,6 +841,7 @@ items:
     notes: "Generalising with on, les gens, la société; avoiding Anglicisms in formal speech."
     example: "On s'habitue à tout, mais la technologie évolue très vite."
     english: "You get used to everything, but technology moves very fast."
+    tidbit: "Frantz Fanon, a psychiatrist from Martinique, wrote Black Skin, White Masks and The Wretched of the Earth, some of the most influential French-language writing on colonialism."
     status: draft
   - id: fr.b2.register
     level: B2
@@ -755,6 +850,7 @@ items:
     notes: "When to switch from vous to tu (on peut se tutoyer ?); on vs nous; dropped ne and ça in speech."
     example: "On peut se tutoyer ? — Oui, bien sûr."
     english: "Shall we use tu? — Yes, of course."
+    tidbit: "In 1793 French revolutionaries pressed citizens to drop vous and Monsieur for tu and citoyen, as a matter of equality. Vous came back."
     status: draft
   - id: fr.b2.anecdotes
     level: B2
@@ -763,41 +859,48 @@ items:
     notes: "Colloquial reactions (c'est pas vrai !, j'hallucine), intensifiers (vachement, trop)."
     example: "C'est pas vrai ! Et tu as fait quoi ? — Rien, j'étais sidéré."
     english: "No way! And what did you do? — Nothing, I was stunned."
+    tidbit: "François Rabelais's giants Gargantua and Pantagruel, from the 1530s, drown enemies in urine and eat pilgrims in a salad. The doctor and monk gave us the word \"gargantuan\"."
     status: draft
   - id: fr.b2.v-society
     level: B2
     strand: vocab
     title: "Politics and society"
+    tidbit: "France's 1905 law separated church and state and is the base of laïcité, one of the most argued-over words in French public life."
     words: [le gouvernement, les élections, voter, la loi, les inégalités, la manifestation, le citoyen, le droit, la grève, l'impôt]
     status: draft
   - id: fr.b2.v-economy
     level: B2
     strand: vocab
     title: "Economy and working life"
+    tidbit: "François Quesnay, doctor to Louis XV, drew a chart of the whole economy in 1758 like the circulation of the blood. The Physiocrats around him popularised the slogan laissez faire."
     words: [la crise, le chômage, le CDD, le CDI, l'inflation, l'épargne, la dette, investir, le bénéfice, la concurrence]
     status: draft
   - id: fr.b2.v-science
     level: B2
     strand: vocab
     title: "Science and research"
+    tidbit: "Marie Curie is the only person to have won Nobel Prizes in two sciences, physics and chemistry. Her notebooks are still so radioactive that they're kept in lead boxes."
     words: [la recherche, l'expérience, la découverte, démontrer, l'hypothèse, les données, le progrès, le vaccin, l'étude, l'intelligence artificielle]
     status: draft
   - id: fr.b2.v-arts
     level: B2
     strand: vocab
     title: "Arts and culture"
+    tidbit: "In 1863 the Paris Salon rejected so many paintings that Napoleon III allowed a Salon des Refusés. Crowds came to laugh at Manet's Déjeuner sur l'herbe, and modern art began."
     words: [l'œuvre, l'écrivain, le tableau, l'exposition, la sortie d'un film, le personnage, l'intrigue, le scénario, la critique, la mise en scène]
     status: draft
   - id: fr.b2.v-argument
     level: B2
     strand: vocab
     title: "Words for arguing"
+    tidbit: "In the Quarrel of the Ancients and the Moderns, launched in 1687, Charles Perrault claimed the writers of his day were as good as Homer. It ran for decades and was bitter."
     words: [l'avantage, l'inconvénient, la conséquence, le point de vue, pour, contre, soulever une question, défendre, rejeter, en somme]
     status: draft
   - id: fr.b2.v-colloquial
     level: B2
     strand: vocab
     title: "Colloquial French"
+    tidbit: "The fifteenth-century poet François Villon, a killer and thief, wrote ballads in the secret slang of criminal gangs. French argot has a literary pedigree."
     words: [bosser, le boulot, le fric, kiffer, vachement, c'est nul, crevé, ouf, grave, bref]
     status: draft
   - id: fr.b2.topic-14-juillet
@@ -805,6 +908,7 @@ items:
     strand: topic
     title: "Le 14 juillet"
     notes: "Holidays, history, or around mid-July."
+    tidbit: "The Bastille held only seven prisoners when it was stormed in 1789. Tradition says Louis XVI's diary entry for that day was \"Rien\", though he may have meant his hunting."
     facts:
       - "France's national day is 14 July."
       - "It commemorates the storming of the Bastille prison in Paris on 14 July 1789, a symbol of the start of the Revolution."
@@ -816,6 +920,7 @@ items:
     strand: topic
     title: "Verlan"
     notes: "Slang, young people's speech, or colloquial French."
+    tidbit: "In 1977 the singer Renaud had a hit called \"Laisse béton\", verlan for laisse tomber, \"forget it\". It took the slang of the suburbs to the national airwaves."
     facts:
       - "Verlan is slang that swaps the syllables of words; the name itself is l'envers ('the reverse') reversed."
       - "Common examples: meuf (femme), relou (lourd, annoying), chelou (louche, shady)."

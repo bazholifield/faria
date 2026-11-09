@@ -135,7 +135,7 @@ enabled = true
 curriculum_dir = "curriculum"      # <lang>.yaml syllabus + topic cards (edit in the Helm's Syllabus tab)
 max_due_words = 6                  # words offered for review per session
 new_items_offered = 2              # syllabus items suggested per session
-topics_offered = 2                 # stories offered per session
+topics_offered = 5                 # stories offered per session
 review_intervals_days = [1, 3, 7, 14, 30]  # Leitner boxes 1..5
 solid_after_sessions = 3           # correct use in this many separate sessions = solid
 

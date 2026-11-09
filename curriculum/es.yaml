@@ -10,6 +10,7 @@ items:
     notes: "el/la/los/las, un/una/unos/unas. -o/-a tendencies and the common exceptions (el día, el problema, la mano, la foto)."
     example: "La casa es grande y los libros son nuevos."
     english: "The house is big and the books are new."
+    tidbit: "Spanish inherited grammatical gender from Latin but lost Latin's neuter nouns. A ghost of the neuter survives in the little word lo, as in lo bueno, \"the good thing\"."
     status: draft
   - id: es.a1.adjective-agreement
     level: A1
@@ -18,6 +19,7 @@ items:
     notes: "Adjectives agree in gender and number and usually follow the noun. English speakers put them first and forget the plural."
     example: "Tengo un coche rojo y dos gatas blancas."
     english: "I have a red car and two white cats."
+    tidbit: "Spanish explorers named American places with plain adjectives: Colorado means \"coloured red\", for the river's silt; Nevada means \"snow-covered\"; Florida means \"flowery\"."
     status: draft
   - id: es.a1.present-regular
     level: A1
@@ -26,6 +28,7 @@ items:
     notes: "Person endings carry the subject, which is why the pronoun can drop."
     example: "Hablo inglés y vivo en Chicago."
     english: "I speak English and I live in Chicago."
+    tidbit: "Spanish's three verb families, -ar, -er and -ir, come from Latin's verb classes. The language descends from the spoken Latin of the Roman soldiers and settlers who reached Iberia from 218 BC, during the war against Hannibal."
     status: draft
   - id: es.a1.pro-drop
     level: A1
@@ -34,6 +37,7 @@ items:
     notes: "Pronouns are left out unless they contrast or emphasise. English speakers overuse yo, which sounds insistent."
     example: "Vivo en Madrid. Yo trabajo allí, pero ella no."
     english: "I live in Madrid. I work there, but she doesn't."
+    tidbit: "Latin also left out its subject pronouns. Julius Caesar's \"veni, vidi, vici\" has no \"I\" because the verb endings carry it, exactly like Spanish vine, vi, vencí."
     status: draft
   - id: es.a1.ser-estar-basic
     level: A1
@@ -42,6 +46,7 @@ items:
     notes: "ser for identity, origin, profession and time; estar for location and temporary states."
     example: "Soy profesora y estoy cansada."
     english: "I'm a teacher and I'm tired."
+    tidbit: "Spanish built its two verbs for \"to be\" from three Latin ones: ser mixes esse, \"to be\", with sedere, \"to sit\", and estar comes from stare, \"to stand\". Being in a place began as standing there."
     status: draft
   - id: es.a1.hay
     level: A1
@@ -50,6 +55,7 @@ items:
     notes: "hay introduces something new (un/una); estar locates something known (el/la)."
     example: "Hay un banco en la esquina. El banco está al lado del café."
     english: "There's a bank on the corner. The bank is next to the café."
+    tidbit: "Hay hides a fossil: it's ha, \"has\", plus an old word y meaning \"there\", from Latin ibi. French still has the same pieces out in the open, in il y a."
     status: draft
   - id: es.a1.present-irregular
     level: A1
@@ -58,6 +64,7 @@ items:
     notes: "e>ie (quiero), o>ue (puedo), e>i (pido); tengo, hago, salgo, pongo, conozco."
     example: "Quiero un café, pero no puedo quedarme mucho."
     english: "I want a coffee, but I can't stay long."
+    tidbit: "In 1492 Antonio de Nebrija published the first grammar of Spanish, one of the first printed grammars of any modern European language, and told Queen Isabel that language had always been the companion of empire."
     status: draft
   - id: es.a1.tener-expressions
     level: A1
@@ -66,6 +73,7 @@ items:
     notes: "Age, hunger, thirst, cold, fear and being in a hurry use tener where English uses be."
     example: "Tengo veinte años y tengo mucha hambre."
     english: "I'm twenty and I'm very hungry."
+    tidbit: "Tener comes from Latin tenere, \"to hold\". In the Cantar de mio Cid, written down around 1200, haber could still mean \"to own\"; tener slowly took that job, and haber was left with he comido and hay."
     status: draft
   - id: es.a1.gustar
     level: A1
@@ -74,6 +82,7 @@ items:
     notes: "The thing liked is the subject: me gusta + singular, me gustan + plural. Also encantar, interesar."
     example: "Me gusta el café, pero me encantan los churros."
     english: "I like coffee, but I love churros."
+    tidbit: "Gustar comes from Latin gustare, \"to taste\". The medieval Latin maxim \"de gustibus non est disputandum\" says there's no arguing about taste."
     status: draft
   - id: es.a1.questions
     level: A1
@@ -82,6 +91,7 @@ items:
     notes: "Intonation questions; qué, cuál, dónde, cuándo, cómo, por qué. ¿Cuál es tu número? not ¿Qué es…?"
     example: "¿Dónde vives? ¿Cuál es tu número de teléfono?"
     english: "Where do you live? What's your phone number?"
+    tidbit: "The upside-down ¿ and ¡ became official in 1754, when the Real Academia's spelling rules adopted them so readers would know from the start that a long sentence was a question."
     status: draft
   - id: es.a1.negation
     level: A1
@@ -90,6 +100,7 @@ items:
     notes: "no before the verb; nada, nadie, nunca after the verb need no as well."
     example: "No tengo nada y no conozco a nadie aquí."
     english: "I don't have anything and I don't know anyone here."
+    tidbit: "Double negatives were once good English too: Chaucer says of his Knight that \"he nevere yet no vileynye ne sayde\" to no one. English later banned them; Spanish never did."
     status: draft
   - id: es.a1.possessives
     level: A1
@@ -98,6 +109,7 @@ items:
     notes: "mi, tu, su, nuestro; su can mean his, her, its, their or your (usted), resolved by context."
     example: "Mi hermano y su novia viven con nosotros."
     english: "My brother and his girlfriend live with us."
+    tidbit: "\"Mi Buenos Aires querido\" is one of the great tangos of Carlos Gardel, the voice of tango, who died in a plane crash in Medellín in 1935 at the height of his fame."
     status: draft
   - id: es.a1.ir-a
     level: A1
@@ -106,6 +118,7 @@ items:
     notes: "The everyday future in speech."
     example: "Esta noche voy a cocinar para mis amigos."
     english: "Tonight I'm going to cook for my friends."
+    tidbit: "The verb ir is a patchwork of three Latin verbs: ire, vadere (which gives voy and vas), and esse, \"to be\", which supplied fui. That's why fui means both \"I went\" and \"I was\"."
     status: draft
   - id: es.a1.introduce-yourself
     level: A1
@@ -114,6 +127,7 @@ items:
     notes: "Name, origin, where you live, what you do; greetings and goodbyes."
     example: "Me llamo Ana, soy de Chicago y trabajo en una escuela."
     english: "My name is Ana, I'm from Chicago and I work at a school."
+    tidbit: "Spanish speakers usually carry two surnames, one from each parent, and women traditionally keep theirs after marriage. Gabriel García Márquez was García from his father and Márquez from his mother."
     status: draft
   - id: es.a1.personal-information
     level: A1
@@ -122,6 +136,7 @@ items:
     notes: "Age, family, phone, email; asking someone to repeat or spell."
     example: "¿Cuántos hermanos tienes? ¿Puedes repetir, por favor?"
     english: "How many siblings do you have? Can you repeat that, please?"
+    tidbit: "Hidalgo, the old Spanish word for a minor noble, comes from hijo de algo, \"son of something\". Don Quijote is one: a man with a name, a horse and no money."
     status: draft
   - id: es.a1.order-food
     level: A1
@@ -130,6 +145,7 @@ items:
     notes: "Para mí…, quiero…, ¿me trae…? (Latin America), ¿me pone…? (Spain), la cuenta."
     example: "Para mí, un café con leche y un pan dulce, por favor."
     english: "For me, a coffee with milk and a sweet roll, please."
+    tidbit: "Tapa literally means \"lid\". A popular story says it began as a slice of ham laid over a glass to keep the flies out of the wine, though nobody can prove it."
     status: draft
   - id: es.a1.shopping-prices
     level: A1
@@ -138,6 +154,7 @@ items:
     notes: "¿Cuánto cuesta / cuestan?; numbers to 1,000; quantities."
     example: "¿Cuánto cuestan estas naranjas?"
     english: "How much are these oranges?"
+    tidbit: "The Spanish silver peso, minted from the mines of Potosí and Mexico, was the first truly global currency. It was legal tender in the United States until 1857 and is the model for the dollar."
     status: draft
   - id: es.a1.time-and-days
     level: A1
@@ -146,6 +163,7 @@ items:
     notes: "¿Qué hora es?, a las…, los lunes; frequency (siempre, a veces, nunca)."
     example: "Los lunes empiezo a trabajar a las ocho."
     english: "On Mondays I start work at eight."
+    tidbit: "Spanish weekdays keep the Roman gods: lunes for the Moon, martes for Mars, miércoles for Mercury, jueves for Jupiter, viernes for Venus. Then come sábado, from Hebrew Shabbat, and domingo, \"the Lord's day\"."
     status: draft
   - id: es.a1.likes-dislikes
     level: A1
@@ -154,41 +172,48 @@ items:
     notes: "Uses gustar; reacting with a mí también / a mí tampoco."
     example: "No me gusta el fútbol. —A mí tampoco."
     english: "I don't like football. —Me neither."
+    tidbit: "Pablo Neruda wrote odes to the things he simply liked, an onion, a tomato, a pair of socks, beginning with his Odas elementales of 1954. He won the Nobel Prize in 1971."
     status: draft
   - id: es.a1.v-family
     level: A1
     strand: vocab
     title: "Family"
+    tidbit: "Cien años de soledad follows seven generations of the Buendía family in the invented town of Macondo. So many of them share names that printed editions often include a family tree."
     words: [la familia, la madre, el padre, el hermano, la hermana, el hijo, la hija, los abuelos, el primo, la pareja]
     status: draft
   - id: es.a1.v-food
     level: A1
     strand: vocab
     title: "Food and drink"
+    tidbit: "Before 1492 Spain had no tomatoes, potatoes, chili or chocolate, and Mexico had no wheat, pigs or sugar cane. Both of today's cuisines are children of that exchange: a tortilla de patatas is post-Columbian."
     words: [el pan, el agua, la leche, el café, la fruta, la carne, el pescado, las verduras, el desayuno, la cena]
     status: draft
   - id: es.a1.v-home
     level: A1
     strand: vocab
     title: "Home"
+    tidbit: "The walls of the Alhambra in Granada, home of the last Muslim kings of Spain, are covered in carved Arabic poetry: the palace literally speaks about itself in verse."
     words: [la casa, el departamento, la cocina, el dormitorio, el baño, la mesa, la silla, la cama, la ventana, la puerta]
     status: draft
   - id: es.a1.v-city
     level: A1
     strand: vocab
     title: "Places in town"
+    tidbit: "In 1573 Philip II issued ordinances telling colonial builders to lay out towns as a grid around a central plaza, which is why so many Latin American cities feel alike at their centre."
     words: [la calle, la tienda, el supermercado, el banco, la estación, el parque, el museo, la farmacia, cerca, lejos]
     status: draft
   - id: es.a1.v-daily-routine
     level: A1
     strand: vocab
     title: "Daily routine"
+    tidbit: "Siesta comes from Latin sexta, the \"sixth hour\" of the Roman day, counted from sunrise: around noon."
     words: [despertarse, levantarse, ducharse, desayunar, trabajar, comer, descansar, volver, cenar, acostarse]
     status: draft
   - id: es.a1.v-clothes-colours
     level: A1
     strand: vocab
     title: "Clothes and colours"
+    tidbit: "Cochineal, a brilliant red dye made from insects living on Mexican cactus, was one of Spain's most valuable colonial exports. It coloured the robes of European cardinals and the coats of British soldiers."
     words: [la camisa, los pantalones, los zapatos, el abrigo, la falda, rojo, azul, verde, negro, blanco]
     status: draft
   - id: es.a1.topic-greetings
@@ -196,6 +221,7 @@ items:
     strand: topic
     title: "How people greet each other"
     notes: "Good when talking about meeting people or travel; contrast with the learner's own habits."
+    tidbit: "Adiós literally commends you \"to God\", and ojalá comes from Arabic for \"if God wills\": two everyday words carrying medieval faith, the second from nearly eight centuries of Muslim rule in Iberia."
     facts:
       - "In Spain friends and family usually greet with two kisses on the cheek (dos besos)."
       - "In much of Latin America the usual greeting among friends is one kiss on the cheek."
@@ -210,6 +236,7 @@ items:
     notes: "Completed events with a time frame (ayer, el año pasado). Stress matters in speech: hablo vs habló."
     example: "Ayer comí paella con mis amigos."
     english: "Yesterday I ate paella with my friends."
+    tidbit: "Bernal Díaz del Castillo, a foot soldier with Cortés, wrote his True History of the Conquest in old age because he was angry at official accounts that gave all the glory to the captain."
     status: draft
   - id: es.a2.preterite-irregular
     level: A2
@@ -218,6 +245,7 @@ items:
     notes: "fui (ser and ir share it), tuve, estuve, hice, dije, pude, puse, vine, quise."
     example: "Fui a la playa, pero tuve que volver pronto."
     english: "I went to the beach, but I had to come back early."
+    tidbit: "Cortés is famous for \"burning his ships\", but they weren't burned. In 1519 he had them stripped and run aground so that his men couldn't go home."
     status: draft
   - id: es.a2.imperfect
     level: A2
@@ -226,6 +254,7 @@ items:
     notes: "What used to happen and what things were like. Only ser, ir and ver are irregular."
     example: "De niño, jugaba al fútbol todas las tardes."
     english: "As a kid, I played football every afternoon."
+    tidbit: "Cien años de soledad opens by reaching across time: \"Muchos años después, frente al pelotón de fusilamiento, el coronel Aureliano Buendía había de recordar aquella tarde remota en que su padre lo llevó a conocer el hielo.\""
     status: draft
   - id: es.a2.preterite-imperfect-intro
     level: A2
@@ -234,6 +263,7 @@ items:
     notes: "The imperfect sets the scene, the preterite moves the story. English 'was -ing' maps to the imperfect, simple past to either."
     example: "Llovía cuando salí de casa."
     english: "It was raining when I left the house."
+    tidbit: "Juan Rulfo's Pedro Páramo begins with a perfect lesson in these two tenses: \"Vine a Comala porque me dijeron que acá vivía mi padre, un tal Pedro Páramo.\" The novel's narrator turns out to be among the dead."
     status: draft
   - id: es.a2.present-perfect
     level: A2
@@ -242,6 +272,7 @@ items:
     notes: "Latin America mostly uses the preterite for recent events (hoy trabajé mucho); Spain uses he trabajado for today and this week. Use the preterite by default; recognise the Spanish habit."
     example: "Todavía no he comido. (Hoy trabajé mucho.)"
     english: "I haven't eaten yet. (I worked a lot today.)"
+    tidbit: "Madrid says hoy he comido; Mexico says hoy comí, and so do Galicia and the Canary Islands. Canarian speech is also famously close to Caribbean Spanish, after centuries of emigration between the islands."
     status: draft
   - id: es.a2.vosotros
     level: A2
@@ -250,6 +281,7 @@ items:
     notes: "Latin America uses ustedes for every 'you all'; Spain uses vosotros among friends, with its own forms (habláis, tenéis, sois) and commands (¡venid!). Recognise it from early on; use it with Spaniards if you like."
     example: "¿Vosotros venís esta noche? (¿Ustedes vienen esta noche?)"
     english: "Are you all coming tonight?"
+    tidbit: "Vosotros and nosotros were once vos otros and nos otros, \"you others\" and \"we others\". Vos itself began as a polite singular; when it lost its shine, people started saying vuestra merced, \"your grace\", which wore down into usted."
     status: draft
   - id: es.a2.object-pronouns
     level: A2
@@ -258,6 +290,7 @@ items:
     notes: "lo/la/los/las vs le/les; before a conjugated verb, attached to infinitives and gerunds."
     example: "El libro lo compré ayer y se lo voy a dar a Juan."
     english: "I bought the book yesterday and I'm going to give it to Juan."
+    tidbit: "In Neruda's Poema 20, published when he was barely twenty, a whole love affair turns on these small words: \"Yo la quise, y a veces ella también me quiso.\""
     status: draft
   - id: es.a2.double-pronouns
     level: A2
@@ -266,6 +299,7 @@ items:
     notes: "le/les becomes se before lo/la (*le lo is impossible)."
     example: "¿El regalo? Se lo di a María."
     english: "The present? I gave it to María."
+    tidbit: "The se in se lo doy isn't reflexive at all. It's a worn-down medieval form: the Cantar de mio Cid says gelo, and that ge later became se."
     status: draft
   - id: es.a2.reflexives
     level: A2
@@ -274,6 +308,7 @@ items:
     notes: "Routines (levantarse), reciprocal (nos vemos), and meaning shifts (ir/irse, dormir/dormirse)."
     example: "Me levanto a las siete y me voy a las ocho."
     english: "I get up at seven and leave at eight."
+    tidbit: "José Ortega y Gasset, Spain's best-known philosopher, summed up the self in 1914: \"Yo soy yo y mi circunstancia.\" You can't be understood apart from the world you find yourself in."
     status: draft
   - id: es.a2.comparatives
     level: A2
@@ -282,6 +317,7 @@ items:
     notes: "más/menos … que, tan … como, tanto como; mejor, peor, mayor, menor; el más alto de."
     example: "Mi hermana es más alta que yo, pero yo soy mayor."
     english: "My sister is taller than me, but I'm older."
+    tidbit: "Everest is the highest mountain above sea level, but the point farthest from the centre of the Earth is the summit of Chimborazo in Ecuador, thanks to the planet's equatorial bulge."
     status: draft
   - id: es.a2.progressive
     level: A2
@@ -290,6 +326,7 @@ items:
     notes: "For actions in progress, not for future plans (English 'I'm leaving tomorrow' is mañana salgo)."
     example: "Ahora estoy leyendo; mañana salgo para Lima."
     english: "I'm reading right now; tomorrow I'm leaving for Lima."
+    tidbit: "Antonio Machado wrote the most quoted lines in Spanish poetry: \"Caminante, no hay camino, se hace camino al andar.\" He died in 1939 just over the French border, a refugee from the Civil War."
     status: draft
   - id: es.a2.por-para-intro
     level: A2
@@ -298,6 +335,7 @@ items:
     notes: "para for purpose, recipient and deadline; por for cause, exchange and through."
     example: "Gracias por el regalo. Este es para ti."
     english: "Thanks for the present. This one is for you."
+    tidbit: "Chile's national motto, on its coat of arms, is \"Por la razón o la fuerza\": by reason or by force."
     status: draft
   - id: es.a2.imperative-tu
     level: A2
@@ -306,6 +344,7 @@ items:
     notes: "Affirmative (habla, ven, dime) vs negative, which uses the subjunctive (no hables). Pronouns attach to the affirmative."
     example: "¡Ven aquí! Dímelo, pero no se lo digas a nadie."
     english: "Come here! Tell me, but don't tell anyone."
+    tidbit: "\"Bésame mucho\" is a command, and one of the most recorded songs in Spanish. Consuelo Velázquez wrote it in Mexico around 1940, and later said she hadn't yet been kissed when she did."
     status: draft
   - id: es.a2.muy-mucho
     level: A2
@@ -314,6 +353,7 @@ items:
     notes: "muy before adjectives and adverbs; mucho with nouns (agrees) and after verbs. *muy calor is a classic error."
     example: "Hace mucho calor y el hotel es muy caro."
     english: "It's very hot and the hotel is very expensive."
+    tidbit: "Francisco de Quevedo's most famous sonnet is about too much of one thing: \"Érase un hombre a una nariz pegado\", \"once there was a man stuck to a nose\". It's traditionally read as an attack on his rival, the poet Góngora."
     status: draft
   - id: es.a2.past-weekend
     level: A2
@@ -322,6 +362,7 @@ items:
     notes: "Sequencing with primero, luego, después, al final."
     example: "El sábado fuimos a la sierra y luego cenamos en un pueblo."
     english: "On Saturday we went to the mountains and then had dinner in a village."
+    tidbit: "Goya painted Madrid's festive San Isidro pilgrimage in 1788 as a sunny picnic. Decades later, old and deaf, he painted it again on the wall of his own house as a dark procession of howling faces."
     status: draft
   - id: es.a2.childhood
     level: A2
@@ -330,6 +371,7 @@ items:
     notes: "Imperfect for habits; antes vs ahora."
     example: "Antes vivía en el campo; ahora vivo en la ciudad."
     english: "I used to live in the country; now I live in the city."
+    tidbit: "Gabriela Mistral, the first Latin American to win the Nobel Prize in Literature, in 1945, started out as a rural schoolteacher in Chile's Elqui Valley while still a teenager."
     status: draft
   - id: es.a2.invitations
     level: A2
@@ -338,6 +380,7 @@ items:
     notes: "¿Quieres…?, ¿Te gustaría…?, ¿Nos vemos…? (Spain: ¿Te apetece…?, ¿Quedamos…?); declining politely with an excuse."
     example: "¿Quieres ir al cine? —Me encantaría, pero hoy no puedo."
     english: "Do you want to go to the movies? —I'd love to, but I can't today."
+    tidbit: "In Luis Buñuel's The Discreet Charm of the Bourgeoisie, which won the 1972 Oscar for foreign film, a group of friends keep trying to have dinner together and are never allowed to finish."
     status: draft
   - id: es.a2.describe-people-places
     level: A2
@@ -346,6 +389,7 @@ items:
     notes: "Appearance and personality (ser/estar/tener), describing your neighbourhood."
     example: "Mi barrio es tranquilo y tiene muchas tiendas pequeñas."
     english: "My neighbourhood is quiet and has lots of small shops."
+    tidbit: "In Las Meninas of 1656, Velázquez paints himself at work, looking straight at you, while the king and queen appear only in a mirror on the back wall. Nobody has fully settled what the picture is doing."
     status: draft
   - id: es.a2.simple-advice
     level: A2
@@ -354,6 +398,7 @@ items:
     notes: "tienes que, deberías, ¿por qué no…?; tú commands."
     example: "Si estás cansado, ¿por qué no te acuestas temprano?"
     english: "If you're tired, why don't you go to bed early?"
+    tidbit: "In Don Juan Manuel's El conde Lucanor of 1335, a count keeps asking his adviser for help and gets a story each time. One of those stories is an ancestor of The Taming of the Shrew."
     status: draft
   - id: es.a2.plans
     level: A2
@@ -362,41 +407,48 @@ items:
     notes: "ir a, pensar + infinitive, quedar con alguien."
     example: "Este verano pienso visitar a mis primos en México."
     english: "This summer I'm planning to visit my cousins in Mexico."
+    tidbit: "Educated people in Columbus's day knew the Earth was round. The experts who doubted his plan were right about its size: Columbus badly underestimated the distance and was saved by a continent nobody expected."
     status: draft
   - id: es.a2.v-travel
     level: A2
     strand: vocab
     title: "Travel and transport"
+    tidbit: "Pilgrims have walked the Camino de Santiago since the Middle Ages, and the twelfth-century Codex Calixtinus includes advice on the route, the food and dishonest innkeepers: one of Europe's first travel guides."
     words: [el viaje, el boleto, el vuelo, el equipaje, la maleta, el andén, perder el tren, reservar, el alojamiento, la frontera]
     status: draft
   - id: es.a2.v-health
     level: A2
     strand: vocab
     title: "Health and the body"
+    tidbit: "In 1803 Spain sent the Balmis Expedition across the world to spread the smallpox vaccine. With no way to keep it fresh, they carried it in orphan boys, passing it from arm to arm during the voyage."
     words: [la cabeza, la espalda, el estómago, me duele, la fiebre, el resfriado, el médico, la receta, la cita, encontrarse mal]
     status: draft
   - id: es.a2.v-work
     level: A2
     strand: vocab
     title: "Work and jobs"
+    tidbit: "The silver of Potosí, in today's Bolivia, was dug by Indigenous men forced to work under the mita draft. The city grew so rich that \"vale un Potosí\" still means \"worth a fortune\"; Don Quijote uses it."
     words: [el trabajo, la empresa, el jefe, el compañero, el sueldo, la reunión, el horario, contratar, despedir, jubilarse]
     status: draft
   - id: es.a2.v-free-time
     level: A2
     strand: vocab
     title: "Free time and hobbies"
+    tidbit: "Mesoamericans played a ball game with solid rubber balls for thousands of years, long before Europeans knew rubber. In 1528 Cortés brought players to show Charles V's court in Spain."
     words: [el ocio, la afición, quedar de verse, salir a tomar algo, ir de excursión, pintar, tocar la guitarra, el partido, la serie, aburrirse]
     status: draft
   - id: es.a2.v-shopping
     level: A2
     strand: vocab
     title: "Shopping and services"
+    tidbit: "From 1565 to 1815 the Manila Galleons linked Acapulco to the Philippines, bringing Chinese silk and porcelain to Mexico in exchange for American silver. It was one of the first truly global trade routes."
     words: [la talla, probarse, el probador, las ofertas, devolver, el recibo, la tarjeta, en efectivo, barato, caro]
     status: draft
   - id: es.a2.v-weather
     level: A2
     strand: vocab
     title: "Weather and seasons"
+    tidbit: "English \"hurricane\" comes through Spanish huracán from Taíno, the language of the Caribbean people Columbus met first. It was one of the first American words to enter European languages."
     words: [hace sol, hace frío, llueve, nieva, la tormenta, el viento, nublado, la primavera, el verano, el invierno]
     status: draft
   - id: es.a2.topic-tianguis
@@ -404,6 +456,7 @@ items:
     strand: topic
     title: "Tianguis: Mexico's street markets"
     notes: "Fits shopping, food or weekend conversations."
+    tidbit: "Cortés's soldiers who had seen Rome and Constantinople said they had never seen a market as large or as orderly as Tlatelolco's, in the Aztec capital."
     facts:
       - "A tianguis is an open-air market that sets up on a given day of the week in the same street."
       - "The word comes from Nahuatl, the language of the Aztecs (tianquiztli, 'market')."
@@ -415,6 +468,7 @@ items:
     strand: topic
     title: "Día de Muertos"
     notes: "Around late October and early November, or when family, food or traditions come up."
+    tidbit: "The elegant skeleton La Catrina began as a satire by the printmaker José Guadalupe Posada, mocking Mexicans who aped European fashion. Diego Rivera gave her the famous dress in a 1947 mural."
     facts:
       - "Día de Muertos is celebrated in Mexico on 1 and 2 November."
       - "Families build an ofrenda, a home altar with photos of the dead, their favourite food, candles and orange cempasúchil (marigold) flowers."
@@ -426,6 +480,7 @@ items:
     strand: topic
     title: "Meal times in Spain"
     notes: "Daily routines, food, travel to Spain."
+    tidbit: "Spain sits in the wrong time zone. Franco moved its clocks to match Germany's in 1940 and they never moved back, which is one reason Spaniards seem to eat and sleep so late."
     facts:
       - "In Spain lunch (la comida) is the main meal of the day, often eaten around two or three in the afternoon."
       - "Dinner is late by US standards, often after nine in the evening."
@@ -440,6 +495,7 @@ items:
     notes: "conocí (met) vs conocía (knew), supe (found out) vs sabía, quise (tried) vs no quise (refused), pude (managed)."
     example: "Conocí a Lucía en 2019, pero no supe su apellido hasta mucho después."
     english: "I met Lucía in 2019, but I didn't find out her surname until much later."
+    tidbit: "Borges was named director of Argentina's National Library in 1955, just as he was losing his sight. In a poem he called it God's splendid irony, giving him at once the books and the night."
     status: draft
   - id: es.b1.pluperfect
     level: B1
@@ -448,6 +504,7 @@ items:
     notes: "The past before the past, often with ya and todavía no."
     example: "Cuando llegué, la fiesta ya había terminado."
     english: "When I arrived, the party had already ended."
+    tidbit: "The Inca Garcilaso de la Vega, son of an Inca princess and a Spanish captain, left Cuzco and wrote his Comentarios reales in Spain in 1609, drawing on what his mother's relatives had told him as a boy."
     status: draft
   - id: es.b1.future-conditional
     level: B1
@@ -456,6 +513,7 @@ items:
     notes: "Future and conditional of probability: serán las tres (it must be three), estaría cansado (he was probably tired)."
     example: "¿Dónde está Marta? —No sé, estará en el trabajo."
     english: "Where's Marta? —I don't know, she's probably at work."
+    tidbit: "The Maya never predicted the world would end in 2012: that date just closed one great cycle of their calendar. An inscription at Palenque refers to a date in the year 4772."
     status: draft
   - id: es.b1.subjunctive-wishes
     level: B1
@@ -464,6 +522,7 @@ items:
     notes: "querer que, esperar que, ojalá, pedir que. Same subject keeps the infinitive (quiero ir vs quiero que vayas)."
     example: "Espero que vengas a la boda. ¡Ojalá haga buen tiempo!"
     english: "I hope you come to the wedding. I hope the weather's good!"
+    tidbit: "Simón Bolívar wished for a united Spanish America. Dying in 1830 with his Gran Colombia falling apart, he wrote that those who served the revolution had \"ploughed the sea\"."
     status: draft
   - id: es.b1.subjunctive-emotion-doubt
     level: B1
@@ -472,6 +531,7 @@ items:
     notes: "me alegra que, no creo que, es posible que. creo que takes the indicative, no creo que the subjunctive."
     example: "Me alegra que estés aquí, aunque no creo que te quedes mucho."
     english: "I'm glad you're here, though I don't think you'll stay long."
+    tidbit: "In Unamuno's San Manuel Bueno, mártir of 1931, a beloved village priest secretly doesn't believe in eternal life, and spends his days helping others to go on believing."
     status: draft
   - id: es.b1.subjunctive-cuando
     level: B1
@@ -480,6 +540,7 @@ items:
     notes: "Future time clauses take the subjunctive; *cuando llegarás is a typical English-speaker error."
     example: "Cuando llegues, llámame."
     english: "When you arrive, call me."
+    tidbit: "Augusto Monterroso's story from 1959 is among the shortest ever written: \"Cuando despertó, el dinosaurio todavía estaba allí.\" Note that it's a past event, so no subjunctive."
     status: draft
   - id: es.b1.relative-clauses
     level: B1
@@ -488,6 +549,7 @@ items:
     notes: "lo que for 'what' as a noun clause; prepositions stay in front (la chica con la que hablé)."
     example: "Lo que más me gusta es el barrio donde vivo."
     english: "What I like most is the neighbourhood where I live."
+    tidbit: "The most famous relative clause in Spanish opens Don Quijote: \"En un lugar de la Mancha, de cuyo nombre no quiero acordarme…\""
     status: draft
   - id: es.b1.se-impersonal
     level: B1
@@ -496,6 +558,7 @@ items:
     notes: "se vende(n), se dice que, aquí se come bien: Spanish's everyday way of avoiding a subject."
     example: "Se venden pisos. En este pueblo se vive muy bien."
     english: "Flats for sale. People live very well in this town."
+    tidbit: "Colonial officials receiving a royal order they couldn't apply had a formula for it: \"se obedece pero no se cumple\", it is obeyed but not carried out. The impersonal se did the diplomatic work."
     status: draft
   - id: es.b1.se-accidental
     level: B1
@@ -504,6 +567,7 @@ items:
     notes: "Things happen to you rather than being done by you. No English equivalent, so learners avoid it."
     example: "Se me olvidaron las llaves y se me cayó el celular."
     english: "I forgot my keys and dropped my phone."
+    tidbit: "Spanish grammar can let things happen to you with nobody to blame. After the Armada failed in 1588, Philip II is said to have remarked that he had sent his ships to fight men, not the winds."
     status: draft
   - id: es.b1.por-para-full
     level: B1
@@ -512,6 +576,7 @@ items:
     notes: "por for route, duration, means and agent; para for destination, opinion (para mí) and comparison (para ser niño)."
     example: "Pasamos por el parque. Para mí, es el mejor de la ciudad."
     english: "We went through the park. For me, it's the best in the city."
+    tidbit: "Sor Juana Inés de la Cruz taught herself Latin as a girl in colonial Mexico, begged to go to university dressed as a boy, and became a nun in order to study. In 1691 she wrote a famous defence of women's right to learn."
     status: draft
   - id: es.b1.formal-commands
     level: B1
@@ -520,6 +585,7 @@ items:
     notes: "Subjunctive forms; pronouns attached (siéntese) or in front when negative (no se preocupe)."
     example: "Siéntese, por favor, y no se preocupe."
     english: "Please sit down and don't worry."
+    tidbit: "From 1513 Spanish conquerors were required to read aloud the Requerimiento, a formal command to accept the Pope and the Crown. It was in Spanish, and it was sometimes read to an empty beach."
     status: draft
   - id: es.b1.reported-speech
     level: B1
@@ -528,6 +594,7 @@ items:
     notes: "Tense shift after a past reporting verb: vendré → dijo que vendría."
     example: "Me dijo que vendría a las seis, pero no vino."
     english: "He told me he'd come at six, but he didn't."
+    tidbit: "At Valladolid in 1550, Spain's emperor held a formal debate on whether the conquest was just. Bartolomé de las Casas spent days arguing for the humanity and rights of Indigenous Americans."
     status: draft
   - id: es.b1.periphrases
     level: B1
@@ -536,6 +603,7 @@ items:
     notes: "llevar + time + gerund for 'have been doing'; English speakers say *he estado estudiando por dos años."
     example: "Llevo dos años estudiando español y sigo aprendiendo."
     english: "I've been studying Spanish for two years and I'm still learning."
+    tidbit: "Fray Luis de León spent years in the Inquisition's prison. Tradition says that when he returned to his lectern in Salamanca, he began simply: \"Decíamos ayer…\", \"As we were saying yesterday…\""
     status: draft
   - id: es.b1.tell-a-story
     level: B1
@@ -544,6 +612,7 @@ items:
     notes: "Preterite/imperfect together, connectors (de repente, entonces, al final)."
     example: "Estábamos cenando cuando de repente se fue la luz."
     english: "We were having dinner when suddenly the power went out."
+    tidbit: "In the Popol Vuh, the K'iche' Maya book of creation, the gods fail with mud and with wood before they finally make human beings out of maize."
     status: draft
   - id: es.b1.opinions
     level: B1
@@ -552,6 +621,7 @@ items:
     notes: "creo que / no creo que, estoy de acuerdo, tienes razón, depende."
     example: "No estoy de acuerdo: no creo que sea tan fácil."
     english: "I don't agree: I don't think it's that easy."
+    tidbit: "In Salamanca in 1936, the aged philosopher Miguel de Unamuno stood up to Franco's generals, and is reported to have told them, \"Venceréis, pero no convenceréis\": you will win but you will not convince."
     status: draft
   - id: es.b1.feelings-wishes
     level: B1
@@ -560,6 +630,7 @@ items:
     notes: "Emotion + subjunctive, ojalá, me da pena que."
     example: "Me da pena que te vayas tan pronto."
     english: "I'm sad that you're leaving so soon."
+    tidbit: "In a 1933 lecture in Buenos Aires, Federico García Lorca described duende: the dark, earthy force that takes hold of a flamenco singer and can't be learned."
     status: draft
   - id: es.b1.recommendations
     level: B1
@@ -568,6 +639,7 @@ items:
     notes: "te recomiendo que, es mejor que, yo que tú + conditional."
     example: "Yo que tú, iría en tren. Te recomiendo que reserves pronto."
     english: "If I were you, I'd go by train. I'd book early."
+    tidbit: "In 1647 the Jesuit Baltasar Gracián published a book of 300 maxims on how to get on in the world, the Oráculo manual. Schopenhauer loved it enough to translate it into German."
     status: draft
   - id: es.b1.travel-problems
     level: B1
@@ -576,6 +648,7 @@ items:
     notes: "Complaining politely, explaining what happened, asking for a solution."
     example: "Disculpe, reservé una habitación doble y me dieron una sencilla."
     english: "Excuse me, I booked a double room and you've given me a single."
+    tidbit: "Álvar Núñez Cabeza de Vaca was shipwrecked on the Gulf Coast in 1528 and spent eight years crossing the continent on foot to Mexico. Only four men of the expedition survived, one of them an enslaved African, Estevanico."
     status: draft
   - id: es.b1.summarise
     level: B1
@@ -584,41 +657,48 @@ items:
     notes: "trata de, se trata de, al principio, resulta que."
     example: "La película trata de una familia que pierde su casa."
     english: "The film is about a family that loses its home."
+    tidbit: "Jorge Luis Borges found a shortcut for long novels: he wrote essays reviewing and summarising books that don't exist, as if they did, and collected them in Ficciones."
     status: draft
   - id: es.b1.v-feelings
     level: B1
     strand: vocab
     title: "Feelings and personality"
+    tidbit: "Tango's lyricist Enrique Santos Discépolo called it \"a sad thought that can be danced\". Spanish also has vergüenza ajena, the embarrassment you feel on someone else's behalf."
     words: [orgulloso, avergonzado, agobiado, ilusionado, decepcionado, celoso, tímido, terco, sensible, la vergüenza]
     status: draft
   - id: es.b1.v-media-tech
     level: B1
     strand: vocab
     title: "Media and technology"
+    tidbit: "The first printing press in the Americas began work in Mexico City in 1539, more than a century before one reached the English colonies."
     words: [la noticia, el periódico, las redes sociales, descargar, la contraseña, la pantalla, el enlace, subir una foto, el celular, la aplicación]
     status: draft
   - id: es.b1.v-environment
     level: B1
     strand: vocab
     title: "The environment"
+    tidbit: "In 2008 Ecuador became the first country to write rights for nature into its constitution, naming Pachamama, the Andean earth mother."
     words: [el medio ambiente, la contaminación, reciclar, la basura, el cambio climático, la sequía, ahorrar energía, el residuo, la especie, proteger]
     status: draft
   - id: es.b1.v-education
     level: B1
     strand: vocab
     title: "Education"
+    tidbit: "The University of Salamanca dates from 1218, one of the oldest in the world. In the Americas, San Marcos in Lima received its charter in 1551."
     words: [la asignatura, aprobar, reprobar, la nota, la beca, la carrera, el máster, matricularse, el examen, la licenciatura]
     status: draft
   - id: es.b1.v-relationships
     level: B1
     strand: vocab
     title: "Relationships"
+    tidbit: "Malintzin, known as La Malinche, was a Nahua woman who became Cortés's interpreter and the mother of his son. In Mexico malinchista still means someone who prefers foreign things to their own."
     words: [llevarse bien, enamorarse, casarse, separarse, discutir, hacer las paces, la confianza, el vecino, el conocido, echar de menos]
     status: draft
   - id: es.b1.v-housing
     level: B1
     strand: vocab
     title: "Housing"
+    tidbit: "Barcelona's neighbours mocked Antoni Gaudí's rippling apartment building Casa Milà by calling it La Pedrera, \"the quarry\". The insult became its name, and it's now a World Heritage Site."
     words: [alquilar, el alquiler, el dueño, el depósito, el contrato, amueblado, la mudanza, mudarse, el barrio, la hipoteca]
     status: draft
   - id: es.b1.topic-arabic-words
@@ -626,6 +706,7 @@ items:
     strand: topic
     title: "Spanish words from Arabic"
     notes: "Good when ojalá or the subjunctive comes up, or for any etymology chat."
+    tidbit: "In twelfth-century Toledo, teams of Christian, Jewish and Muslim scholars translated Arabic science and philosophy into Latin. Much of Aristotle returned to Western Europe through that city."
     facts:
       - "Much of the Iberian Peninsula was under Muslim rule from 711 until 1492."
       - "Thousands of Spanish words come from Arabic, many beginning with al-, from the Arabic article: almohada, alfombra, aceite, azúcar."
@@ -637,6 +718,7 @@ items:
     strand: topic
     title: "Vos in Argentina and Uruguay"
     notes: "When regional varieties come up; a good aside after practising tú forms."
+    tidbit: "The speech of Buenos Aires grew its own slang, lunfardo, among immigrants at the turn of the twentieth century. Argentines still say laburo for \"work\", from Italian lavoro."
     facts:
       - "In Argentina and Uruguay people say vos instead of tú, with its own verb forms: vos tenés, vos sos, vos podés."
       - "Vos is also common in parts of Central America."
@@ -648,6 +730,7 @@ items:
     strand: topic
     title: "Same thing, different word"
     notes: "Whenever a word the learner uses differs between Spain and Latin America."
+    tidbit: "Guagua is a bus in Cuba and the Canary Islands, but in the Andes it's a baby, from Quechua wawa. The same sound took two entirely different journeys into Spanish."
     facts:
       - "Spain says coche, ordenador, móvil and zumo; Mexico says carro, computadora, celular and jugo."
       - "Spain uses vosotros for 'you all' among friends; Latin America uses ustedes for everyone."
@@ -662,6 +745,7 @@ items:
     notes: "Forms from the preterite stem (tuvieron → tuviera). After past wishes and emotions; -ra and -se forms."
     example: "Mis padres querían que estudiara medicina."
     english: "My parents wanted me to study medicine."
+    tidbit: "Spanish's imperfect subjunctive has two forms. The -se form continues the Latin subjunctive, while the -ra form was once a Latin past indicative (amaveram, \"I had loved\") that changed its job over the centuries."
     status: draft
   - id: es.b2.si-clauses
     level: B2
@@ -670,6 +754,7 @@ items:
     notes: "si + imperfect subjunctive → conditional; si + pluperfect subjunctive → conditional perfect. Never conditional after si."
     example: "Si tuviera tiempo, viajaría más. Si lo hubiera sabido, habría venido."
     english: "If I had time, I'd travel more. If I'd known, I would have come."
+    tidbit: "If smallpox hadn't arrived first, would 168 men have taken an empire? The epidemic had already killed the Inca ruler Huayna Capac and set off a civil war when Pizarro reached Cajamarca in 1532."
     status: draft
   - id: es.b2.subjunctive-relative
     level: B2
@@ -678,6 +763,7 @@ items:
     notes: "Unknown or non-existent antecedents: busco un piso que tenga… vs tengo un piso que tiene…"
     example: "Busco un piso que tenga terraza y que no sea muy caro."
     english: "I'm looking for a flat that has a terrace and isn't too expensive."
+    tidbit: "In the 1530s Bishop Vasco de Quiroga founded communities in Mexico inspired by Thomas More's Utopia: places where everyone would work, share and be cared for."
     status: draft
   - id: es.b2.subjunctive-conjunctions
     level: B2
@@ -686,6 +772,7 @@ items:
     notes: "para que, antes de que, a menos que, sin que; aunque + indicative (fact) vs subjunctive (concession or unknown)."
     example: "Aunque llueva, saldremos. Te lo digo para que lo sepas."
     english: "Even if it rains, we'll go out. I'm telling you so you know."
+    tidbit: "In 1494, at Tordesillas, Spain and Portugal drew a line down the Atlantic to divide the non-Christian world between them. It's the reason Brazil speaks Portuguese."
     status: draft
   - id: es.b2.perfect-subjunctive
     level: B2
@@ -694,6 +781,7 @@ items:
     notes: "no creo que haya llegado; me sorprendió que no hubiera llamado."
     example: "No creo que haya llegado todavía."
     english: "I don't think she's arrived yet."
+    tidbit: "Legend says that when the last Muslim king of Granada looked back at his lost city in 1492, his mother told him to weep like a woman for what he hadn't defended like a man. The mountain pass is still called El Suspiro del Moro."
     status: draft
   - id: es.b2.ser-estar-meaning
     level: B2
@@ -702,6 +790,7 @@ items:
     notes: "ser listo/estar listo, ser rico/estar rico, ser aburrido/estar aburrido, ser malo/estar malo."
     example: "La sopa está riquísima. Su familia es rica."
     english: "The soup is delicious. His family is rich."
+    tidbit: "José Gaos, a Spanish philosopher exiled in Mexico, produced the first translation of Heidegger's Being and Time into any language, in 1951, working in a language with two verbs for \"to be\"."
     status: draft
   - id: es.b2.verbs-of-change
     level: B2
@@ -710,6 +799,7 @@ items:
     notes: "ponerse (moods), volverse (character), hacerse (effort, profession), quedarse (result), convertirse en."
     example: "Se puso rojo, se hizo médico y se quedó sin amigos."
     english: "He went red, became a doctor and ended up without friends."
+    tidbit: "García Márquez said that reading Kafka's Metamorphosis as a student, with its man who becomes an insect in the first sentence, showed him that a person was allowed to write that way."
     status: draft
   - id: es.b2.passive-ser
     level: B2
@@ -718,6 +808,7 @@ items:
     notes: "ser + participle is formal or written; speech prefers se or active with a third-person plural."
     example: "El puente fue construido en 1890. (Lo construyeron en 1890.)"
     english: "The bridge was built in 1890."
+    tidbit: "The Spanish Constitution of 1812 was proclaimed in besieged Cádiz on St Joseph's Day, so people called it La Pepa. The political sense of the word \"liberal\" spread from the debates held there."
     status: draft
   - id: es.b2.reported-requests
     level: B2
@@ -726,6 +817,7 @@ items:
     notes: "pedir, decir, aconsejar + que + subjunctive, shifted to the imperfect subjunctive in the past."
     example: "Me pidió que la llamara cuando llegara."
     english: "She asked me to call her when I arrived."
+    tidbit: "In 1780 Túpac Amaru II, a descendant of the Inca rulers, led a huge Andean uprising demanding an end to forced labour. He was executed in the main square of Cuzco the following year."
     status: draft
   - id: es.b2.lo-neuter
     level: B2
@@ -734,6 +826,7 @@ items:
     notes: "lo + adjective (lo bueno, lo difícil), lo + adverb + que (lo bien que canta)."
     example: "Lo bueno es que nadie se dio cuenta de lo tarde que era."
     english: "The good thing is that nobody noticed how late it was."
+    tidbit: "In 1949 the Cuban novelist Alejo Carpentier gave a name to the wonders of American history in a prologue: lo real maravilloso, \"the marvellous real\". Note the neuter lo doing the naming."
     status: draft
   - id: es.b2.clitic-doubling
     level: B2
@@ -742,6 +835,7 @@ items:
     notes: "A mi madre le encanta…: the pronoun is required with gustar-type verbs. Recognise Spain's leísmo (le vi)."
     example: "A mi madre le encanta este pueblo."
     english: "My mother loves this town."
+    tidbit: "The Real Academia Española was founded in 1713 under the motto \"Limpia, fija y da esplendor\": it cleans, sets and gives splendour. Its grammar has tolerated Madrid's habit of le for \"him\" for centuries."
     status: draft
   - id: es.b2.discourse-markers
     level: B2
@@ -750,6 +844,7 @@ items:
     notes: "sin embargo, en cambio, por lo tanto, de hecho, es decir, o sea, pues; spoken vs written choices."
     example: "No es caro; de hecho, es más barato que el otro."
     english: "It isn't expensive; in fact, it's cheaper than the other one."
+    tidbit: "Rome's great teacher of rhetoric, Quintilian, was born in Calahorra in northern Spain, and the philosopher Seneca in Córdoba. Roman Hispania taught Rome how to argue."
     status: draft
   - id: es.b2.argue
     level: B2
@@ -758,6 +853,7 @@ items:
     notes: "Pros and cons, conceding (es cierto que…, pero), concluding."
     example: "Es cierto que es caro; sin embargo, a largo plazo ahorras dinero."
     english: "It's true that it's expensive; however, in the long run you save money."
+    tidbit: "In the 1530s the Salamanca theologian Francisco de Vitoria argued that Indigenous peoples held real rights over their lands, work now seen as a foundation of international law."
     status: draft
   - id: es.b2.speculate
     level: B2
@@ -766,6 +862,7 @@ items:
     notes: "What would have happened if…; probability (puede que, a lo mejor + indicative)."
     example: "A lo mejor se ha perdido. Si hubiera salido antes, ya estaría aquí."
     english: "Maybe he's lost. If he'd left earlier, he'd be here by now."
+    tidbit: "Borges's 1941 story \"The Garden of Forking Paths\" imagines a universe in which every choice branches into all its outcomes, years before physicists proposed a many-worlds view of quantum mechanics."
     status: draft
   - id: es.b2.report
     level: B2
@@ -774,6 +871,7 @@ items:
     notes: "Reporting verbs beyond decir: comentar, contar, explicar, insistir en, negar."
     example: "Insistió en que no lo sabía y negó haberlo visto."
     english: "He insisted he didn't know and denied having seen it."
+    tidbit: "Rodolfo Walsh published Operación Masacre in 1957, an investigation told like a novel, years before In Cold Blood. He disappeared in 1977, the day after sending an open letter to Argentina's military junta."
     status: draft
   - id: es.b2.abstract-topics
     level: B2
@@ -782,6 +880,7 @@ items:
     notes: "Education, technology, work; generalising (la gente, uno, se)."
     example: "Uno se acostumbra a todo, pero la tecnología cambia muy rápido."
     english: "You get used to everything, but technology changes very fast."
+    tidbit: "María Zambrano, who spent decades in exile after the Civil War, argued that philosophy needs poetry, which she called razón poética. In 1988 she became the first woman to win the Cervantes Prize."
     status: draft
   - id: es.b2.register
     level: B2
@@ -790,6 +889,7 @@ items:
     notes: "When to use usted; vosotros (Spain) vs ustedes (Latin America); recognising voseo (vos tenés)."
     example: "¿Usted es el señor García? Encantada. —Tuteame, por favor."
     english: "Are you Mr García? Pleased to meet you. —Please, call me tú."
+    tidbit: "In the Colombian highlands of Boyacá people still address each other as sumercé, a direct descendant of su merced, \"your grace\": a courtesy from the colonial era still alive in everyday speech."
     status: draft
   - id: es.b2.anecdotes
     level: B2
@@ -798,47 +898,55 @@ items:
     notes: "Intensifiers (súper, -ísimo; re- in Argentina), reactions (¡no me digas!, ¡no manches! in Mexico, ¡qué fuerte! in Spain)."
     example: "¡No me digas! ¿Y qué hiciste? —Nada, me quedé de piedra."
     english: "No way! And what did you do? —Nothing, I was stunned."
+    tidbit: "Lazarillo de Tormes, published anonymously in 1554, began the picaresque novel. In its best-known scene a boy and a blind man agree to share grapes one at a time, and each cheats."
     status: draft
   - id: es.b2.v-society
     level: B2
     strand: vocab
     title: "Politics and society"
+    tidbit: "In 1977, when gatherings were banned under Argentina's dictatorship, mothers of the disappeared began walking in pairs around the Plaza de Mayo, because walking wasn't standing still."
     words: [el gobierno, las elecciones, votar, la ley, la desigualdad, la manifestación, el ciudadano, el derecho, la corrupción, el impuesto]
     status: draft
   - id: es.b2.v-economy
     level: B2
     strand: vocab
     title: "Economy and working life"
+    tidbit: "Scholars at Salamanca noticed that American silver was pushing up prices in Spain. In 1556 Martín de Azpilcueta wrote that money is worth less where it is plentiful, an early statement of what economists now call the quantity theory."
     words: [la crisis, el desempleo, el contrato temporal, trabajar por cuenta propia, la inflación, el ahorro, la deuda, invertir, el beneficio, la competencia]
     status: draft
   - id: es.b2.v-science
     level: B2
     strand: vocab
     title: "Science and research"
+    tidbit: "Santiago Ramón y Cajal, who wanted to be an artist as a boy, won the 1906 Nobel Prize for showing that the brain is built of separate cells. His drawings of neurons are still shown in art museums."
     words: [la investigación, el experimento, el hallazgo, demostrar, la hipótesis, los datos, el avance, la vacuna, el estudio, la inteligencia artificial]
     status: draft
   - id: es.b2.v-arts
     level: B2
     strand: vocab
     title: "Arts and culture"
+    tidbit: "Picasso painted Guernica in 1937 after the bombing of the Basque town and refused to let it enter Spain while Franco's regime lasted. It went to Madrid only in 1981."
     words: [la obra, el escritor, el cuadro, la exposición, el estreno, el personaje, la trama, el guion, la crítica, la puesta en escena]
     status: draft
   - id: es.b2.v-argument
     level: B2
     strand: vocab
     title: "Words for arguing"
+    tidbit: "Averroes of Córdoba answered a famous attack on philosophy with a book called The Incoherence of the Incoherence. His commentaries on Aristotle shaped university debates in Christian Europe for centuries."
     words: [la ventaja, el inconveniente, la consecuencia, el punto de vista, a favor, en contra, plantear, defender, rechazar, en resumen]
     status: draft
   - id: es.b2.v-colloquial
     level: B2
     strand: vocab
     title: "Colloquial Latin American Spanish"
+    tidbit: "The Mexican comic Cantinflas talked so much while saying nothing that he became a verb: cantinflear is in the Real Academia's dictionary."
     words: [chido, ¡qué padre!, la chamba, la lana, ¡no manches!, órale, ahorita, estar hecho polvo, ni de broma, chévere]
     status: draft
   - id: es.b2.v-colloquial-spain
     level: B2
     strand: vocab
     title: "Colloquial Spain"
+    tidbit: "After Franco died in 1975, Madrid exploded into La Movida, a burst of punk, painting and all-night freedom that launched the filmmaker Pedro Almodóvar."
     words: [vale, guay, currar, la pasta, flipar, molar, ¡qué fuerte!, tío, el móvil, el ordenador]
     status: draft
   - id: es.b2.topic-quijote
@@ -846,6 +954,7 @@ items:
     strand: topic
     title: "Don Quijote"
     notes: "Books, reading, or when someone 'tilts at windmills'."
+    tidbit: "Cervantes lost the use of his left hand at the Battle of Lepanto and spent five years as a captive in Algiers. When someone published a fake sequel to Don Quijote, he mocked it inside his own Part Two."
     facts:
       - "Miguel de Cervantes published the first part of Don Quijote in 1605 and the second in 1615."
       - "It is often called the first modern novel."
@@ -857,6 +966,7 @@ items:
     strand: topic
     title: "Frida Kahlo"
     notes: "Art, Mexico City, or overcoming hardship."
+    tidbit: "At eighteen, Frida Kahlo was badly hurt in a bus crash in 1925. She began to paint while bedridden, with a mirror fixed above her so that she could use herself as a model."
     facts:
       - "Frida Kahlo (1907-1954) was a Mexican painter known above all for her self-portraits."
       - "She lived in the Casa Azul in Coyoacán, Mexico City, which is now a museum."

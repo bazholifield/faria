@@ -19,6 +19,7 @@ Edit them in the Helm (Faria → Syllabus) or by hand; both keep the same format
   notes: "What to cover, and what English speakers get wrong."
   example: "Ayer comí paella con mis amigos."
   english: "Yesterday I ate paella with my friends."
+  tidbit: "A true, interesting bit of history, art, literature or philosophy tied to this item."
   words: [...]                  # vocab items: the core words of the theme (topics: optional)
   facts:                        # topic items only: what the mentor may say, and nothing beyond it
     - "One checked fact per line."
@@ -33,6 +34,10 @@ Edit them in the Helm (Faria → Syllabus) or by hand; both keep the same format
 - **topic**: a story or cultural note (history, etymology, regional varieties) the mentor can
   tell when the conversation goes there. `notes` says when it fits; `facts` are the only claims
   it should make, so every fact should be one you'd stand behind.
+
+Every item has a **tidbit**: what the mentor tells when the learner has nothing to talk about, or
+when the item comes up. Like `facts`, it's the only claim the mentor should make, so it has to be
+one you'd stand behind.
 
 Order matters: within a level, items are listed in the order they should be introduced.
 

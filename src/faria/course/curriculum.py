@@ -52,10 +52,10 @@ def next_items(items: list[dict], band: str, covered: set[str], n: int) -> list[
 
 
 def topics(items: list[dict], band: str, told: set[str], n: int) -> list[dict]:
-    """Topic cards not yet told, at or below the level above the learner's
-    (the mentor adapts the language; the content just shouldn't be out of reach)."""
+    """Stories not yet told: topic cards and any item with a tidbit, at or below the level
+    above the learner's (the mentor adapts the language; the content just shouldn't be out of reach)."""
     ceiling = band_index(band) + 1
-    return [i for i in items if i["strand"] == "topic" and i["id"] not in told
+    return [i for i in items if (i["strand"] == "topic" or i.get("tidbit")) and i["id"] not in told
             and band_index(i["level"]) <= ceiling][:n]
 
 

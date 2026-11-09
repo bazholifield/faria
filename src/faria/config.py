@@ -189,7 +189,7 @@ class CourseConfig(BaseModel):
     curriculum_dir: Path = Path("curriculum")   # <lang>.yaml files (curriculum/README.md)
     max_due_words: int = 6                      # words offered for review per session
     new_items_offered: int = 2                  # syllabus items suggested per session
-    topics_offered: int = 2
+    topics_offered: int = 5
     review_intervals_days: list[int] = [1, 3, 7, 14, 30]  # Leitner boxes 1..5
     solid_after_sessions: int = 3               # correct use in this many sessions = solid
     # The variety the mentor speaks by default; other regions come up as asides.

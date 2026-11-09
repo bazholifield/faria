@@ -10,6 +10,7 @@ items:
     notes: "der/die/das learned with every noun; a few reliable endings (-ung, -heit, -keit → die; -chen → das). Plurals come in several patterns."
     example: "Der Tisch, die Lampe und das Bett sind neu."
     english: "The table, the lamp and the bed are new."
+    tidbit: "In German the sun is feminine and the moon masculine, the reverse of the Romance languages. The Merseburg Charms, written down in the tenth century, name a goddess called Sunna."
     status: checked
   - id: de.a1.present-regular
     level: A1
@@ -18,6 +19,7 @@ items:
     notes: "Regular endings; sein and haben fully irregular. German present also covers English 'I'm doing' and near future."
     example: "Ich wohne in Chicago und arbeite an einer Schule."
     english: "I live in Chicago and work at a school."
+    tidbit: "The oldest heroic poem in German, the Hildebrandslied, was copied around 830 into a religious book at Fulda: a father and son who meet on a battlefield and must fight."
     status: checked
   - id: de.a1.stem-change
     level: A1
@@ -26,6 +28,7 @@ items:
     notes: "Changes only in du and er/sie/es: fahren → fährt, sprechen → spricht, lesen → liest."
     example: "Er fährt jeden Tag mit dem Rad und spricht drei Sprachen."
     english: "He cycles every day and speaks three languages."
+    tidbit: "Jacob Grimm, of the fairy tales, was also one of the founders of historical linguistics. He popularised the words Ablaut and Umlaut, and \"Grimm's Law\" still describes how Germanic consonants shifted."
     status: checked
   - id: de.a1.v2-word-order
     level: A1
@@ -34,6 +37,7 @@ items:
     notes: "The verb is always the second element; anything can go first, the subject then follows the verb (Heute gehe ich…). English speakers put the subject second."
     example: "Heute gehe ich ins Kino. Kommst du mit?"
     english: "Today I'm going to the cinema. Are you coming?"
+    tidbit: "Nietzsche's most quoted line keeps the verb in second place: \"Was mich nicht umbringt, macht mich stärker.\" What doesn't kill me makes me stronger."
     status: checked
   - id: de.a1.accusative
     level: A1
@@ -42,6 +46,7 @@ items:
     notes: "Only masculine changes (der → den, ein → einen); accusative pronouns (mich, dich, ihn)."
     example: "Ich habe einen Bruder. Kennst du ihn?"
     english: "I have a brother. Do you know him?"
+    tidbit: "\"Ich hab noch einen Koffer in Berlin\", \"I still have a suitcase in Berlin\": Marlene Dietrich, who had left Germany and fought against the Nazis, made this her song of return."
     status: checked
   - id: de.a1.nicht-kein
     level: A1
@@ -50,6 +55,7 @@ items:
     notes: "kein negates nouns with ein or no article; nicht negates everything else."
     example: "Ich habe keine Zeit und ich bin nicht müde."
     english: "I don't have time and I'm not tired."
+    tidbit: "\"Keine Experimente!\", no experiments, was Konrad Adenauer's successful election slogan in 1957: a whole nation's post-war mood in two words."
     status: checked
   - id: de.a1.modal-verbs
     level: A1
@@ -58,6 +64,7 @@ items:
     notes: "können, müssen, wollen, möchten, dürfen, sollen; the infinitive goes to the end."
     example: "Ich möchte einen Kaffee, aber ich muss gleich gehen."
     english: "I'd like a coffee, but I have to go soon."
+    tidbit: "Kant's moral philosophy is often summed up with two modal verbs: \"Du kannst, denn du sollst.\" You can, because you ought to."
     status: checked
   - id: de.a1.separable-verbs
     level: A1
@@ -66,6 +73,7 @@ items:
     notes: "The prefix goes to the end of the clause: aufstehen → ich stehe um sieben auf."
     example: "Ich stehe um sieben Uhr auf und rufe meine Mutter an."
     english: "I get up at seven and call my mother."
+    tidbit: "Mark Twain joked in \"The Awful German Language\" that a German verb's parts could be spread so far apart that the two ends of a sentence were in different counties."
     status: checked
   - id: de.a1.possessives
     level: A1
@@ -74,6 +82,7 @@ items:
     notes: "mein, dein, sein, ihr, unser, euer, Ihr; endings like ein. sein = his, ihr = her/their."
     example: "Das ist meine Schwester und ihr Freund."
     english: "That's my sister and her boyfriend."
+    tidbit: "\"Meine Ruh ist hin, mein Herz ist schwer\" is Gretchen at her spinning wheel in Goethe's Faust. Franz Schubert set it to music when he was seventeen."
     status: checked
   - id: de.a1.questions
     level: A1
@@ -82,6 +91,7 @@ items:
     notes: "wer, was, wo, woher, wohin, wann, wie; doch to contradict a negative question."
     example: "Kommst du nicht? — Doch, ich komme!"
     english: "Aren't you coming? — Yes, I am!"
+    tidbit: "Gretchen asks Faust, \"Nun sag, wie hast du's mit der Religion?\" German still calls the awkward question that gets to the point a Gretchenfrage."
     status: checked
   - id: de.a1.es-gibt
     level: A1
@@ -90,6 +100,7 @@ items:
     notes: "Existence takes the accusative: es gibt einen Park."
     example: "In meiner Straße gibt es einen Bäcker und einen Park."
     english: "There's a bakery and a park on my street."
+    tidbit: "Es gibt literally means \"it gives\". The philosopher Heidegger made a great deal of that: in German, being is something that is given."
     status: checked
   - id: de.a1.imperative
     level: A1
@@ -98,6 +109,7 @@ items:
     notes: "du (komm!), ihr (kommt!), Sie (kommen Sie!); bitte and mal soften it."
     example: "Komm doch mal vorbei! Setzen Sie sich bitte."
     english: "Do come by! Please sit down."
+    tidbit: "Kant defined the Enlightenment with an order, in 1784: \"Habe Mut, dich deines eigenen Verstandes zu bedienen!\" Have the courage to use your own understanding."
     status: checked
   - id: de.a1.introduce-yourself
     level: A1
@@ -106,6 +118,7 @@ items:
     notes: "Name, origin, where you live, job; du vs Sie at first contact."
     example: "Ich heiße Ana, ich komme aus den USA und wohne in Chicago."
     english: "My name is Ana, I'm from the US and I live in Chicago."
+    tidbit: "After the fall of the monarchy in 1919 German nobility lost its legal privileges, and von became simply part of a surname. Austria abolished it altogether."
     status: checked
   - id: de.a1.personal-information
     level: A1
@@ -114,6 +127,7 @@ items:
     notes: "Age, family, contact details; asking someone to repeat (Wie bitte?, Noch einmal, bitte)."
     example: "Wie bitte? Können Sie das noch einmal sagen?"
     english: "Sorry? Could you say that again?"
+    tidbit: "The most common German surnames are medieval jobs: Müller the miller, Schmidt the smith, Schneider the tailor, Fischer the fisherman."
     status: checked
   - id: de.a1.order-food
     level: A1
@@ -122,6 +136,7 @@ items:
     notes: "Ich hätte gern…, Ich nehme…, Zahlen, bitte; zusammen oder getrennt?"
     example: "Ich hätte gern ein Wasser und eine Brezel. — Zusammen oder getrennt?"
     english: "I'd like a water and a pretzel. — Together or separately?"
+    tidbit: "Herta Heuwer is credited with inventing the currywurst at her Berlin food stand in 1949, using ketchup and curry powder said to have come from British soldiers."
     status: checked
   - id: de.a1.shopping-prices
     level: A1
@@ -130,6 +145,7 @@ items:
     notes: "Was kostet…? / Wie viel kosten…?; numbers with units first (einundzwanzig)."
     example: "Was kosten die Äpfel? — Zwei Euro das Kilo."
     english: "How much are the apples? — Two euros a kilo."
+    tidbit: "In the German hyperinflation of 1923, a loaf of bread came to cost billions of marks. Workers were paid twice a day so that they could spend their wages before they lost their value."
     status: checked
   - id: de.a1.time-and-days
     level: A1
@@ -138,6 +154,7 @@ items:
     notes: "Wie spät ist es?, um acht Uhr, halb neun (= 8:30, a classic trap), montags."
     example: "Montags fange ich um halb neun an."
     english: "On Mondays I start at half past eight."
+    tidbit: "Donnerstag is Thor's day. Wednesday was Wodan's day in northern Europe, but the Church helped replace it in German with the neutral Mittwoch, \"mid-week\"."
     status: checked
   - id: de.a1.likes-dislikes
     level: A1
@@ -146,41 +163,48 @@ items:
     notes: "gern + verb (ich koche gern), mögen + noun, lieber/am liebsten."
     example: "Ich koche gern, aber ich esse lieber im Restaurant."
     english: "I like cooking, but I prefer eating out."
+    tidbit: "Schopenhauer, the great pessimist, disliked most people and loved poodles. He owned a series of them, and called each one Atma, a Sanskrit word for the soul."
     status: checked
   - id: de.a1.v-family
     level: A1
     strand: vocab
     title: "Family"
+    tidbit: "The first edition of the Brothers Grimm had wicked mothers. The brothers turned them into stepmothers in later editions, so as to protect the image of motherhood."
     words: [die Familie, die Mutter, der Vater, der Bruder, die Schwester, der Sohn, die Tochter, die Großeltern, der Cousin, der Partner]
     status: checked
   - id: de.a1.v-food
     level: A1
     strand: vocab
     title: "Food and drink"
+    tidbit: "Potatoes were new and distrusted when Frederick the Great pushed farmers to plant them in 1756. People still leave potatoes on his grave at Sanssouci."
     words: [das Brot, das Wasser, die Milch, der Käse, das Obst, das Fleisch, der Fisch, das Gemüse, das Frühstück, das Abendessen]
     status: checked
   - id: de.a1.v-home
     level: A1
     strand: vocab
     title: "Home"
+    tidbit: "The Bauhaus school, founded in Weimar in 1919, set out to join art, craft and industry, and its idea of what a chair or a lamp should be is still in your home."
     words: [das Haus, die Wohnung, die Küche, das Schlafzimmer, das Bad, der Tisch, der Stuhl, das Bett, das Fenster, die Tür]
     status: checked
   - id: de.a1.v-city
     level: A1
     strand: vocab
     title: "Places in town"
+    tidbit: "A medieval principle held that a serf who lived a year and a day in a free town became free. The nineteenth century summed it up as \"Stadtluft macht frei\": city air makes you free."
     words: [die Straße, der Laden, die Bäckerei, die Bank, der Bahnhof, der Park, das Museum, die Apotheke, in der Nähe, weit weg]
     status: checked
   - id: de.a1.v-daily-routine
     level: A1
     strand: vocab
     title: "Daily routine"
+    tidbit: "The story goes that Immanuel Kant's afternoon walk in Königsberg was so regular that his neighbours set their clocks by it."
     words: [aufwachen, aufstehen, duschen, frühstücken, arbeiten, zu Mittag essen, sich ausruhen, nach Hause kommen, zu Abend essen, ins Bett gehen]
     status: checked
   - id: de.a1.v-clothes-colours
     level: A1
     strand: vocab
     title: "Clothes and colours"
+    tidbit: "Black, red and gold are traditionally linked to the uniforms of the Lützow volunteers who fought Napoleon. They became the colours of German democracy at the Hambach Festival of 1832."
     words: [das Hemd, die Hose, die Schuhe, der Mantel, das Kleid, rot, blau, grün, schwarz, weiß]
     status: checked
   - id: de.a1.topic-du-sie
@@ -188,6 +212,7 @@ items:
     strand: topic
     title: "Du or Sie?"
     notes: "Meeting people, work, or when the learner isn't sure which to use."
+    tidbit: "Germans moving from Sie to du once marked it with a ritual, Brüderschaft trinken: linking arms and drinking together before using first names."
     facts:
       - "German has an informal du and a formal Sie."
       - "Switching to du is usually offered by the older or more senior person: 'Wollen wir uns duzen?'"
@@ -202,6 +227,7 @@ items:
     notes: "The spoken past: haben + participle at the end (ge-…-t / ge-…-en). Spoken German rarely uses the Präteritum of most verbs."
     example: "Gestern habe ich lange geschlafen und dann einen Film gesehen."
     english: "Yesterday I slept in and then watched a film."
+    tidbit: "Willy Brandt knelt at the Warsaw Ghetto memorial in 1970, unannounced. He later explained: \"Ich habe getan, was Menschen tun, wenn die Sprache versagt.\" I did what people do when words fail."
     status: draft
   - id: de.a2.perfekt-sein
     level: A2
@@ -210,6 +236,7 @@ items:
     notes: "Motion and change of state (gehen, fahren, aufstehen, werden), plus sein and bleiben."
     example: "Wir sind nach Berlin gefahren und dort zwei Tage geblieben."
     english: "We drove to Berlin and stayed there two days."
+    tidbit: "In 1786 Goethe slipped away from the Weimar court in secret and travelled to Italy for almost two years. His Italian Journey made that trip the dream of generations of Germans."
     status: draft
   - id: de.a2.dative
     level: A2
@@ -218,6 +245,7 @@ items:
     notes: "dem/der/dem/den + -n in the plural; dative pronouns (mir, dir, ihm); the indirect object."
     example: "Ich gebe dem Kind ein Buch und meiner Mutter Blumen."
     english: "I'm giving the child a book and my mother flowers."
+    tidbit: "In 2004 Bastian Sick published a bestseller about the German language with a joke grammar mistake for a title: Der Dativ ist dem Genitiv sein Tod."
     status: draft
   - id: de.a2.dative-verbs
     level: A2
@@ -226,6 +254,7 @@ items:
     notes: "helfen, danken, gefallen, gehören, schmecken; gefallen works like Spanish gustar (das gefällt mir)."
     example: "Die Stadt gefällt mir. Kannst du mir helfen?"
     english: "I like the city. Can you help me?"
+    tidbit: "The Reichstag in Berlin carries a dative across its front in bronze letters: DEM DEUTSCHEN VOLKE, \"to the German people\". The inscription was added only in 1916."
     status: draft
   - id: de.a2.prepositions-fixed
     level: A2
@@ -234,6 +263,7 @@ items:
     notes: "Dative: mit, nach, bei, seit, von, zu, aus. Accusative: für, ohne, durch, gegen, um. Contractions (zum, beim, vom)."
     example: "Ich fahre mit dem Bus zur Arbeit und gehe ohne meinen Schirm."
     english: "I take the bus to work and go without my umbrella."
+    tidbit: "Für Elise is one of the most famous piano pieces ever written, but it was found only after Beethoven's death, and nobody knows for sure who Elise was."
     status: draft
   - id: de.a2.two-way-prepositions
     level: A2
@@ -242,6 +272,7 @@ items:
     notes: "in, an, auf, über, unter…: accusative for movement (wohin?), dative for location (wo?). legen/liegen, stellen/stehen."
     example: "Ich lege das Buch auf den Tisch. Jetzt liegt es auf dem Tisch."
     english: "I'm putting the book on the table. Now it's on the table."
+    tidbit: "Caspar David Friedrich's Wanderer above the Sea of Fog (über dem Nebelmeer, dative, because he's standing still) shows a man with his back to us: the great image of German Romanticism."
     status: draft
   - id: de.a2.subordinate-clauses
     level: A2
@@ -250,6 +281,7 @@ items:
     notes: "Subordinate clauses send the conjugated verb to the end; a clause in front puts the main verb first (Wenn ich Zeit habe, komme ich)."
     example: "Ich bleibe zu Hause, weil ich krank bin."
     english: "I'm staying home because I'm ill."
+    tidbit: "Thomas Mann's sentences, with verbs held back until the end, can run half a page. His novel Buddenbrooks, about the decline of a merchant family, earned him the Nobel Prize in 1929."
     status: draft
   - id: de.a2.reflexive-verbs
     level: A2
@@ -258,6 +290,7 @@ items:
     notes: "sich freuen (auf/über), sich treffen, sich erinnern; dative reflexive with a body part (ich wasche mir die Hände)."
     example: "Ich freue mich auf das Wochenende."
     english: "I'm looking forward to the weekend."
+    tidbit: "Freud wrote about das Ich and das Es, plain German for \"the I\" and \"the it\". English translators turned them into Latin, ego and id, making them sound far more clinical than he did."
     status: draft
   - id: de.a2.comparatives
     level: A2
@@ -266,6 +299,7 @@ items:
     notes: "-er als, so … wie, am -sten; umlaut in short adjectives (alt → älter); gut/besser/am besten, gern/lieber/am liebsten."
     example: "Mein Bruder ist älter als ich, aber ich bin größer."
     english: "My brother is older than me, but I'm taller."
+    tidbit: "Cologne Cathedral took 632 years to finish, from 1248 to 1880. When it was completed it was briefly the tallest building in the world."
     status: draft
   - id: de.a2.adjective-endings-intro
     level: A2
@@ -274,6 +308,7 @@ items:
     notes: "After der/die/das: -e or -en. Enough for common phrases (der neue Job, mit dem alten Auto)."
     example: "Der neue Job ist toll, aber ich fahre noch mit dem alten Auto."
     english: "The new job is great, but I'm still driving the old car."
+    tidbit: "The Brothers Grimm began their great German dictionary in 1838. Jacob died while working on the word Frucht. The project was finished in 1961, more than a century after they started."
     status: draft
   - id: de.a2.prateritum-basics
     level: A2
@@ -282,6 +317,7 @@ items:
     notes: "These few verbs use the Präteritum even in speech (war, hatte, konnte, musste)."
     example: "Ich war gestern krank und konnte nicht kommen."
     english: "I was ill yesterday and couldn't come."
+    tidbit: "Karl May's Winnetou novels gave generations of Germans their picture of the American West, and he wrote nearly all of them before he ever set foot in the United States."
     status: draft
   - id: de.a2.seit
     level: A2
@@ -290,6 +326,7 @@ items:
     notes: "For 'have been doing': ich wohne seit drei Jahren hier. *Ich habe hier für drei Jahre gewohnt is an English-speaker error."
     example: "Ich lerne seit zwei Jahren Deutsch."
     english: "I've been learning German for two years."
+    tidbit: "Since 1634 the Bavarian village of Oberammergau has staged a Passion play about every ten years, keeping a vow its people made during an outbreak of plague."
     status: draft
   - id: de.a2.past-weekend
     level: A2
@@ -298,6 +335,7 @@ items:
     notes: "Perfekt with sequencing (zuerst, dann, danach, am Ende), keeping verb-second after each."
     example: "Am Samstag sind wir in die Berge gefahren, danach haben wir gegrillt."
     english: "On Saturday we went to the mountains, then we had a barbecue."
+    tidbit: "Oktoberfest began as a wedding party: the marriage of Crown Prince Ludwig of Bavaria in October 1810, with horse races for the people of Munich."
     status: draft
   - id: de.a2.childhood
     level: A2
@@ -306,6 +344,7 @@ items:
     notes: "früher vs heute; war/hatte plus Perfekt."
     example: "Früher habe ich auf dem Land gewohnt, heute wohne ich in der Stadt."
     english: "I used to live in the country; now I live in the city."
+    tidbit: "A Frankfurt doctor, Heinrich Hoffmann, couldn't find a picture book he liked for his son, so in 1845 he made Struwwelpeter, in which disobedient children get terrifying punishments."
     status: draft
   - id: de.a2.invitations
     level: A2
@@ -314,6 +353,7 @@ items:
     notes: "Hast du Lust…?, Wollen wir…?; declining with leider and a reason."
     example: "Hast du Lust, ins Kino zu gehen? — Gern, aber heute kann ich leider nicht."
     english: "Do you fancy going to the cinema? — I'd love to, but unfortunately I can't today."
+    tidbit: "Around 1800 some of the most brilliant gatherings in Berlin took place in the homes of Jewish women such as Rahel Varnhagen, where philosophers, nobles and poets met as equals."
     status: draft
   - id: de.a2.describe-people-places
     level: A2
@@ -322,6 +362,7 @@ items:
     notes: "Appearance and character; your neighbourhood; es gibt, liegt."
     example: "Mein Viertel ist ruhig und es gibt viele kleine Läden."
     english: "My neighbourhood is quiet and there are lots of small shops."
+    tidbit: "In his self-portrait of 1500 Albrecht Dürer faces us directly, in a pose traditionally reserved for Christ. It was an astonishing claim for an artist to make."
     status: draft
   - id: de.a2.simple-advice
     level: A2
@@ -330,6 +371,7 @@ items:
     notes: "Du solltest…, Warum … nicht?, imperative with doch mal."
     example: "Du bist müde? Geh doch mal früher ins Bett!"
     english: "You're tired? Why not go to bed earlier!"
+    tidbit: "Adolph Knigge published Über den Umgang mit Menschen in 1788, a book about how to deal with people. Today the word Knigge simply means a guide to manners."
     status: draft
   - id: de.a2.plans
     level: A2
@@ -338,41 +380,48 @@ items:
     notes: "Present tense + time expression, vorhaben, wollen."
     example: "Im Sommer habe ich vor, meine Freunde in Wien zu besuchen."
     english: "This summer I'm planning to visit my friends in Vienna."
+    tidbit: "King Ludwig II of Bavaria spent a fortune on his fantasy castle at Neuschwanstein and died in mysterious circumstances in 1886. It was opened to paying visitors just weeks later."
     status: draft
   - id: de.a2.v-travel
     level: A2
     strand: vocab
     title: "Travel and transport"
+    tidbit: "Alexander von Humboldt spent five years, from 1799, exploring Spanish America with the botanist Aimé Bonpland. Darwin said Humboldt's writing shaped his entire course in life."
     words: [die Reise, die Fahrkarte, der Flug, das Gepäck, der Koffer, das Gleis, den Zug verpassen, buchen, die Unterkunft, umsteigen]
     status: draft
   - id: de.a2.v-health
     level: A2
     strand: vocab
     title: "Health and the body"
+    tidbit: "Otto von Bismarck, no friend of socialists, created the first national health insurance in 1883, in part to take away their best argument."
     words: [der Kopf, der Rücken, der Bauch, Kopfschmerzen haben, das Fieber, die Erkältung, der Arzt, das Rezept, der Termin, sich krank fühlen]
     status: draft
   - id: de.a2.v-work
     level: A2
     strand: vocab
     title: "Work and jobs"
+    tidbit: "The sociologist Max Weber argued in 1905 that Protestant ideas helped create capitalism. He pointed to the word Beruf, \"job\", which Luther's Bible had given the sense of a calling."
     words: [die Arbeit, die Firma, der Chef, der Kollege, das Gehalt, die Besprechung, die Arbeitszeit, einstellen, kündigen, in Rente gehen]
     status: draft
   - id: de.a2.v-free-time
     level: A2
     strand: vocab
     title: "Free time and hobbies"
+    tidbit: "The small garden plots at the edge of German cities are called Schrebergärten after a Leipzig doctor, Moritz Schreber, who believed in fresh air for children."
     words: [die Freizeit, ausgehen, wandern, malen, Gitarre spielen, das Spiel, die Serie, sich langweilen, basteln, das Wochenende]
     status: draft
   - id: de.a2.v-shopping
     level: A2
     strand: vocab
     title: "Shopping and services"
+    tidbit: "Dresden's Striezelmarkt, dating from 1434, is one of the oldest Christmas markets in Germany."
     words: [die Größe, anprobieren, die Umkleidekabine, der Schlussverkauf, umtauschen, der Kassenbon, die Karte, bar bezahlen, günstig, teuer]
     status: draft
   - id: de.a2.v-weather
     level: A2
     strand: vocab
     title: "Weather and seasons"
+    tidbit: "Sturm und Drang, \"storm and stress\", the movement of the young Goethe and Schiller, took its name from a 1776 play by Friedrich Klinger."
     words: [die Sonne scheint, es ist kalt, es regnet, es schneit, das Gewitter, der Wind, bewölkt, der Frühling, der Sommer, der Winter]
     status: draft
   - id: de.a2.topic-kaffee-und-kuchen
@@ -380,6 +429,7 @@ items:
     strand: topic
     title: "Kaffee und Kuchen"
     notes: "Food, weekends, visiting family."
+    tidbit: "Johann Sebastian Bach wrote a comic Coffee Cantata around 1734 for a Leipzig coffeehouse, about a daughter who won't give up her coffee, even to find a husband."
     facts:
       - "Kaffee und Kuchen is a German tradition of coffee and cake in the afternoon, especially on Sundays."
       - "Popular cakes include Apfelkuchen, Käsekuchen and Schwarzwälder Kirschtorte."
@@ -391,6 +441,7 @@ items:
     strand: topic
     title: "German in Austria and Switzerland"
     notes: "Regional varieties, travel, or when an Austrian or Swiss word comes up."
+    tidbit: "When Austria joined the European Union in 1995 its treaty protected 23 Austrian food words, such as Erdäpfel for potatoes and Marillen for apricots."
     facts:
       - "In Austria January is Jänner, tomatoes are Paradeiser and potatoes are Erdäpfel."
       - "In Switzerland people greet with Grüezi, and a bicycle is a Velo."
@@ -405,6 +456,7 @@ items:
     notes: "After der-words, ein-words and no article. The hardest system for learners; aim for high-frequency phrases first."
     example: "Ein guter Freund hat mir mit frischem Brot und heißem Kaffee geholfen."
     english: "A good friend helped me out with fresh bread and hot coffee."
+    tidbit: "Eine kleine Nachtmusik, \"a little night music\", is one of Mozart's best-known pieces, but it wasn't published until decades after his death."
     status: draft
   - id: de.b1.prateritum
     level: B1
@@ -413,6 +465,7 @@ items:
     notes: "Regular (-te) and strong (ging, kam, sah) forms; written and northern spoken narrative."
     example: "Es war spät, als wir endlich ankamen."
     english: "It was late when we finally arrived."
+    tidbit: "\"Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt.\" Kafka's Metamorphosis wastes no time."
     status: draft
   - id: de.b1.plusquamperfekt
     level: B1
@@ -421,6 +474,7 @@ items:
     notes: "The past before the past, often with nachdem."
     example: "Nachdem wir gegessen hatten, gingen wir spazieren."
     english: "After we had eaten, we went for a walk."
+    tidbit: "Kafka had asked his friend Max Brod to burn everything he had left unpublished. Brod refused, and that's why we have The Trial and The Castle."
     status: draft
   - id: de.b1.konjunktiv-ii
     level: B1
@@ -429,6 +483,7 @@ items:
     notes: "Politeness (Könnten Sie…?), wishes (Ich hätte gern…), advice (An deiner Stelle würde ich…)."
     example: "Könnten Sie mir helfen? An deiner Stelle würde ich das Angebot annehmen."
     english: "Could you help me? If I were you, I'd take the offer."
+    tidbit: "Rilke's Duino Elegies begin in the subjunctive, at a point of despair: \"Wer, wenn ich schriee, hörte mich denn aus der Engel Ordnungen?\" Who, if I cried out, would hear me among the angels' orders?"
     status: draft
   - id: de.b1.wenn-konjunktiv
     level: B1
@@ -437,6 +492,7 @@ items:
     notes: "Wenn ich Zeit hätte, würde ich…; also without wenn (Hätte ich Zeit, …)."
     example: "Wenn ich mehr Zeit hätte, würde ich Klavier lernen."
     english: "If I had more time, I'd learn the piano."
+    tidbit: "\"If I knew the world would end tomorrow, I would still plant an apple tree today\" is widely attributed to Martin Luther, but no one has ever found it in his writings."
     status: draft
   - id: de.b1.relative-clauses
     level: B1
@@ -445,6 +501,7 @@ items:
     notes: "Relative pronoun takes its case from its role in the clause (der Mann, den ich kenne / dem ich helfe); verb at the end; never omitted."
     example: "Das ist der Kollege, mit dem ich jeden Tag zur Arbeit fahre."
     english: "That's the colleague I drive to work with every day."
+    tidbit: "Goethe's devil introduces himself in a relative clause: \"Ich bin der Geist, der stets verneint.\" I am the spirit that always denies."
     status: draft
   - id: de.b1.passive
     level: B1
@@ -453,6 +510,7 @@ items:
     notes: "werden + participle; Perfekt passive (ist … worden); von for the agent. Speech often uses man instead."
     example: "Das Haus wurde 1890 gebaut. Hier wird viel diskutiert."
     english: "The house was built in 1890. There's a lot of discussion here."
+    tidbit: "In 1995 the Reichstag was wrapped in silver fabric by the artists Christo and Jeanne-Claude, after more than twenty years of campaigning, and millions came to see it."
     status: draft
   - id: de.b1.genitive
     level: B1
@@ -461,6 +519,7 @@ items:
     notes: "des/der + -(e)s; wegen, trotz, während; speech often replaces it with von + dative."
     example: "Wegen des Wetters bleiben wir zu Hause. Das Auto meines Vaters ist alt."
     english: "Because of the weather we're staying home. My father's car is old."
+    tidbit: "Des Knaben Wunderhorn, \"The Boy's Magic Horn\", is a collection of German folk poems published in 1805–08 by Achim von Arnim and Clemens Brentano. Gustav Mahler later set many of them to music."
     status: draft
   - id: de.b1.zu-infinitive
     level: B1
@@ -469,6 +528,7 @@ items:
     notes: "Es ist schwer, … zu …; um … zu for purpose (*für zu is an English-speaker error)."
     example: "Ich lerne Deutsch, um in Berlin zu arbeiten."
     english: "I'm learning German in order to work in Berlin."
+    tidbit: "Karl Marx's most famous sentence, carved on his grave in London, ends with a zu: \"Die Philosophen haben die Welt nur verschieden interpretiert; es kommt aber darauf an, sie zu verändern.\""
     status: draft
   - id: de.b1.prepositional-verbs
     level: B1
@@ -477,6 +537,7 @@ items:
     notes: "warten auf, sich interessieren für, denken an; darauf, wofür when the object is a thing."
     example: "Worauf wartest du? — Auf den Bus. Ich warte schon lange darauf."
     english: "What are you waiting for? — The bus. I've been waiting for it for ages."
+    tidbit: "The poet Friedrich Hölderlin spent his last 36 years in a tower room above the river in Tübingen, cared for by a carpenter who admired his novel."
     status: draft
   - id: de.b1.als-wenn-obwohl
     level: B1
@@ -485,6 +546,7 @@ items:
     notes: "als for a single past event, wenn for repeated or present/future ones."
     example: "Als ich klein war, war ich oft krank. Wenn ich krank war, blieb ich zu Hause."
     english: "When I was little, I was often ill. Whenever I was ill, I stayed home."
+    tidbit: "Beethoven composed his Ninth Symphony although he was almost entirely deaf. Tradition says that at the premiere in 1824 he had to be turned around to see the applause."
     status: draft
   - id: de.b1.futur-i
     level: B1
@@ -493,6 +555,7 @@ items:
     notes: "werden + infinitive for promises, predictions and probability (er wird wohl krank sein)."
     example: "Wo ist Max? — Er wird wohl noch im Büro sein."
     english: "Where's Max? — He's probably still at the office."
+    tidbit: "Fritz Lang's 1927 film Metropolis imagined a city divided between rich and poor, a future that's often given as the year 2026."
     status: draft
   - id: de.b1.n-declension
     level: B1
@@ -501,6 +564,7 @@ items:
     notes: "der Student, der Kollege, der Herr add -n/-en outside the nominative."
     example: "Ich habe den neuen Kollegen schon kennengelernt."
     english: "I've already met the new colleague."
+    tidbit: "Nietzsche's Zarathustra makes a claim about a weak noun: \"Der Mensch ist etwas, das überwunden werden soll.\" Man is something that shall be overcome."
     status: draft
   - id: de.b1.tell-a-story
     level: B1
@@ -509,6 +573,7 @@ items:
     notes: "Präteritum or Perfekt, connectors (plötzlich, damals, schließlich), word order after each."
     example: "Wir saßen beim Essen, als plötzlich der Strom ausfiel."
     english: "We were having dinner when suddenly the power went out."
+    tidbit: "The Nibelungenlied, written around 1200, is a tale of betrayal and slaughter. Richard Wagner reworked its legends into his Ring cycle, around fifteen hours of opera."
     status: draft
   - id: de.b1.opinions
     level: B1
@@ -517,6 +582,7 @@ items:
     notes: "Ich finde, dass…; meiner Meinung nach (verb follows!); Da hast du recht / Da bin ich anderer Meinung."
     example: "Meiner Meinung nach ist das nicht so einfach. Da bin ich anderer Meinung."
     english: "In my opinion it's not that simple. I see it differently."
+    tidbit: "In 1942 and 1943 students in Munich, among them Sophie and Hans Scholl, secretly printed anti-Nazi leaflets as the White Rose. Caught at the university, they were executed within days."
     status: draft
   - id: de.b1.feelings-wishes
     level: B1
@@ -525,6 +591,7 @@ items:
     notes: "Ich hoffe, dass…; Es tut mir leid, dass…; Ich wünschte, … (Konjunktiv II)."
     example: "Es tut mir leid, dass du schon gehst. Ich wünschte, du könntest bleiben."
     english: "I'm sorry you're already leaving. I wish you could stay."
+    tidbit: "Goethe's The Sorrows of Young Werther of 1774 was such a sensation that young men dressed like its hero, in a blue coat and yellow waistcoat, and there were reports of imitation suicides."
     status: draft
   - id: de.b1.recommendations
     level: B1
@@ -533,6 +600,7 @@ items:
     notes: "Ich würde dir empfehlen…, An deiner Stelle…, Es wäre besser, wenn…"
     example: "An deiner Stelle würde ich mit dem Zug fahren."
     english: "If I were you, I'd take the train."
+    tidbit: "Karl Baedeker's guidebooks gave the world star ratings for sights. In 1942 German propaganda threatened to bomb every British building with three stars in the guide, and the raids became known as the Baedeker raids."
     status: draft
   - id: de.b1.travel-problems
     level: B1
@@ -541,6 +609,7 @@ items:
     notes: "Complaining politely with Konjunktiv II; explaining what happened."
     example: "Entschuldigung, ich hatte ein Doppelzimmer gebucht, kein Einzelzimmer."
     english: "Excuse me, I'd booked a double room, not a single."
+    tidbit: "In 1846 Ida Pfeiffer, a Viennese housewife in her late forties, set off alone around the world with very little money. She did it twice and wrote bestsellers about it."
     status: draft
   - id: de.b1.summarise
     level: B1
@@ -549,41 +618,48 @@ items:
     notes: "Es geht um…, Der Film handelt von…, am Anfang, am Ende."
     example: "Der Film handelt von einer Familie, die ihr Haus verliert."
     english: "The film is about a family that loses its home."
+    tidbit: "Marcel Reich-Ranicki survived the Warsaw Ghetto and became the \"pope\" of German literature. On his TV programme he could make or break a novel in a few sentences."
     status: draft
   - id: de.b1.v-feelings
     level: B1
     strand: vocab
     title: "Feelings and personality"
+    tidbit: "The writer Jean Paul coined Weltschmerz, \"world-pain\", for the sorrow of seeing the world fall short of what it could be. English simply borrowed it, as it did Schadenfreude."
     words: [stolz, peinlich, gestresst, enttäuscht, eifersüchtig, schüchtern, stur, empfindlich, die Vorfreude, sich schämen]
     status: draft
   - id: de.b1.v-media-tech
     level: B1
     strand: vocab
     title: "Media and technology"
+    tidbit: "In 1941 in Berlin, working almost alone, Konrad Zuse completed the Z3, widely regarded as the first working programmable computer. His early machines were built in his parents' living room."
     words: [die Nachrichten, die Zeitung, die sozialen Medien, herunterladen, das Passwort, der Bildschirm, der Link, ein Foto posten, das Handy, die App]
     status: draft
   - id: de.b1.v-environment
     level: B1
     strand: vocab
     title: "The environment"
+    tidbit: "The word sustainability began in German forestry. In 1713 Hans Carl von Carlowitz, worried about a timber shortage for the Saxon mines, wrote of using woods in a nachhaltend way."
     words: [die Umwelt, die Verschmutzung, recyceln, der Müll, der Klimawandel, die Dürre, Energie sparen, die Art, schützen, nachhaltig]
     status: draft
   - id: de.b1.v-education
     level: B1
     strand: vocab
     title: "Education"
+    tidbit: "Friedrich Fröbel opened his first Kindergarten, a \"garden of children\", in 1840. Wilhelm von Humboldt's university in Berlin of 1810 became the model for the modern research university."
     words: [das Fach, eine Prüfung bestehen, durchfallen, die Note, das Stipendium, das Studium, der Abschluss, sich einschreiben, das Gymnasium, die Uni]
     status: draft
   - id: de.b1.v-relationships
     level: B1
     strand: vocab
     title: "Relationships"
+    tidbit: "Clara Wieck's father fought her marriage to the composer Robert Schumann so bitterly that the couple took him to court to win permission. They married in 1840."
     words: [sich gut verstehen, sich verlieben, heiraten, sich trennen, sich streiten, sich versöhnen, das Vertrauen, der Nachbar, der Bekannte, vermissen]
     status: draft
   - id: de.b1.v-housing
     level: B1
     strand: vocab
     title: "Housing"
+    tidbit: "The Fuggerei in Augsburg, founded by the banker Jakob Fugger in 1521, is the oldest social housing still in use. The rent is still under one euro a year, plus daily prayers for the founder."
     words: [mieten, die Miete, der Vermieter, die Kaution, der Mietvertrag, möbliert, der Umzug, umziehen, das Viertel, die Nebenkosten]
     status: draft
   - id: de.b1.topic-compound-nouns
@@ -591,6 +667,7 @@ items:
     strand: topic
     title: "German compound nouns"
     notes: "Any time a long word comes up, or for a laugh about long words."
+    tidbit: "In 2013 German lost one of its longest words when the law it named was repealed: Rindfleischetikettierungsüberwachungsaufgabenübertragungsgesetz, on supervising the labelling of beef."
     facts:
       - "German builds new nouns by joining words: Handschuh (hand + shoe) is a glove, Kühlschrank (cool + cupboard) a fridge."
       - "The last part decides the gender: die Hand + der Schuh = der Handschuh."
@@ -602,6 +679,7 @@ items:
     strand: topic
     title: "The Berlin Wall"
     notes: "History, Berlin, or around 9 November or 3 October."
+    tidbit: "On 9 November 1989 the East German official Günter Schabowski was asked at a press conference when new travel rules took effect. He looked through his notes and said \"sofort, unverzüglich\": immediately. The Wall opened that night."
     facts:
       - "The Berlin Wall divided the city from 1961 to 1989."
       - "It fell on the night of 9 November 1989."
@@ -613,6 +691,7 @@ items:
     strand: topic
     title: "Why German capitalises nouns"
     notes: "Spelling questions, or when the learner notices the capitals."
+    tidbit: "Capitalising nouns grew into a habit in German printing during the sixteenth and seventeenth centuries. Jacob Grimm hated it, and his great dictionary doesn't do it."
     facts:
       - "Every German noun is written with a capital letter: der Tisch, die Freiheit."
       - "Capitalising all nouns became standard in the 17th and 18th centuries."
@@ -627,6 +706,7 @@ items:
     notes: "hätte/wäre + participle for regrets and counterfactuals; with modals the double infinitive (hätte kommen sollen)."
     example: "Wenn ich das gewusst hätte, wäre ich früher gekommen. Ich hätte anrufen sollen."
     english: "If I'd known, I'd have come earlier. I should have called."
+    tidbit: "If the briefcase hadn't been moved behind a heavy table support on 20 July 1944, Claus von Stauffenberg's bomb might have killed Hitler."
     status: draft
   - id: de.b2.konjunktiv-i
     level: B2
@@ -635,6 +715,7 @@ items:
     notes: "News and formal register (er sei, sie habe); recognise it, use it for reporting; speech prefers Konjunktiv II or indicative."
     example: "Der Minister sagte, er habe nichts davon gewusst."
     english: "The minister said he had known nothing about it."
+    tidbit: "The Viennese satirist Karl Kraus spent nearly forty years, from 1899, attacking the language of journalism in his magazine Die Fackel, which for most of its life he wrote alone."
     status: draft
   - id: de.b2.passive-advanced
     level: B2
@@ -643,6 +724,7 @@ items:
     notes: "muss gemacht werden; ist geöffnet (state) vs wird geöffnet (process)."
     example: "Das muss bis Freitag erledigt werden. Das Geschäft ist bis acht geöffnet."
     english: "That has to be done by Friday. The shop is open until eight."
+    tidbit: "The first article of the German constitution of 1949 is a statement of state, not an action: \"Die Würde des Menschen ist unantastbar.\" Human dignity is inviolable."
     status: draft
   - id: de.b2.participle-attributes
     level: B2
@@ -651,6 +733,7 @@ items:
     notes: "Written German packs relative clauses before the noun: der gestern gekaufte Wagen."
     example: "Der vor zwei Jahren eröffnete Bahnhof ist schon zu klein."
     english: "The station that opened two years ago is already too small."
+    tidbit: "Schopenhauer despised Hegel's dense academic prose and called him a charlatan. He even scheduled his own Berlin lectures at the same hour as Hegel's, and hardly anyone came."
     status: draft
   - id: de.b2.nominalisation
     level: B2
@@ -659,6 +742,7 @@ items:
     notes: "Formal style: nach der Ankunft, eine Entscheidung treffen, zur Verfügung stellen."
     example: "Nach langer Diskussion wurde eine Entscheidung getroffen."
     english: "After long discussion, a decision was made."
+    tidbit: "Victor Klemperer, a Jewish professor who survived in Dresden, secretly documented how Nazi language worked. His 1947 book LTI shows how words and phrases poison thought."
     status: draft
   - id: de.b2.two-part-connectors
     level: B2
@@ -667,6 +751,7 @@ items:
     notes: "sowohl … als auch, weder … noch, entweder … oder, je … desto, nicht nur … sondern auch."
     example: "Je mehr ich lese, desto besser verstehe ich."
     english: "The more I read, the better I understand."
+    tidbit: "Hegel loved Aufheben because this one word means both \"cancel\" and \"preserve\": sowohl als auch. He used it for how ideas get overcome and kept at once."
     status: draft
   - id: de.b2.modal-particles
     level: B2
@@ -675,6 +760,7 @@ items:
     notes: "Untranslatable but everywhere in speech; they carry the speaker's attitude. Without them German sounds stiff."
     example: "Das ist ja interessant! Komm doch mal vorbei. Das ist halt so."
     english: "Oh, that's interesting! Do come by. That's just how it is."
+    tidbit: "Heinrich Heine's irony often sits in one small word. Exiled in Paris, he wrote one of the great lines of homesickness: \"Denk ich an Deutschland in der Nacht, dann bin ich um den Schlaf gebracht.\""
     status: draft
   - id: de.b2.subjective-modals
     level: B2
@@ -683,6 +769,7 @@ items:
     notes: "Er soll reich sein (supposedly), sie muss krank sein (must be), er will es gesehen haben (claims)."
     example: "Er soll sehr reich sein. Sie muss krank sein, sonst wäre sie hier."
     english: "He's supposed to be very rich. She must be ill, or she'd be here."
+    tidbit: "The Munich comic Karl Valentin made modal verbs into a joke that Germans still quote: \"Mögen hätt ich schon wollen, aber dürfen hab ich mich nicht getraut.\""
     status: draft
   - id: de.b2.lassen
     level: B2
@@ -691,6 +778,7 @@ items:
     notes: "Having something done (ich lasse mein Auto reparieren), letting, and sich lassen = can be (das lässt sich machen)."
     example: "Ich lasse mir die Haare schneiden. Das lässt sich leicht erklären."
     english: "I'm getting my hair cut. That's easy to explain."
+    tidbit: "Frederick the Great wrote in 1740 that in his lands, everyone should be allowed to find salvation in their own way: \"jeder nach seiner Façon\"."
     status: draft
   - id: de.b2.middle-field
     level: B2
@@ -699,6 +787,7 @@ items:
     notes: "Pronouns before nouns, time–manner–place, and where nicht goes; what makes long sentences sound native."
     example: "Ich habe es ihm gestern nicht mit Absicht gesagt."
     english: "I didn't tell him yesterday on purpose."
+    tidbit: "Paul Celan's \"Todesfuge\", written after the Holocaust by a survivor who lost both parents, turns word order into a fugue: \"der Tod ist ein Meister aus Deutschland\"."
     status: draft
   - id: de.b2.futur-ii
     level: B2
@@ -707,6 +796,7 @@ items:
     notes: "Completed by a future point, and guesses about the past (er wird es vergessen haben)."
     example: "Bis Montag werde ich das Buch gelesen haben. Er wird es vergessen haben."
     english: "By Monday I'll have read the book. He must have forgotten."
+    tidbit: "In Halberstadt, an organ has been playing a piece by John Cage since 2001. By the time it ends, in the year 2640, it will have lasted 639 years."
     status: draft
   - id: de.b2.argue
     level: B2
@@ -715,6 +805,7 @@ items:
     notes: "Zwar … aber, einerseits … andererseits, Dagegen spricht…, Alles in allem."
     example: "Zwar ist es teuer, aber auf lange Sicht spart man Geld."
     english: "It's expensive, admittedly, but in the long run you save money."
+    tidbit: "In 1986 German historians and philosophers fought in the newspapers over how to remember the Nazi past. The Historikerstreit made Jürgen Habermas a public combatant."
     status: draft
   - id: de.b2.speculate
     level: B2
@@ -723,6 +814,7 @@ items:
     notes: "Counterfactuals, subjective modals, wohl / vermutlich, Futur II."
     example: "Er hat sich vermutlich verlaufen. Wäre er früher losgegangen, wäre er schon hier."
     english: "He's probably got lost. If he'd set off earlier, he'd be here by now."
+    tidbit: "In 1935 the Austrian physicist Erwin Schrödinger imagined a cat both alive and dead in a box, to show how absurd he found one reading of quantum theory."
     status: draft
   - id: de.b2.report
     level: B2
@@ -731,6 +823,7 @@ items:
     notes: "Konjunktiv I or II, reporting verbs (behaupten, bestreiten, zugeben, betonen)."
     example: "Er bestritt, ihn gesehen zu haben, und betonte, er wisse von nichts."
     english: "He denied seeing him and stressed that he knew nothing."
+    tidbit: "In the 1980s the journalist Günter Wallraff disguised himself as a Turkish migrant worker for two years. His book Ganz unten exposed how such workers were treated in West Germany."
     status: draft
   - id: de.b2.abstract-topics
     level: B2
@@ -739,6 +832,7 @@ items:
     notes: "Generalising with man, die Gesellschaft; nominal style when it fits."
     example: "Man gewöhnt sich an alles, aber die Technik entwickelt sich sehr schnell."
     english: "You get used to everything, but technology moves very fast."
+    tidbit: "Reporting on the trial of Adolf Eichmann in 1961, Hannah Arendt coined \"the banality of evil\" and set off a controversy that still hasn't ended."
     status: draft
   - id: de.b2.register
     level: B2
@@ -747,6 +841,7 @@ items:
     notes: "When to use Sie, the offer to switch (Wollen wir uns duzen?), workplace and regional norms."
     example: "Wollen wir uns duzen? — Gern, ich bin Lena."
     english: "Shall we use du? — Sure, I'm Lena."
+    tidbit: "The Bavarian and Austrian greeting Servus is Latin for \"slave\", short for \"your servant\". It's now one of the friendliest ways there is to say hello."
     status: draft
   - id: de.b2.anecdotes
     level: B2
@@ -755,41 +850,48 @@ items:
     notes: "Reactions (Echt jetzt?, Krass!), intensifiers (total, voll, mega), modal particles for tone."
     example: "Echt jetzt? Und was hast du gemacht? — Nichts, ich war total baff."
     english: "Seriously? And what did you do? — Nothing, I was totally stunned."
+    tidbit: "Baron Münchhausen was a real eighteenth-century officer who told tall stories at dinner. In the book they inspired, he pulls himself and his horse out of a swamp by his own hair."
     status: draft
   - id: de.b2.v-society
     level: B2
     strand: vocab
     title: "Politics and society"
+    tidbit: "Germany's Weimar Constitution of 1919 gave women the vote and promised sweeping rights. Its Article 48, on emergency powers, helped to destroy it."
     words: [die Regierung, die Wahlen, wählen, das Gesetz, die Ungleichheit, die Demonstration, der Bürger, das Recht, der Streik, die Steuer]
     status: draft
   - id: de.b2.v-economy
     level: B2
     strand: vocab
     title: "Economy and working life"
+    tidbit: "Ludwig Erhard, father of the \"social market economy\", ended many price controls in 1948. The story goes that he did it on a weekend, when the occupation offices that might object were closed."
     words: [die Krise, die Arbeitslosigkeit, der befristete Vertrag, selbstständig, die Inflation, die Ersparnisse, die Schulden, investieren, der Gewinn, die Konkurrenz]
     status: draft
   - id: de.b2.v-science
     level: B2
     strand: vocab
     title: "Science and research"
+    tidbit: "Emmy Noether proved one of the deepest theorems in physics, but at Göttingen she was long barred from a post because she was a woman, and lectured under David Hilbert's name."
     words: [die Forschung, das Experiment, die Entdeckung, nachweisen, die Hypothese, die Daten, der Fortschritt, der Impfstoff, die Studie, die künstliche Intelligenz]
     status: draft
   - id: de.b2.v-arts
     level: B2
     strand: vocab
     title: "Arts and culture"
+    tidbit: "In 1937 the Nazis put modern art on show in Munich as \"degenerate\", to ridicule it. It drew far more visitors than the official exhibition of approved art nearby."
     words: [das Werk, der Schriftsteller, das Gemälde, die Ausstellung, die Premiere, die Figur, die Handlung, das Drehbuch, die Kritik, die Inszenierung]
     status: draft
   - id: de.b2.v-argument
     level: B2
     strand: vocab
     title: "Words for arguing"
+    tidbit: "Leibniz dreamed of a logical language that would settle all disputes. Instead of arguing, he wrote, two philosophers could just sit down and say to each other: \"Calculemus!\", let us calculate."
     words: [der Vorteil, der Nachteil, die Folge, der Standpunkt, dafür, dagegen, ansprechen, vertreten, ablehnen, zusammenfassend]
     status: draft
   - id: de.b2.v-colloquial
     level: B2
     strand: vocab
     title: "Colloquial German"
+    tidbit: "Berlin's food and slang remember the French Protestants who fled there in the 1680s: a Berlin meatball is still a Bulette, from French boulette."
     words: [krass, geil, die Kohle, pennen, quatschen, echt, Bock haben, keine Ahnung, na ja, Feierabend]
     status: draft
   - id: de.b2.topic-luther
@@ -797,6 +899,7 @@ items:
     strand: topic
     title: "Luther's Bible and standard German"
     notes: "History, religion, or how standard languages form."
+    tidbit: "Martin Luther translated the New Testament in about eleven weeks while hiding in Wartburg Castle in 1521–22. He said you had to look at the mouths of ordinary people to know how to write German."
     facts:
       - "Martin Luther translated the New Testament into German, published in 1522."
       - "His translation was widely read and helped spread a common written German across many dialect regions."
@@ -808,6 +911,7 @@ items:
     strand: topic
     title: "Falsche Freunde"
     notes: "Whenever the learner trips on one, or for a fun aside."
+    tidbit: "German Gift means poison. It comes from the same root as English \"gift\", and once meant something given, possibly by way of a euphemism for a dose."
     facts:
       - "Gift means poison, not a present (a present is ein Geschenk)."
       - "Bekommen means to get or receive, not to become (to become is werden)."

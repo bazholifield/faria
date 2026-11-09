@@ -1,3 +1,4 @@
+from pathlib import Path
 """The course layer (ADR-034): Leitner review, word matching, curriculum selection, and the
 taught -> used -> wrong cycle and coverage updates through a real SessionRunner."""
 
@@ -165,6 +166,34 @@ def test_course_section_offers_due_words_and_next_items(repo, tmp_path):
     prompt = assemble_system_prompt(replace(runner.context, course=notes), "")
     assert "el mercado (the market)" in prompt and "[es.a2.preterite]" in prompt
     assert "None of this is an agenda" in prompt
+    # the learner's subject first; history instead of small talk when they have none
+    assert "Open by asking what's going on and what they feel like talking about" in prompt
+    assert "history, art, literature or philosophy" in prompt
+
+
+def test_items_with_a_tidbit_are_offered_as_stories(tmp_path):
+    items = curriculum.load(_write_syllabus(tmp_path), "es")
+    for i in items:
+        if i["id"] == "es.a2.preterite":
+            i["tidbit"] = "Cortés's ships were run aground, not burned."
+    told = curriculum.topics(items, "A2", told=set(), n=5)
+    assert {"es.a2.preterite", "es.a2.topic-mercado"} <= {i["id"] for i in told}
+    assert "es.a2.preterite" not in {i["id"] for i in curriculum.topics(items, "A2", told={"es.a2.preterite"}, n=5)}
+
+
+def test_every_real_syllabus_item_has_a_tidbit():
+    root = Path(__file__).resolve().parent.parent / "curriculum"
+    for lang in ("es", "fr", "de"):
+        missing = [i["id"] for i in curriculum.load(root, lang) if not i.get("tidbit")]
+        assert not missing, f"{lang}: no tidbit for {missing}"
+
+
+def test_session_memory_is_background_not_an_opener(repo, tmp_path):
+    from faria.tutor import prompts
+    from types import SimpleNamespace as NS
+    ctx = NS(recent_summaries=[NS(summary_text="Talked about their two dogs.", next_focus=[])])
+    section = prompts._memory_section(ctx, "Spanish", is_home_base=False)
+    assert "their two dogs" in section and "don't open with it" in section
 
 
 def test_sweep_moves_coverage_to_practised_then_solid(repo, tmp_path):

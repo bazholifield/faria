@@ -2,7 +2,7 @@
 
 **Goal:** a voice-first language tutor and companion that converses at your level, corrects judiciously, and keeps a persistent learner model per language (see the workshop scenario below).
 
-**Now:** building toward a full course over an hour of conversation a day: the syllabus (es/fr/de, A1–B2), spaced review, topic cards and placement are in; speech got acknowledgements, level-aware patience and pace, barge-in and stressed recasts. Next: your own recordings as a speech test set, then daily use to tune it. The public README is drafted (milestone 9).
+**Now:** building toward a full course over an hour of conversation a day: the syllabus (es/fr/de, A1–B2), spaced review, topic cards and placement are in; speech got acknowledgements, level-aware patience and pace, barge-in and stressed recasts. Next: your own recordings as a speech test set, then daily use to tune it. The public README is drafted (milestone 9). Nov 2026, after a real session: the learner's subject now leads (the mentor asks what's up, teaches inside it, and tells history, art or literature from a tidbit on every syllabus item when there's nothing to discuss), and false voice switches mid-sentence are fixed.
 
 Phases are cumulative; each has concrete exit criteria ("I can do X"). Pedagogy gets debugged
 in text (Phase 0–1) before audio complicates anything (Phase 2+).

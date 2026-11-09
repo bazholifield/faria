@@ -401,6 +401,11 @@ Residual limits (documented, not fixed): lingua still misses some phrases in con
 *speaker* changes (Piper = different speaker per language). Both are the Phase 4 cloned-voice
 job. py3langid dependency dropped.
 
+**Amended November 2026.** "Zero false switches" came from too small a test. On 809 real sentences
+(tutor replies, syllabus examples, Tatoeba) 5% switched voice wrongly: a learner heard "me contaste"
+in the English voice. A segment now also has to be far likelier in its detected language than in
+the base one (`_clearly_foreign`), with a stricter bar for runs under three words.
+
 ## ADR-027 — The developer console is a separate, localhost-only app
 
 Tuning this project means editing prompt text, trying voices, moving thresholds, and judging
@@ -564,6 +569,12 @@ direction. **Decision:**
   in `solid_after_sessions` separate sessions).
 - **Variety:** the mentor speaks one default variety per language (`course.varieties`) and
   mentions other regions as colour when it comes up.
+
+**Amended November 2026, after a real session:** the tutor opened with a question about the
+learner's dogs, from its session memory. The learner's subject now always comes first: the mentor
+asks what's up, teaches inside whatever they bring, and when they have nothing, tells history, art,
+literature or philosophy from a per-item `tidbit` instead of making small talk. Session memory is
+background, not conversation material.
 
 Every course hook is best-effort: a failure is logged and the conversation continues.
 Migration 0006 adds the tables and backs the database up first (`<db>.pre-0006.bak`), as every

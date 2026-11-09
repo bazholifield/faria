@@ -355,8 +355,13 @@ def _memory_section(ctx: SessionContext, target: str, is_home_base: bool) -> str
     if last_focus:
         lines.append(
             "You intended to work on: " + "; ".join(last_focus) + ". Weave these "
-            "in naturally; do not announce them as an agenda."
+            "in only if the conversation allows; do not announce them as an agenda."
         )
+    lines.append(
+        "This is background for understanding them, not material for conversation: "
+        "don't open with it or ask about their life because of it. If they bring "
+        "something back up, you remember."
+    )
     return "\n".join(lines)
 
 
@@ -364,7 +369,15 @@ def _course_section(ctx: SessionContext, target: str) -> str | None:
     """Suggestions from the syllabus and spaced review. The learner decides what to
     talk about and for how long; the mentor decides when something fits."""
     c = ctx.course
-    lines: list[str] = []
+    lines: list[str] = [
+        "How this conversation goes. Open by asking what's going on and what they feel "
+        "like talking about: one short, open question. Whatever they bring is the "
+        "conversation, and everything below happens inside it, through the words and "
+        "structures that subject needs anyway. If they have nothing in mind, don't fish "
+        "for a subject: take over and teach by telling them something worth hearing "
+        f"from the history, art, literature or philosophy of the places {target} is "
+        "spoken, starting with the stories below."
+    ]
     if c.variety:
         lines.append(
             f"Speak {c.variety} by default. When it comes up naturally, mention how "
@@ -374,7 +387,7 @@ def _course_section(ctx: SessionContext, target: str) -> str | None:
         probes = "; ".join(f"{level}: {', '.join(titles)}" for level, titles in c.placement)
         lines.append(
             f"You don't know this learner's {target} level yet, so this first conversation "
-            "also places them. Make it a friendly getting-to-know-you chat: start simple, "
+            "also places them, through whatever you end up talking about: start simple, "
             "and every couple of turns try something a step harder, noticing how they cope "
             f"and dropping back as soon as they struggle. Natural things to try, by level: "
             f"{probes}. Never announce a test or ask them to rate themselves."
@@ -384,23 +397,24 @@ def _course_section(ctx: SessionContext, target: str) -> str | None:
         words = ", ".join(f"{w} ({g})" if g else w for w, g in c.due_words)
         ideas.append(
             f"Words they learned before and are due to meet again: {words}. Use them "
-            "naturally, or make an opening for the learner to use them."
+            "yourself where they suit what's being discussed; never change the subject for one."
         )
     for item in c.new_items:
         example = f' (e.g. "{item["example"]}")' if item.get("example") else ""
         ideas.append(
-            f"Worth introducing if a natural moment comes [{item['id']}]: {item['title']}{example}. "
-            "Point it out lightly, in passing; don't turn it into a lesson."
+            f"Worth introducing if what they're saying calls for it [{item['id']}]: {item['title']}{example}. "
+            "Point it out lightly, in passing; don't turn it into a lesson, and let it wait "
+            "for another day if it doesn't fit."
+            + (f" A story that goes with it, if it helps: {item['tidbit']}" if item.get("tidbit") else "")
         )
     for item in c.revisit_items:
         ideas.append(f"They've used this before and it's due another airing [{item['id']}]: {item['title']}.")
     for topic in c.topics:
-        facts = " ".join(topic.get("facts") or [])
-        angle = f" (fits: {topic['notes'].rstrip('.')})" if topic.get("notes") else ""
-        words = f" Words it brings: {', '.join(topic['words'])}." if topic.get("words") else ""
+        facts = " ".join(filter(None, [topic.get("tidbit"), *(topic.get("facts") or [])]))
+        words = f" Words it brings: {', '.join(topic['words'])}." if topic.get("strand") == "topic" and topic.get("words") else ""
         ideas.append(
-            f"A story you could tell if the conversation goes there [{topic['id']}]: "
-            f"{topic['title']}{angle}. Facts: {facts} Stick to these facts.{words}"
+            f"A story to tell when they have nothing in mind or it connects [{topic['id']}]: "
+            f"{facts} Tell it in your own words at their level, and stick to these facts.{words}"
         )
     if ideas:
         lines.append(
