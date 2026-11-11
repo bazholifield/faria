@@ -211,7 +211,7 @@ def _run_chat(args: argparse.Namespace, settings: Settings, conn) -> int:
         runner.abandon()
         print(
             "\n[faria] Anthropic API authentication failed. Put a valid "
-            "ANTHROPIC_API_KEY in .env (see .env.example).",
+            "ANTHROPIC_API_KEY in .env (a line: ANTHROPIC_API_KEY=...).",
             file=sys.stderr,
         )
         return 1
@@ -221,8 +221,8 @@ def _run_chat(args: argparse.Namespace, settings: Settings, conn) -> int:
             raise
         runner.abandon()
         print(
-            "\n[faria] no Anthropic API key found. Copy .env.example to .env "
-            "and set ANTHROPIC_API_KEY.",
+            "\n[faria] no Anthropic API key found. Create a file named .env "
+            "with the line ANTHROPIC_API_KEY=... (your key).",
             file=sys.stderr,
         )
         return 1

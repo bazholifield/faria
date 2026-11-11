@@ -11,7 +11,7 @@ items:
     example: "La casa es grande y los libros son nuevos."
     english: "The house is big and the books are new."
     tidbit: "Spanish inherited grammatical gender from Latin but lost Latin's neuter nouns. A ghost of the neuter survives in the little word lo, as in lo bueno, \"the good thing\"."
-    status: draft
+    status: checked
   - id: es.a1.adjective-agreement
     level: A1
     strand: grammar
@@ -20,7 +20,7 @@ items:
     example: "Tengo un coche rojo y dos gatas blancas."
     english: "I have a red car and two white cats."
     tidbit: "Spanish explorers named American places with plain adjectives: Colorado means \"coloured red\", for the river's silt; Nevada means \"snow-covered\"; Florida means \"flowery\"."
-    status: draft
+    status: checked
   - id: es.a1.present-regular
     level: A1
     strand: grammar
@@ -29,7 +29,7 @@ items:
     example: "Hablo inglés y vivo en Chicago."
     english: "I speak English and I live in Chicago."
     tidbit: "Spanish's three verb families, -ar, -er and -ir, come from Latin's verb classes. The language descends from the spoken Latin of the Roman soldiers and settlers who reached Iberia from 218 BC, during the war against Hannibal."
-    status: draft
+    status: checked
   - id: es.a1.pro-drop
     level: A1
     strand: grammar

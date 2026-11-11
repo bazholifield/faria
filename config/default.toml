@@ -124,6 +124,8 @@ de = ["Aha.", "Mm.", "Verstehe."]
 # then set your pick here. No Basque (eu) voice exists in the Piper catalog —
 # the TTS twin of the Whisper-Basque STT gap; use the openai backend for eu.
 en = "en_US-john-medium"
+# Spanish: Spain's voice by default. Alternatives (auditions in data/say/): es_MX-claude-high
+# (Mexico, Piper's high-quality tier), es_MX-ald-medium (Mexico), es_AR-daniela-high (Argentina).
 es = "es_ES-sharvard-medium"
 fr = "fr_FR-siwis-medium"
 de = "de_DE-thorsten-medium"

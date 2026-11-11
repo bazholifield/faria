@@ -261,25 +261,26 @@ embedding index over summaries/utterances, not a vector-DB service) when any of 
    full utterance history.
 3. Mini-lessons should be grounded in "what has this learner already been taught".
 
-## 9. Portfolio track · In progress · public README drafted, release audit clean
+## 9. Portfolio track · In progress · public README, tests on GitHub, licence; going public
 
-*Public once the tutor is fully functional: converses, switches languages, adapts to level, teaches culture, and could carry a course.*
+*Going public in November 2026, before it's fully functional, with the README stating what isn't measured yet. The demo video waits until the quality is where I want it.*
 
 FARIA is the project that best shows the linguist first: a correction policy grounded in how
 recasts work, a two-level error taxonomy, a CEFR model with an evidence trail, and 28 recorded
 design decisions. What's missing for a public portfolio is an outsider's way in, evidence that
 the pedagogy works, and a demo people can watch.
 
-- Outsider-first README: a 30-second pitch, a demo video or GIF, "the linguistics" (recast default and why orthography is never corrected in speech, the error taxonomy, the CEFR evidence model), an architecture diagram, cost and latency from the run ledger; the developer quickstart moves lower *(done Nov 2026, except the video: a placeholder comment marks where it goes; latency is July's measurement until re-measured)*
-- **Demo recording (priority):** a 2–3 minute screen recording of a voice session with a language pivot, a correction recap and the patterns view
+- Outsider-first README: a 30-second pitch, a demo video or GIF, "the linguistics" (recast default and why orthography is never corrected in speech, the error taxonomy, the CEFR evidence model), an architecture diagram, cost and latency from the run ledger; the developer quickstart moves lower *(done Nov 2026, tightened Nov 11; except the video: a placeholder comment marks where it goes; latency is July's measurement until re-measured)*
+- **Demo recording (later, once quality is higher):** a 2–3 minute screen recording of a voice session with a language pivot, a correction recap and the patterns view
+- Voice choice per learner: Spain's Spanish voice by default; Mexican (es_MX-claude-high, es_MX-ald-medium) and Argentine (es_AR-daniela-high) voices are configured alternatives now, and should become something you can say ("use a Mexican voice"), like "slower, please"
 - Later: a text-mode Hugging Face Space where visitors bring their own API key (never a hosted key, which would bill you for strangers' sessions)
 - Error-detection evaluation: adjudicate a gold set in the annotation browser (Phase 2.5), then precision and recall per error category
 - CEFR estimator check: the Phase 1 "play above/below my level" test, written up with the estimate's trajectory
 - Persona metrics from prompt-lab replay: one before/after persona edit with numbers (questions per reply, reply length)
 - Latency under the 2 s budget, or a clear account of the remaining gap (ADR-022: API STT or a GPU path)
-- GitHub Actions running the test suite (157 tests, fakes for the API; no key needed)
+- GitHub Actions running the test suite (187 tests, fakes for the API; no key needed) *(done Nov 2026: `.github/workflows/tests.yml`, badge in the README)*
 - `DESIGN_NOTES.md`: a 2-page summary of the pedagogy decisions for teachers and linguists, linking the ADRs
-- Release checks *(Nov 2026: a fresh clone installs and passes the tests; no keys, personal details, real transcripts or `data/` in the files or history; LICENSE still to choose)*: LICENSE: non-commercial (e.g. PolyForm Noncommercial), so others can read and run FARIA but not sell it; confirm test fixtures hold no real session transcripts; make the repo public. History is clean (no `.env` or `data/` ever committed); squashing the early "Phase X updates" commits is optional
+- Release checks *(Nov 2026: a fresh clone installs and passes the tests; no keys, personal details, real transcripts or `data/` in the files or history; LICENSE: PolyForm Noncommercial 1.0.0, added Nov 11)*: LICENSE: non-commercial (e.g. PolyForm Noncommercial), so others can read and run FARIA but not sell it; confirm test fixtures hold no real session transcripts; make the repo public. History is clean (no `.env` or `data/` ever committed); squashing the early "Phase X updates" commits is optional
 
 **Done when:**
 - Someone who has never seen FARIA understands what it does and why in under two minutes, from the README and video alone.
