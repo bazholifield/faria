@@ -2,10 +2,10 @@
 
 **Goal:** a voice-first language tutor and companion that converses at your level, corrects judiciously, and keeps a persistent learner model per language (see the workshop scenario below).
 
-**Now:** building toward a full course over an hour of conversation a day: the syllabus (es/fr/de, A1–B2), spaced review, topic cards and placement are in; speech got acknowledgements, level-aware patience and pace, barge-in and stressed recasts. Next: your own recordings as a speech test set, then daily use to tune it. The public README is drafted (milestone 9). Nov 2026, after a real session: the learner's subject now leads (the mentor asks what's up, teaches inside it, and tells history, art or literature from a tidbit on every syllabus item when there's nothing to discuss), and false voice switches mid-sentence are fixed.
+**Now:** building toward a full course over an hour of conversation a day: the syllabus (es/fr/de, A1 to B2), spaced review, topic cards and placement are in; speech got acknowledgements, level-aware patience and pace, barge-in and stressed recasts. Next: your own recordings as a speech test set, then daily use to tune it. The public README is drafted (milestone 9). Nov 2026, after a real session: the learner's subject now leads (the mentor asks what's up, teaches inside it, and tells history, art or literature from a tidbit on every syllabus item when there's nothing to discuss), and false voice switches mid-sentence are fixed.
 
 Phases are cumulative; each has concrete exit criteria ("I can do X"). Pedagogy gets debugged
-in text (Phase 0–1) before audio complicates anything (Phase 2+).
+in text (Phase 0 to 1) before audio complicates anything (Phase 2+).
 
 ## North star: the workshop scenario
 
@@ -36,15 +36,15 @@ pedagogy until conversations feel like a good tutor, not a chatbot with a person
 
 - CLI chat (`faria chat --language es`): streamed conversation with the tutor in the target
   language, at a level set from the profile.
-- Learner profile persistence: learner + per-language profile rows, sessions and utterances
+- Learner profile persistence: learner and per-language profile rows, sessions and utterances
   logged.
-- Prompt assembly v1 (`tutor/prompts.py`): profile snapshot + recent session summaries +
-  correction directives, ordered stable→volatile for prompt-cache friendliness. Baseline
+- Prompt assembly v1 (`tutor/prompts.py`): profile snapshot, recent session summaries and
+  correction directives, ordered from stable to volatile for prompt-cache friendliness. Baseline
   persona must already read as **mentor, not eager assistant** (full presets in Phase 1.5).
 - Correction policy v1 (`domain/correction.py`), per ADR-013:
   - Two orthogonal knobs: **frequency** (off | minimal | balanced | aggressive) and
-    **style** (recast | recast_plus_note | explicit). Default: balanced + recast —
-    "Yo voy a la playa ayer" → "Ah, ¿fuiste a la playa ayer?"
+    **style** (recast | recast_plus_note | explicit). Default: balanced with recast —
+    "Yo voy a la playa ayer" gets "Ah, ¿fuiste a la playa ayer?"
   - **Orthography is never corrected in conversation**, at any setting. Logged only.
   - Budget/severity/recurrence rules per the module docstring.
 - Session summaries: on `/end`, Haiku writes a structured summary (topics, vocab, notable
@@ -69,11 +69,11 @@ pedagogy until conversations feel like a good tutor, not a chatbot with a person
   overall estimate with confidence. Evidence rows kept so estimates can be recomputed.
 - End-of-session recap: deferred corrections surfaced in a structured recap at `/end`.
 - Pattern lifecycle: recurrence escalation into the prompt's focus list; statuses
-  (active → improving → resolved / fossilization_risk) updated from evidence.
+  (active, improving, resolved, or fossilization_risk) updated from evidence.
 - Optional: spaCy-based syntactic-complexity metrics as a computed (non-LLM) signal.
 
 **Done when:**
-- After ~5 sessions, `faria` can show me my top-5 recurring error patterns per language,
+- After about 5 sessions, `faria` can show me my top-5 recurring error patterns per language,
   each with real example utterances and counts.
 - The CEFR estimate moves in the right direction when I deliberately play above/below
   my level, and its confidence grows across sessions.
@@ -100,7 +100,7 @@ Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
   comprehension evidence (a free surprise-probe for the comprehension dimension).
 - **Persona presets** (ADR-016): named persona blocks, default "mentor" — unhurried, tells
   stories, makes statements, no praise inflation, comfortable leading. Initiative knob
-  (learner-led ↔ balanced ↔ tutor-led).
+  (from learner-led through balanced to tutor-led).
 
 **Done when:**
 - Mid-conversation "auf Deutsch, bitte" switches the tutor into German at my German level;
@@ -111,19 +111,19 @@ Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
 - A transcript reads mentor-like: the tutor introduced at least one topic/story unprompted,
   and the conversation is not question-answer ping-pong.
 
-## 4. Phase 2: audio · In progress · ~4.5 s to first audio vs the < 2 s target (before Oct 2026 changes)
+## 4. Phase 2: audio · In progress · about 4.5 s to first audio, against a target under 2 s (before Oct 2026 changes)
 
 - STT adapter (`speech/stt.py`): faster-whisper local implementation behind the interface;
   per-language override registry. **Basque caveat:** Whisper's `eu` support is weak — the
   registry exists precisely so Basque can route to a different backend (e.g. a HiTZ/Aholab
   fine-tuned model or an API) without touching the loop. Language switching (Phase 1.5)
   means the active STT model follows the active language.
-- TTS adapter (`speech/tts.py`): Piper (local, free) + one API implementation (e.g. OpenAI
+- TTS adapter (`speech/tts.py`): Piper (local, free) and one API implementation (e.g. OpenAI
   TTS). Interface shaped so XTTS/ElevenLabs voice cloning slots in later.
-- FastAPI app (`server/`): WebSocket endpoint for the realtime loop (audio in → STT →
-  tutor → streamed text → TTS → audio out), REST for profile/history/config.
+- FastAPI app (`server/`): WebSocket endpoint for the realtime loop (audio in, speech to text,
+  tutor, streamed text, text to speech, audio out), REST for profile/history/config.
 - Latency work: stream Claude output into TTS sentence-by-sentence so audio starts before
-  the reply finishes. Budget: **< 2s from end of my utterance to first audio**, ideally ~1.5s.
+  the reply finishes. Budget: **under 2s from end of my utterance to first audio**, ideally about 1.5s.
 - Ambient groundwork for the workshop scenario: VAD-based turn taking (no push-to-talk
   required at the desk), tolerance for long learner silences (I'm sanding a board, not
   ignoring the tutor).
@@ -131,7 +131,7 @@ Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
   events (suspected, low confidence) rather than treated as grammar errors.
 
 **Done when:**
-- Wearing a headset at my desk, I can hold a spoken conversation with < 2s response
+- Wearing a headset at my desk, I can hold a spoken conversation with under 2s response
   latency, with the same learner-model behavior as text.
 - Swapping STT or TTS backend is a config change, not a code change.
 
@@ -141,15 +141,15 @@ Prototyped entirely in the text CLI; this is the workshop scenario minus audio.
 - Early transcription during the pause, plus a mid-thought / finished verdict on it *(done)*
 - Barge-in: talking over Faria stops its voice *(done)*
 - Stressed recasts: corrected words said after a pause, slower, and bold on screen *(done)*
-- Prompt-cache warm-up at session start (first word ~8 s → ~1.4 s measured) and a cached history *(done)*
+- Prompt-cache warm-up at session start (first word measured at about 8 s before, about 1.4 s after) and a cached history *(done)*
 - OpenAI speech recognition and voice (one voice for every language), switched off until the key is in `.env` *(built, untested live)*
-- Your recordings as a test set (~50 short clips per language) to compare recognition options on numbers
+- Your recordings as a test set (about 50 short clips per language) to compare recognition options on numbers
 - Later, as we play with it: context hints for new words, checking whether recognition hides learner errors, mixed-language turns, pronunciation feedback
 
-**Status (built 2026-07-20):** the loop is live end-to-end (`faria serve` + browser at
+**Status (built 2026-07-20):** the loop is live end-to-end (`faria serve` and browser at
 localhost:8765) with identical learner-model behavior — verified. Backend swap is a config
-change — met. Latency is the open item: **~4.5s** to first audio on pure CPU (measured:
-STT ~2s + first Claude token ~2s + TTS ~0.5s) vs. the <2s budget; instrumentation is in
+change — met. Latency is the open item: **about 4.5s** to first audio on pure CPU (measured:
+STT about 2s and first Claude token about 2s and TTS about 0.5s) vs. the under 2s budget; instrumentation is in
 place and the closing paths (chiefly CUDA for whisper) are in ADR-022. The headset test
 itself needs a human with a microphone — that's you.
 
@@ -165,10 +165,10 @@ localhost console (ADR-027) for working *on* the tutor rather than talking to it
   tokens/cost/latency across all three call sites — conversation, summary, sweep (ADR-028,
   migration 0005). Persona text moved out of Python into editable `.md` files, so
   "which prompt produced this run" has an answer.
-- **Run ledger (built):** sessions listed with cost, latency against the <2s budget, and the
+- **Run ledger (built):** sessions listed with cost, latency against the under 2s budget, and the
   prompt version that produced them; per-run detail shows transcript, per-turn spend, the
   verbatim prompt, and which config knobs have drifted since.
-- **Prompt lab — render + edit (built):** the assembled prompt for any profile/language,
+- **Prompt lab — render and edit (built):** the assembled prompt for any profile/language,
   broken into labeled sections with character counts, against real profile data and with no
   API call; correction/pivot/audio/persona overrides re-render it without persisting
   anything. Persona text is editable in the browser and reloads in place. Strictly
@@ -200,21 +200,21 @@ localhost console (ADR-027) for working *on* the tutor rather than talking to it
   sessions.
 - A VAD setting can be chosen by replaying one recording, not by guessing between utterances.
 
-## 6. The course: syllabus, review and topics · In progress · 292 syllabus items + 25 topic cards drafted, 0 checked
+## 6. The course: syllabus, review and topics · In progress · 292 syllabus items and 25 topic cards drafted, 0 checked
 
 The vision: a mentor you could do an hour a day with and come out with a real course, without
 it ever feeling like a lesson plan. Suggestions, never an agenda; you decide length and
 direction (ADR-034).
 
-- Syllabus for Spanish, French and German, A1–B2: grammar, can-do functions, vocabulary themes, in teaching order (`curriculum/`) *(drafted)*
+- Syllabus for Spanish, French and German, A1 to B2: grammar, can-do functions, vocabulary themes, in teaching order (`curriculum/`) *(drafted)*
 - Syllabus tab in the Helm to correct it item by item *(done)*
 - Topic cards: stories, history, etymology and regional varieties with checked facts *(drafted)*
 - The mentor gets an "Ideas" section: words due, one or two new items, stories it could tell *(done)*
 - `note_teaching` tool: taught words enter Leitner review in conversation; structures and stories are tracked *(done)*
-- Coverage introduced → practised → solid from the end-of-session sweep *(done)*
+- Coverage moves from introduced to practised to solid from the end-of-session sweep *(done)*
 - Placement conversation for a language with no level yet *(done)*
 - Default variety per language, other regions as asides *(done; Spanish base still to confirm)*
-- Your pass over the syllabus and topic cards (draft → checked)
+- Your pass over the syllabus and topic cards (from draft to checked)
 - Level adaptation check: play above and below your level; measure whether Faria's own speech changes (sentence length, rarer words) between A2 and B2
 - A progress view: words learning/solid, structures covered, per language
 
@@ -225,7 +225,7 @@ direction (ADR-034).
 ## 7. Phase 3: phone client · Next
 
 - Single mobile-friendly web page served by FastAPI: pick a language, hold-to-talk (or VAD),
-  hear replies. MediaRecorder + WebSocket; no build toolchain unless it earns its keep.
+  hear replies. MediaRecorder and WebSocket; no build toolchain unless it earns its keep.
 - Reachable from the phone over LAN and Tailscale (bind address/port in config; document
   the Tailscale HTTPS story since getUserMedia requires a secure context off-localhost —
   `tailscale cert` or serve over the tailnet HTTPS proxy).
@@ -251,12 +251,12 @@ direction (ADR-034).
 
 ## Flagged: when semantic retrieval earns its keep
 
-Long-term memory is structured data + LLM-written summaries injected into the prompt
+Long-term memory is structured data and LLM-written summaries injected into the prompt
 (ADR-007). That holds while injected context stays small. Revisit (likely a small local
 embedding index over summaries/utterances, not a vector-DB service) when any of these hit:
 
 1. Rolling summary window loses things I notice ("we discussed this weeks ago") —
-   i.e. > ~30–50 sessions per language and the last-N window is blind to older material.
+   i.e. more than about 30 to 50 sessions per language and the last-N window is blind to older material.
 2. Spaced repetition needs "find prior contexts where I used/heard word X" over the
    full utterance history.
 3. Mini-lessons should be grounded in "what has this learner already been taught".
@@ -271,7 +271,7 @@ design decisions. What's missing for a public portfolio is an outsider's way in,
 the pedagogy works, and a demo people can watch.
 
 - Outsider-first README: a 30-second pitch, a demo video or GIF, "the linguistics" (recast default and why orthography is never corrected in speech, the error taxonomy, the CEFR evidence model), an architecture diagram, cost and latency from the run ledger; the developer quickstart moves lower *(done Nov 2026, tightened Nov 11; except the video: a placeholder comment marks where it goes; latency is July's measurement until re-measured)*
-- **Demo recording (later, once quality is higher):** a 2–3 minute screen recording of a voice session with a language pivot, a correction recap and the patterns view
+- **Demo recording (later, once quality is higher):** a 2 to 3 minute screen recording of a voice session with a language pivot, a correction recap and the patterns view
 - Voice choice per learner: Spain's Spanish voice by default; Mexican (es_MX-claude-high, es_MX-ald-medium) and Argentine (es_AR-daniela-high) voices are configured alternatives now, and should become something you can say ("use a Mexican voice"), like "slower, please"
 - Later: a text-mode Hugging Face Space where visitors bring their own API key (never a hosted key, which would bill you for strangers' sessions)
 - Error-detection evaluation: adjudicate a gold set in the annotation browser (Phase 2.5), then precision and recall per error category

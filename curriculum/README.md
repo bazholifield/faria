@@ -7,7 +7,7 @@ items worth introducing, words due for review and a couple of stories, as sugges
 agenda. Coverage is tracked from what the learner actually says. Items marked `cut` are never
 offered.
 
-Edit them in the Helm (Faria → Syllabus) or by hand; both keep the same format.
+Edit them in the Helm (Faria's **Syllabus** tab) or by hand; both keep the same format.
 
 ## Items
 

@@ -6,7 +6,7 @@
 learning, at your level, corrects you the way a good teacher does, mostly without stopping the
 conversation, and remembers how you're doing between sessions.
 
-<!-- DEMO VIDEO: a 2–3 minute screen recording of a voice session goes here (a language switch,
+<!-- DEMO VIDEO: a 2 to 3 minute screen recording of a voice session goes here (a language switch,
 a correction or two, and the summary at the end). Upload the .mp4 by dragging it into a GitHub
 issue or the README editor, and paste the link it gives you on its own line. -->
 
@@ -51,7 +51,7 @@ tense error and is treated as one.
 uncertain word is logged but never corrected or counted, and an absurd sentence gets "what did you
 mean?" rather than a correction.
 
-**Countable errors.** Six fixed categories with closed subcategories and a 1–4 severity scale with
+**Countable errors.** Six fixed categories with closed subcategories and a 1 to 4 severity scale with
 written anchors (slip, minor, disruptive, breakdown), for the same reason annotators share a
 guideline: free-text labels can't be counted across sessions. A mistake that keeps recurring
 becomes a *pattern* and gets more attention.
@@ -76,11 +76,11 @@ ordinary Spanish words (*me contaste*) in the English voice.
 
 ```mermaid
 flowchart LR
-    mic["🎙️ Browser<br/>microphone"] --> vad["Detects when<br/>you stop talking"]
+    mic["Browser<br/>microphone"] --> vad["Detects when<br/>you stop talking"]
     vad --> stt["Speech to text<br/>(Whisper, with a<br/>confidence per word)"]
     stt --> tutor["Tutor<br/>(Claude)"]
     tutor --> tts["Text to speech<br/>(Piper, the right voice<br/>for each language)"]
-    tts --> spk["🔊 Browser<br/>speakers"]
+    tts --> spk["Browser<br/>speakers"]
 
     policy["Correction policy<br/>(rules in code)"] --> tutor
     course["Course: review words,<br/>new points, stories"] --> tutor

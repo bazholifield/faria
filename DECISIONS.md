@@ -1,14 +1,14 @@
 # Decisions
 
-Short ADR-style records. Format: context → decision → consequences. Newest at the bottom.
+Short ADR-style records. Format: context, decision, consequences. Newest at the bottom.
 
 ---
 
-## ADR-001 — Python + FastAPI backend, src-layout
+## ADR-001 — Python and FastAPI backend, src-layout
 
 Solo dev, strong Python/NLP background; the interesting logic (pedagogy, prompt assembly,
 audio orchestration) benefits from the Python ecosystem (spaCy, faster-whisper, transformers).
-FastAPI gives WebSocket + REST + pydantic in one framework for Phase 2+. src-layout so the
+FastAPI gives WebSocket, REST and pydantic in one framework for Phase 2 onward. src-layout so the
 package is import-tested the way it will be installed, and publishable later without surgery.
 Phase 0 has no server at all — the CLI drives `session/lifecycle.py` directly, which forces
 the domain logic to stay transport-independent.
@@ -25,11 +25,11 @@ Note: Sonnet 5 runs adaptive thinking by default; we explicitly disable it for c
 latency (config `models.thinking`) and revisit for the annotation sidecar if tool-trigger
 rates suffer (thinking-off models are less tool-eager).
 
-## ADR-003 — Error detection: sidecar in the conversation call + end-of-session sweep
+## ADR-003 — Error detection: sidecar in the conversation call and end-of-session sweep
 
 Options considered: (a) structured annotations returned by the same call that generates the
 reply (tool-use sidecar), (b) a separate analyzer call per utterance, (c) end-of-session
-analysis only. **Chosen: (a) + a session-end sweep.** One call per turn keeps cost linear and
+analysis only. **Chosen: (a) and a session-end sweep.** One call per turn keeps cost linear and
 — decisively — the model that decides *whether to correct in-flight* is the same model that
 *logs the error*, so the log and the conversation can't disagree about what happened. The
 Haiku sweep at session end catches misses and produces aggregate signals with full-transcript
@@ -42,7 +42,7 @@ per turn.
 ## ADR-004 — Multi-dimensional CEFR model with an evidence trail
 
 A single CEFR number hides the typical asymmetry (comprehension B1, production A2) and gives
-prompt assembly less to work with. **Chosen:** continuous per-dimension scores (~1.0=A1 …
+prompt assembly less to work with. **Chosen:** continuous per-dimension scores (about 1.0 for A1 …
 6.0=C2) for lexical range, grammatical accuracy, syntactic complexity, comprehension (+
 fluency in the audio phase), each with its own confidence; overall = weighted aggregate.
 Raw per-session observations are stored in `level_observations` so the estimate can be
@@ -62,17 +62,17 @@ unit-testable and tunable per profile (`correction_aggressiveness`) without prom
 there can be disagreement between what the prompt allowed and what the model did, which is
 logged rather than hidden.
 
-## ADR-006 — SQLite + hand-rolled forward-only migrations
+## ADR-006 — SQLite and hand-rolled forward-only migrations
 
 Single user, single writer, local-first: SQLite is the obvious store. No ORM — the schema IS
 the domain model documentation, and repository.py is the single module that speaks SQL.
-Migrations are numbered `.sql` files applied in order by a ~40-line runner with a
+Migrations are numbered `.sql` files applied in order by a runner of about 40 lines with a
 `schema_migrations` table; forward-only, no down-migrations (restore from backup instead —
 it's one file). Switch to Alembic only if/when the project grows contributors or a second
 database backend. Enum-ish columns use CHECK constraints *except* the error taxonomy, which
 is enforced in Python (`domain/taxonomy.py`) so the taxonomy can evolve without a migration.
 
-## ADR-007 — No vector DB; memory = structured data + injected summaries
+## ADR-007 — No vector DB; memory = structured data and injected summaries
 
 Long-term memory is the learner model (structured rows) plus LLM-written session summaries,
 the last N of which are injected into the next session's system prompt. This is inspectable,
@@ -96,7 +96,7 @@ counts aggregate reliably across sessions and detectors — the inter-rater-reli
 free-text labels don't aggregate. The open-ended variation lives in `feature_key`
 (`category:subcategory:feature`, e.g. `morphosyntax:agreement:gender_noun_adj`, or a lemma for
 lexical items), which links events into `error_patterns` for recurrence counting. Severity is
-a 1–4 ordinal with written anchors (slip / minor / disruptive / breakdown) — anchors defined
+a 1 to 4 ordinal with written anchors (slip / minor / disruptive / breakdown) — anchors defined
 once in taxonomy.py and embedded verbatim in the detector's tool schema, so human and model
 raters share the same scale. Fossilization risk is deliberately *not* a severity level: it's
 pattern-level state (`error_patterns.status`), because it's a property of recurrence, not of
@@ -104,7 +104,7 @@ a single event.
 
 ## ADR-010 — STT/TTS behind interfaces with per-language routing
 
-`speech/stt.py` defines a Transcriber ABC and a registry mapping language → implementation,
+`speech/stt.py` defines a Transcriber ABC and a registry mapping language to implementation,
 because one backend won't fit all languages (Whisper is weak for Basque). `speech/tts.py`
 mirrors this for synthesis with a voice parameter, so Piper (local/free) is the default and
 API voices or cloning (XTTS/ElevenLabs) are drop-ins. Consequence: the realtime loop is
@@ -112,7 +112,7 @@ written once against the interfaces in Phase 2 and never touched when backends c
 
 ## ADR-011 — Thin web client first; Flutter later, if ever
 
-Phase 3 client is a single mobile web page (MediaRecorder + WebSocket) served by FastAPI over
+Phase 3 client is a single mobile web page (MediaRecorder and WebSocket) served by FastAPI over
 LAN/Tailscale. No frontend framework, no build step, no app-store loop — the phone is a
 microphone and a speaker. Flutter is Phase 4 "maybe": it buys background audio, wake-word,
 and better mic control, and costs a second codebase. Decide when the web client's actual
@@ -131,14 +131,14 @@ From the first real session: explicit corrections felt like an eager assistant, 
 corrected a *spelling* error — meaningless for a product that is audio-first even when typed.
 **Decision:** two orthogonal per-profile knobs. *Frequency*: off | minimal | balanced |
 aggressive ("off" is new — the tutor must be able to shut up entirely). *Style*: recast |
-recast_plus_note | explicit; default balanced + recast ("Yo voy a la playa ayer" → "Ah,
+recast_plus_note | explicit; default balanced and recast ("Yo voy a la playa ayer" gets "Ah,
 ¿fuiste a la playa ayer?"). The **orthography category (spelling, diacritics, punctuation) is
 never surfaced in conversation at any setting** — logged for stats only. Detector nuance the
 sidecar instructions must carry: a load-bearing diacritic ("ayer hablo con ella" for
 *habló*) is a tense/conjugation error that happens to surface in writing — classify it as
 morphosyntax, not orthography, so it isn't silenced by this rule. Consequences: migration
 0002 (add 'off' to the aggressiveness CHECK, add a `correction_style` column); rules v1 in
-domain/correction.py gain R0 (orthography → logged_silent, always).
+domain/correction.py gain R0 (orthography is always logged_silent).
 
 ## ADR-014 — Sessions are learner-scoped; language is a per-utterance property
 
@@ -148,7 +148,7 @@ cannot represent that. **Decision:** sessions attach to the learner; `utterances
 `language` column; error events and level observations route to the profile of the language
 in play for that utterance. Per-language profiles, patterns, and level models are untouched —
 the companion vision *depends* on them (pivoting into French "at my level" requires the
-French estimate to exist, which is why Phases 0–1 stay single-language and come first).
+French estimate to exist, which is why Phases 0 to 1 stay single-language and come first).
 Consequence: migration scheduled early in Phase 1.5, while the DB is still disposable —
 delete `data/` rather than write data-preserving migration code for throwaway sessions.
 
@@ -171,7 +171,7 @@ the model's default gravity, so the persona block must actively counter it: unhu
 stories and teaches unprompted, makes statements rather than ending every turn with a
 question, no praise inflation, comfortable taking the lead and comfortable with silence.
 **Decision:** personas are named, swappable prompt blocks (start with "mentor"), selected
-per profile or per session; the initiative knob (learner-led ↔ balanced ↔ tutor-led talk
+per profile or per session; the initiative knob (from learner-led through balanced to tutor-led talk
 ratio) is part of persona configuration. Personality is content for `tutor/prompts.py`
 section 1 — versioned prompt text, not code.
 
@@ -196,8 +196,8 @@ Every `upsert_pattern` call resets status to `active` (still a live problem) unl
 `fossilization_risk` — computed in one SQL `CASE`, no read-modify-write round trip. The reverse
 direction (a pattern going quiet) can't happen at write time by definition, so
 `decay_pattern_statuses` runs separately at the start of every session, downgrading
-`active`/`fossilization_risk` → `improving` after `pattern_improving_after_days` (default 14)
-without recurrence, → `resolved` after `pattern_resolved_after_days` (default 45). A pattern
+`active` or `fossilization_risk` becomes `improving` after `pattern_improving_after_days` (default 14)
+without recurrence, and `resolved` after `pattern_resolved_after_days` (default 45). A pattern
 that recurs after being marked `improving` is bumped back to `active` by the next
 `upsert_pattern` call — a relapse, not a new pattern. All three thresholds are
 `CorrectionConfig` fields, tunable without touching the rule.
@@ -240,7 +240,7 @@ error. The companion fix for cross-*session* fingerprint drift: `SessionContext`
 focus threshold — the old bug was that a still-rare error had no existing key to reuse, since
 `focus_patterns` only surfaces recurring ones), rendered as an explicit "reuse this verbatim"
 list in the prompt. Confirmed live: a repeated "tengo vs. tiene" error correctly accumulated
-onto one pattern (occurrence_count 1 → 2) after this fix, where it had previously fragmented
+onto one pattern (occurrence_count 1 to 2) after this fix, where it had previously fragmented
 into three separate one-off patterns across two sessions.
 
 ## ADR-021 — Audio: the browser owns the hardware; the backend owns everything else
@@ -254,7 +254,7 @@ sketch, and other calls bundled here:
 
 - **AudioWorklet PCM instead of MediaRecorder.** MediaRecorder produces webm/opus, which
   would force an ffmpeg/opus-decode dependency server-side. Raw PCM keeps the server
-  dependency-free and the client is still ~60 lines of vanilla JS, no build toolchain.
+  dependency-free and the client is still about 60 lines of vanilla JS, no build toolchain.
 - **VAD is server-side** (webrtcvad behind an injectable `SpeechDetector` protocol,
   `speech/vad.py`): the client stays dumb, and utterance-boundary tuning
   (`vad_silence_ms` etc.) lives in config where it can be tuned without touching the client.
@@ -273,27 +273,27 @@ sketch, and other calls bundled here:
   all sending. Sync/blocking work (whisper, piper, Claude streaming, DB) runs in executor
   threads; sqlite connections drop `check_same_thread` since access is sequential per
   connection.
-- Practical consequence of webrtcvad: it needs `pkg_resources`, so setuptools is pinned <81
+- Practical consequence of webrtcvad: it needs `pkg_resources`, so setuptools is pinned under 81
   in dependencies until webrtcvad ships a fix.
 
-## ADR-022 — Latency: measured, instrumented, and honestly not yet at <2s on CPU
+## ADR-022 — Latency: measured, instrumented, and honestly not yet at under 2s on CPU
 
-Per-stage timings (utterance-end → transcript → first Claude token → first audio) are
+Per-stage timings (from the end of the utterance to the transcript, the first Claude token and the first audio) are
 logged per turn and sent to the client, so tuning is against numbers, not vibes. Measured on
 this machine (WSL2, CPU-only, 3s Spanish utterance):
 
-- whisper "small" int8: 5–9s per utterance — **unusable**; "base" ≈ 1.5–2.1s with equal
-  accuracy on clean headset speech → "base" + greedy decoding is the shipped default.
-- Steady-state end-to-end: **~4.5s** to first tutor audio (stt ~2.0s + Claude first token
-  ~1.9s + first-sentence TTS ~0.5s), plus the 700 ms VAD silence wait in live use. One run
+- whisper "small" int8: 5 to 9s per utterance — **unusable**; "base" about 1.5 to 2.1s with equal
+  accuracy on clean headset speech, so "base" and greedy decoding is the shipped default.
+- Steady-state end-to-end: **about 4.5s** to first tutor audio (stt about 2.0s and Claude first token
+  about 1.9s and first-sentence TTS about 0.5s), plus the 700 ms VAD silence wait in live use. One run
   hit 27s on an API-side spike (SDK retry) — rare but real; a client-side "still
   thinking" cue matters more than shaving the median.
 - Sentence-streaming TTS works as designed: the tutor's audio starts while the reply is
   still generating (8s of speech began 0.5s after the first sentence completed).
 
-The <2s exit criterion is NOT met on pure CPU. Paths to close, in expected-impact order:
-CUDA for whisper via WSL2 GPU passthrough (turns 2s of STT into ~0.2s — the single biggest
-win), `vad_silence_ms` 700→500, prompt caching once the assembled prompt crosses the
+The under 2s exit criterion is NOT met on pure CPU. Paths to close, in expected-impact order:
+CUDA for whisper via WSL2 GPU passthrough (turns 2s of STT into about 0.2s — the single biggest
+win), `vad_silence_ms` from 700 to 500, prompt caching once the assembled prompt crosses the
 cacheable minimum, and (if ever acceptable) a faster conversation model. Revisit with the
 desktop GPU before shipping Phase 3.
 
@@ -316,7 +316,7 @@ fixable because we have word-level STT confidences. **Decision — three layers:
    recast-family styles — live sessions showed the model repeatedly going explicit despite
    softer directives (`model_action` receipts prove it), so the directive now bans the
    move by name. BREAKDOWN-severity errors in recast styles become CLARIFIED ("what were
-   you trying to say?" + a modeled phrasing) instead of explicit correction — an absurd
+   you trying to say?" and a modeled phrasing) instead of explicit correction — an absurd
    utterance is now treated as a communication repair, and in audio it may well be a
    mistranscription anyway. Full explicit explanations remain available on request, and
    the `explicit` style still exists for opting in.
@@ -333,7 +333,7 @@ sentence is language-identified just before synthesis (py3langid, CONSTRAINED to
 languages we have voices for — constrained short-text LID is reliable where open-set LID
 is noisy) and routed to that language's voice; short fragments and low-confidence calls
 fall back to the active language, so the worst case is the status quo. Voices for the
-active + home languages preload at session start so a mid-reply switch doesn't stall on a
+active and home languages preload at session start so a mid-reply switch doesn't stall on a
 model load. Known residue: mixed sentences ("the word 'sobremesa' means…") read in the
 dominant language's voice — per-word switching is a non-goal; a code-switching API voice
 (Phase 4, XTTS/ElevenLabs) is the real fix, and it's also the only real fix for the
@@ -347,7 +347,7 @@ mentor-ish) and `faria say --voice <id>` which writes WAVs; six US-male candidat
 pre-generated in `data/say/` for the user to judge. The true wizened-old-man voice is a
 Phase 4 cloning job; this pass makes voice choice a config decision instead of an accident.
 
-## ADR-025 — STT hallucination filtering: Silero VAD + whisper's own speech signals
+## ADR-025 — STT hallucination filtering: Silero VAD and whisper's own speech signals
 
 Second headset session: whisper transcribes random words when the user said nothing —
 its notorious hallucinate-on-silence, made worse by the small/base model. **Decision — a
@@ -358,17 +358,17 @@ layered filter, most-accurate-signal first:**
    120 Hz hum all decode to empty text and are dropped. A real utterance (even padded with
    a second of leading/trailing silence) passes cleanly.
 2. **A pure `is_probable_speech()` gate** (testable, no I/O) on whisper's own per-segment
-   signals — mean `no_speech_prob` (drop > 0.6), mean `avg_logprob` (drop < -1.0), mean word
-   confidence (drop < 0.45) — plus a non-linguistic-junk filter (pure punctuation, music
+   signals — mean `no_speech_prob` (drop over 0.6), mean `avg_logprob` (drop below -1.0), mean word
+   confidence (drop under 0.45) — plus a non-linguistic-junk filter (pure punctuation, music
    glyphs, bracketed "[Music]"/"(wind)" stage directions). Deliberately **no word blocklist**:
    blocking whisper's classic silence-fillers ("gracias", "you", "thank you") would also drop
    legitimate short learner answers, so real words are left to the probabilistic gates.
 3. **webrtcvad aggressiveness 3** as the cheap first gate (keeps whisper from running on pure
    silence at all). Considered a segmenter-level voiced-ratio gate too but **removed it**: the
-   mandatory ~700 ms of end-of-utterance trailing silence inflates the denominator and would
+   mandatory about 700 ms of end-of-utterance trailing silence inflates the denominator and would
    drop short real turns — and Silero is a far better noise filter than an energy ratio anyway.
 
-Verified live over the websocket: 2 s of loud white noise → no transcription, no turn (the
+Verified live over the websocket: 2 s of loud white noise gives no transcription, no turn (the
 "only transcribe sounds actually directed at it" behavior). True speaker-specific recognition
 (enrollment / voice ID) remains future work as the user noted; this makes it *functional*.
 
@@ -443,7 +443,7 @@ material, not just the running figure:
   defaults. A diff needs matching code to interpret, which defeats the purpose of a snapshot;
   disk is free at personal scale. The console diffs a run's snapshot against current config
   and shows only the knobs that drifted, which is the question you actually have.
-- `prompt_versions` is **content-addressed** (hash → exact assembled prompt text) with
+- `prompt_versions` is **content-addressed** (each hash maps to the exact assembled prompt text) with
   `session_prompts` linking each prompt a session used, in rebuild order. A session rebuilds
   its prompt on every language switch (ADR-015), so this is one-to-many. Identical prompts
   across sessions collapse to one row, which makes "these two runs were the same setup"
@@ -528,15 +528,15 @@ teaching, so it is left alone for now.
 
 ## ADR-033 — Prompt-cache warm-up and a cached history
 
-Measured: the first conversation call of a session took ~8 s to its first word with a cold
-cache, ~1.4 s once cached. **Decision:** at session start (and after a language switch, which
-rebuilds the prompt), send one `max_tokens=1` call with the exact tools + system prefix while
+Measured: the first conversation call of a session took about 8 s to its first word with a cold
+cache, about 1.4 s once cached. **Decision:** at session start (and after a language switch, which
+rebuilds the prompt), send one `max_tokens=1` call with the exact tools and system prefix while
 the learner is still saying hello; the first real turn waits for it rather than racing it on
 the shared DB connection. Verified live: the warm-up wrote 6,273 tokens and the first turn then
 processed 2 uncached input tokens. A second cache breakpoint on the newest message caches the
 conversation history too, which matters for hour-long sessions. Warm-up calls are recorded as
-`stage = 'warmup'` (migration 0006). Haiku 5.5 was measured for comparison (0.8–2.6 s to first
-word vs Sonnet's 1.3–1.6 s cached): not a clear enough win to trade tutoring quality for;
+`stage = 'warmup'` (migration 0006). Haiku 5.5 was measured for comparison (0.8 to 2.6 s to first
+word vs Sonnet's 1.3 to 1.6 s cached): not a clear enough win to trade tutoring quality for;
 revisit with prompt-lab replay.
 
 ## ADR-034 — The course layer: a syllabus offered as suggestions, review in conversation
@@ -564,7 +564,7 @@ direction. **Decision:**
   FSRS was considered and deferred: conversational evidence is too noisy to pay for its
   precision. Words are matched by lemma (`course/lemmas.py`, simplemma when installed, exact
   forms otherwise), with a leading article dropped and multi-word expressions matched as runs.
-- **Coverage** moves introduced → practised → solid from the end-of-session sweep, which now
+- **Coverage** moves from introduced to practised to solid from the end-of-session sweep, which now
   also counts correct and incorrect uses of the tracked structures (solid after correct use
   in `solid_after_sessions` separate sessions).
 - **Variety:** the mentor speaks one default variety per language (`course.varieties`) and
